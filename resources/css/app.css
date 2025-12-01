@@ -1,0 +1,100 @@
+.div_produit{
+    height: 200px;
+    width: 100px;
+    background-color: black;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Arial", "Helvetica", sans-serif;
+    background-color: #f0f0f0;
+}
+
+/* --- Styles du Bandeau FIFA --- */
+.fifa-header {
+    background-color: #034f96; /* Le bleu caractéristique de la FIFA */
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ecarte les éléments gauche/droite */
+    padding: 0 5%; /* Marge intérieure sur les côtés */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Section Gauche (Logo + Boutique) */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 40px; /* Espace entre le logo et le lien boutique */
+}
+
+/* Le Logo FIFA (Simulé en CSS) */
+.logo-fifa {
+    font-size: 32px;
+    font-weight: 900;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+}
+
+/* Lien Boutique */
+.nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700; /* Gras */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    transition: opacity 0.3s;
+}
+
+.nav-link:hover {
+    opacity: 0.8;
+}
+
+/* Bouton Inscription / Connexion */
+.btn-auth {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px; /* Bords arrondis */
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.btn-auth:hover {
+    background-color: white;
+    color: #034f96;
+    border-color: white;
+}
+
+/* Petit icône bonhomme (optionnel, fait en CSS pur pour éviter les imports) */
+.user-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    position: relative;
+    margin-right: 10px;
+}
+.user-icon::after {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: -3px;
+    width: 16px;
+    height: 6px;
+    border: 2px solid currentColor;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+}

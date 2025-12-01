@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\PersonneTest;
+use App\Http\Controllers\UtilisateurTest;
+use App\Http\Controllers\ProduitTest;
+use App\Http\Controllers\InscriptionConnexion;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/personnes', [PersonneTest::class, 'index']);
+Route::get('/utilisateurs', [UtilisateurTest::class, 'index']);
+Route::get('/produits', [ProduitTest::class, 'index']);
+Route::get('/inscriptionConnexion', [InscriptionConnexion::class, 'index']);
