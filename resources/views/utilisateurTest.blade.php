@@ -16,12 +16,10 @@
             <tbody>
                 @foreach($utilisateurs as $user)
                     <tr>
-                        {{-- Donnée venant directement de la table 'utilisateur' --}}
+
                         <td>{{ $user->mdp }}</td>
 
-                        {{-- Données venant de la table 'personne' via la relation --}}
                         <td>
-                            {{-- On vérifie si la personne existe pour éviter une erreur --}}
                             {{ $user->personne ? $user->personne->nom : 'Inconnu' }}
                         </td>
                         <td>

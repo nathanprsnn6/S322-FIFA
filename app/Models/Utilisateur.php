@@ -14,13 +14,14 @@ class Utilisateur extends Model
 
     protected $fillable = [
         'idpersonne',
-        'idselection',
+        'idnation',
+        'naiss_idnation',
         'courriel',
         'surnom',
-        'langue',
+        'favori_idnation',
+        'langue_idnation',
         'cp',
         'ville',
-        'paysresidence',
         'mdp'
     ];
     public function personne()

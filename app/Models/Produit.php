@@ -13,6 +13,9 @@ class Produit extends Model
     public $timestamps = false;
     protected $fillable = [
         'descriptionproduit',
+        'idnation',
+        'idcategorie',
+        'idcompetition',
         'titreproduit'
     ];
 }

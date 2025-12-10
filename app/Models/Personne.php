@@ -26,5 +26,18 @@ class Personne extends Model
         'prenom',
         'datenaissance'
     ];
+    protected static function booted()
+    {
+        static::creating(function ($personne) {
+            // Si l'ID n'est pas déjà défini manuellement
+            if (empty($personne->idpersonne)) {
+                // 1. On cherche l'ID le plus grand dans la table
+                $lastId = static::max('idpersonne');
+                
+                // 2. On attribue le dernier ID + 1
+                $personne->idpersonne = $lastId ? $lastId + 1 : 1;
+            }
+        });
+    }
 
 }
