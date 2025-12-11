@@ -131,3 +131,37 @@ colorSelect.addEventListener('change', function() {
     priceDisplay.textContent = newPrice.toFixed(2) + ' €';
 });
 
+
+/* =========================================
+   4. GESTION DES VOTES (Version Strict)
+   ========================================= */
+   document.addEventListener('DOMContentLoaded', function() {
+    
+    const radios = document.querySelectorAll('.vote-radio');
+
+    if (radios.length > 0) {
+        radios.forEach(radio => {
+            radio.addEventListener('click', function() {
+                // On utilise 'click' au lieu de 'change' pour être plus réactif
+                
+                if (this.checked) {
+                    const currentPlayerId = this.dataset.player; 
+                    const currentRank = this.getAttribute('name'); // ex: rank_1
+
+                    // On parcourt TOUS les autres boutons
+                    radios.forEach(otherRadio => {
+                        
+                        // CAS 1 : C'est le même joueur
+                        if (otherRadio.dataset.player === currentPlayerId) {
+                            // Si ce n'est pas le bouton qu'on vient de cliquer
+                            if (otherRadio !== this) {
+                                // On le décoche (le joueur perd son ancienne médaille)
+                                otherRadio.checked = false;
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+});
