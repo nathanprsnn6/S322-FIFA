@@ -136,32 +136,24 @@ colorSelect.addEventListener('change', function() {
    4. GESTION DES VOTES (Version Strict)
    ========================================= */
    document.addEventListener('DOMContentLoaded', function() {
-    
+    // On récupère tous les boutons radio de vote
     const radios = document.querySelectorAll('.vote-radio');
 
-    if (radios.length > 0) {
-        radios.forEach(radio => {
-            radio.addEventListener('click', function() {
-                // On utilise 'click' au lieu de 'change' pour être plus réactif
-                
-                if (this.checked) {
-                    const currentPlayerId = this.dataset.player; 
-                    const currentRank = this.getAttribute('name'); // ex: rank_1
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // L'ID du joueur qu'on vient de cliquer
+            const playerId = this.dataset.player;
+            // Le rang qu'on vient de choisir (rank_1, rank_2 ou rank_3)
+            const currentRankName = this.name;
 
-                    // On parcourt TOUS les autres boutons
-                    radios.forEach(otherRadio => {
-                        
-                        // CAS 1 : C'est le même joueur
-                        if (otherRadio.dataset.player === currentPlayerId) {
-                            // Si ce n'est pas le bouton qu'on vient de cliquer
-                            if (otherRadio !== this) {
-                                // On le décoche (le joueur perd son ancienne médaille)
-                                otherRadio.checked = false;
-                            }
-                        }
-                    });
+            // Si on coche une case, on doit décocher ce même joueur 
+            // s'il était sélectionné ailleurs (sur une autre ligne de rang)
+            radios.forEach(otherRadio => {
+                // Si c'est le même joueur MAIS un rang différent
+                if (otherRadio.dataset.player === playerId && otherRadio.name !== currentRankName) {
+                    otherRadio.checked = false;
                 }
             });
         });
-    }
+    });
 });

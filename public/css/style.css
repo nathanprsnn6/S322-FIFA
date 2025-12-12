@@ -650,78 +650,242 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
     transition: filter 0.4s ease-in-out; 
 }
 
-/* 1. Le conteneur principal : On passe de Grid à Flex Column */
+/* =========================================
+   SECTION VOTE (Mise à jour : Grille Large)
+   ========================================= */
+
+/* 1. Le Conteneur Principal : La Grille */
 #joueurs {
-    display: flex;
-    flex-direction: column; /* Empile les éléments verticalement */
-    gap: 20px;
-    padding: 20px;
-    max-width: 800px; /* Optionnel : limite la largeur pour que ça ne soit pas trop étiré */
-    margin: 0 auto;   /* Optionnel : centre la liste sur la page */
-}
-
-#joueurs a { 
-    text-decoration: none; 
-    color: inherit; /* Garde la couleur du texte par défaut */
-}
-
-/* 2. La carte du joueur : On met l'image à côté du texte */
-.div_joueurs {
-    border: 1px solid #ddd;
-    padding: 15px;
-    background-color: white;
-    border-radius: 8px;
-    
-    display: flex;            
-    flex-direction: row;      /* IMPORTANT : Met l'image et le texte côte à côte */
-    align-items: center;      /* Centre verticalement l'image par rapport au texte */
-    text-align: left;         /* Alignement du texte à gauche (plus joli en liste) */
-    
-    transition: transform 0.2s; /* Petit bonus pour l'animation */
-}
-
-/* Petit effet au survol */
-.div_joueurs:hover {
-    transform: translateX(10px); /* Déplace légèrement vers la droite au survol */
-    border-color: #aaa;
-}
-
-/* 3. L'image : On fixe une taille carrée ou rectangulaire fixe */
-/* Attention : J'ai corrigé ta classe .div_joueur (singulier) en .div_joueurs (pluriel) pour correspondre à ton HTML */
-.div_joueurs img {
-    width: 120px;        /* Largeur fixe pour l'alignement */
-    height: 120px;       /* Hauteur fixe */
-    object-fit: cover;   /* Coupe l'image proprement sans l'écraser */
-    border-radius: 50%;  /* Optionnel : Rend l'image ronde (très courant pour les profils) */
-    margin-right: 20px;  /* Espace entre l'image et le texte */
-    margin-bottom: 0;    /* On enlève la marge du bas qui servait pour la grille */
-}
-
-/* 4. On écrase le ID précédent qui mettait l'image à 75% */
-#img_joueur { 
-    width: 120px; 
-    height: 120px; 
-}
-#joueurs .grid-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.div_joueurs {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    width: 300px; /* Largeur fixe pour l'exemple */
-    text-align: center;
-}
-
-#img_joueur {
+    padding: 40px 20px;
+    max-width: 1600px;
+    margin: 0 auto;
     width: 100%;
-    height: 200px;
+}
+
+.liste-joueurs-grid {
+    display: grid;
+    /* CORRECTION ICI : 'columns' et non 'rows' */
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+    gap: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    /* On centre le contenu si une ligne n'est pas remplie */
+    justify-content: center; 
+}
+
+/* 2. La Carte Joueur (Plus grosse) */
+.div_joueurs {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 15px; /* Arrondi plus prononcé */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Ombre plus présente */
+    position: relative;
+    height: 100%; /* S'assure que toutes les cartes ont la même hauteur sur une ligne */
+}
+
+.div_joueurs:hover {
+    transform: translateY(-8px); /* Monte un peu plus haut au survol */
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    border-color: #034f96;
+}
+
+/* Lien global (si besoin de cliquer sur l'image) */
+.div_joueurs a.link-overlay {
+    text-decoration: none;
+    color: inherit;
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* 3. Image du joueur (Agrandie) */
+.player-image-container {
+    width: 100%;
+    height: 320px; /* Beaucoup plus haut pour une "grosse" carte */
+    overflow: hidden;
+    position: relative;
+    background-color: #f0f2f5;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.div_joueurs img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    object-position: top center;
+    transition: transform 0.6s ease;
+}
+
+.div_joueurs:hover img {
+    transform: scale(1.08);
+}
+
+/* 4. Infos Joueur (Texte plus gros) */
+.player-info {
+    padding: 25px; /* Plus d'espace intérieur */
+    text-align: center;
+    background: white;
+}
+
+.player-info h2 {
+    font-size: 1.8em; /* Nom du joueur plus gros */
+    color: #034f96;
+    margin: 0 0 12px 0;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+}
+
+.player-info p {
+    font-size: 1.1em; /* Biographie plus lisible */
+    color: #6c757d;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* 5. Zone de Vote */
+.vote-section {
+    padding: 20px 30px 30px; /* Marge interne agrandie */
+    background-color: #ffffff;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacement entre les boules 1, 2, 3 */
+}
+
+.vote-radio { display: none; }
+
+/* 6. Les Boules de vote (Plus grosses) */
+.vote-label {
+    width: 55px;  /* Plus large */
+    height: 55px; /* Plus haut */
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 22px; /* Chiffre plus gros */
+    color: #b0b0b0;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.vote-label:hover {
+    background-color: #f0f4ff;
+    border-color: #034f96;
+    color: #034f96;
+    transform: scale(1.1);
+}
+
+/* Couleurs actives (inchangées mais adaptées à la taille) */
+input[name="rank_1"]:checked + label {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
+    transform: scale(1.15);
+}
+
+input[name="rank_2"]:checked + label {
+    background-color: #adb5bd;
+    border-color: #adb5bd;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(173, 181, 189, 0.5);
+    transform: scale(1.15);
+}
+
+input[name="rank_3"]:checked + label {
+    background-color: #fd7e14;
+    border-color: #fd7e14;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(253, 126, 20, 0.5);
+    transform: scale(1.15);
+}
+
+/* =========================================
+   RESPONSIVE (Mobile)
+   ========================================= */
+@media (max-width: 768px) {
+    #joueurs {
+        /* Sur mobile, on repasse en 1 seule colonne mais on garde le style "carte" */
+        grid-template-columns: 1fr; 
+        padding: 15px;
+        gap: 25px;
+    }
+    
+    .div_joueurs {
+        min-height: auto;
+    }
+
+    .player-image-container {
+        height: 250px; /* Image un peu moins haute sur mobile */
+    }
+
+    .vote-label {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+.submit-wrapper {
+    text-align: center;
+    display: flex;
+    margin-top: 100px;
+    margin-bottom: 40px;
+}
+
+.btn-vote-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    
+    background-color: #034f96; /* Bleu officiel */
+    color: #ffffff;
+    
+    padding: 16px 45px;
+    font-size: 1.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    border: none;
+    border-radius: 50px; /* Forme pilule */
+    cursor: pointer;
+    
+    box-shadow: 0 8px 20px rgba(3, 79, 150, 0.25);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-vote-submit:hover {
+    background-color: #02366b;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(3, 79, 150, 0.35);
+}
+
+.btn-vote-submit svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.btn-vote-submit:hover svg {
+    transform: translateX(5px); /* Petite animation de la flèche */
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+    #joueurs { grid-template-columns: 1fr; padding: 0 15px; }
+    .player-image-container { height: 260px; }
+    .btn-vote-submit { width: 100%; justify-content: center; }
 }
 
 
@@ -842,6 +1006,7 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
             width: 160px;
             height: 180px;
             display: flex;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
             margin: 0 auto;
