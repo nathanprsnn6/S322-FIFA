@@ -12,7 +12,7 @@ use App\Http\Controllers\InscriptionPro;
 use App\Http\Controllers\Modification;
 use App\Http\Controllers\Connexion;
 use App\Http\Controllers\ProduitDetail;
-use App\Http\Controllers\Voter;
+use App\Http\Controllers\VoterController;
 use App\Http\Controllers\VoterDetail;
 use App\Http\Controllers\Payer;
 
@@ -72,7 +72,8 @@ Route::put('/modifier', [Modification::class, 'update'])->name('user.update');
 
 // --- VOTER ---
 // 1. La liste des joueurs
-Route::get('/voter', [Voter::class, 'index'])->name('voter.index'); 
+Route::get('/voter', [VoterController::class, 'index'])->name('voter.index');
+Route::post('/voter', [VoterController::class, 'store'])->name('voter.store');
 
 // 2. Le détail d'un joueur (C'est ici qu'on utilise le bon contrôleur VoterDetail)
 Route::get('/voter/{id}', [VoterDetail::class, 'show'])->name('voter.show');    
