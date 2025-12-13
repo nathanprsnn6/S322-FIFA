@@ -110,24 +110,81 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-const stockDisplay = document.querySelector('#stock')
+document.addEventListener('DOMContentLoaded', function() {
+    const stockDisplay = document.getElementById('stock');
+    const priceDisplay = document.querySelector('#price b');
+    const colorSelect = document.getElementById('color');
+    const sizeInputs = document.querySelectorAll('.size-input');
+    const sizeLabels = document.querySelectorAll('.size-button');
+    const addButton = document.getElementById('add-button');
+    const stockData = window.stockData || {};
 
-document.querySelectorAll('.size-button').forEach(button => {
-    button.addEventListener('click', function() {
-        document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        const selectedSize = this.dataset.id;
-        stockDisplay.textContent = "Stock restant : " + '5'
+    function updateProductInfo() {
+    const selectedColorId = colorSelect.value;
+    const selectedSizeInput = document.querySelector('input[name="size"]:checked');
+    
+    const selectedOption = colorSelect.options[colorSelect.selectedIndex];
+    const price = parseFloat(selectedOption.getAttribute('data-price'));
+    priceDisplay.textContent = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
+
+    if (selectedSizeInput) {
+        const selectedSizeId = selectedSizeInput.value;
+        
+        let stockQty = 0;
+        if (stockData[selectedColorId] && stockData[selectedColorId][selectedSizeId]) {
+            stockQty = stockData[selectedColorId][selectedSizeId];
+        }
+
+        if (stockQty > 0) {
+            stockDisplay.textContent = "Stock restant : " + stockQty;
+            stockDisplay.style.color = "green";
+            addButton.disabled = false;
+            addButton.style.opacity = "1";
+            addButton.style.cursor = "pointer";
+
+            // Met à jour la valeur max de l'input quantité
+            const quantityInput = document.getElementById('quantity');
+            quantityInput.max = stockQty;
+
+            // Si la valeur actuelle dépasse max, on la remet à max
+            if (parseInt(quantityInput.value) > stockQty) {
+                quantityInput.value = stockQty;
+            }
+        } else {
+            stockDisplay.textContent = "Rupture de stock";
+            stockDisplay.style.color = "red";
+            addButton.disabled = true;
+            addButton.style.opacity = "0.5";
+            addButton.style.cursor = "not-allowed";
+
+            // Désactive aussi la quantité
+            const quantityInput = document.getElementById('quantity');
+            quantityInput.max = 0;
+            quantityInput.value = 0;
+        }
+    } else {
+        stockDisplay.textContent = "Veuillez sélectionner une taille";
+        stockDisplay.style.color = "#333";
+        addButton.disabled = true;
+
+        // Remet la quantité à 1 par défaut
+        const quantityInput = document.getElementById('quantity');
+        quantityInput.max = 1;
+        quantityInput.value = 1;
+    }
+}
+
+    sizeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            sizeLabels.forEach(lbl => lbl.classList.remove('active'));
+            const label = document.querySelector(`label[for="${this.id}"]`);
+            if(label) label.classList.add('active');
+            
+            updateProductInfo();
+        });
     });
+
+    colorSelect.addEventListener('change', updateProductInfo);
+
+    updateProductInfo();
 });
-
-const colorSelect = document.getElementById('color');
-const priceDisplay = document.querySelector('#price b');
-
-
-colorSelect.addEventListener('change', function() {
-    const selectedOption = this.options[this.selectedIndex];
-    const newPrice = parseFloat(selectedOption.getAttribute('data-price'));
-    priceDisplay.textContent = newPrice.toFixed(2) + ' €';
-});
-

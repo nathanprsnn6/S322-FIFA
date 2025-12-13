@@ -12,7 +12,6 @@ class Contenir extends Model
     protected $fillable = [
         'idpanier',
         'idproduit',
-        'idcommande',
         'ligneproduit',
         'qteproduit'
     ];
