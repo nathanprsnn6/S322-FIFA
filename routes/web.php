@@ -15,6 +15,8 @@ use App\Http\Controllers\ProduitDetail;
 use App\Http\Controllers\Voter;
 use App\Http\Controllers\VoterDetail;
 use App\Http\Controllers\Payer;
+use App\Http\Controllers\Commande;
+use App\Http\Controllers\ExpeditionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,3 +84,16 @@ Route::get('/payer', action: [Payer::class, 'index'])->name('payer.index');
 // Route pour gérer la soumission du paiement
 Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
     ->name('payer.effectuer');
+
+
+
+
+Route::middleware(['auth'])->group(function () {
+        Route::get('/mes-commandes', [Commande::class, 'index'])->name('commandes.index');
+    });
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
+});

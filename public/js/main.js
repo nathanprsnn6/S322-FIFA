@@ -131,3 +131,4 @@ colorSelect.addEventListener('change', function() {
     priceDisplay.textContent = newPrice.toFixed(2) + ' €';
 });
 
+

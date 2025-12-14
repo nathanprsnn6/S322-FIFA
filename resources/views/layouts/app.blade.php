@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIFA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="shortcut icon" href="{{ asset('img/FIFA.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
@@ -13,7 +14,6 @@
         
         <div class="header-left">
             <a href="{{ url('/') }}" class="logo-fifa">FIFA</a>
-            
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
         </div>
@@ -22,6 +22,7 @@
             <a href="#" class="btn-auth" id="open-cart-btn">
                 <span class="panier-icon"></span> <span id="panier-text">Panier</span>
             </a>
+
             @guest
                 <a href="{{ route('login') }}" class="btn-auth">
                     <span class="user-icon"></span> Inscription / Connexion
@@ -30,10 +31,27 @@
 
             @auth
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <a href="{{ route('user.edit') }}" class="btn-auth" style="background-color: white; color: #034f96;">
-                        <span class="user-icon" style="border-color: #034f96;"></span> 
-                        {{ Auth::user()->prenom ?? 'Mon Compte' }}
-                    </a>
+                    
+                    {{-- 
+                        DETECTION DU ROLE : SERVICE EXPEDITION 
+                    --}}
+                    @if(Auth::user()->idrole == 3)
+                        <a href="{{ route('expedition.index') }}" class="btn-auth" style="background-color: #27ae60; color: white; border: none;">
+                            <i class="fas fa-truck"></i> Espace Expédition
+                        </a>
+                    @endif
+
+                    <div class="user-dropdown">
+                        <a href="#" class="btn-auth" style="background-color: white; color: #034f96;">
+                            <span class="user-icon" style="border-color: #034f96;"></span> 
+                            {{ Auth::user()->prenom ?? 'Mon Compte' }}
+                        </a>
+
+                        <div class="dropdown-menu">
+                            <a href="{{ route('user.edit') }}">Mes informations</a>
+                            <a href="{{ route('commandes.index') }}">Mes commandes</a>
+                        </div>
+                    </div>
 
                     <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                         @csrf
@@ -43,8 +61,6 @@
                     </form>
                 </div>
             @endauth
-
-            
         </div>
 
         <div id="cart-popup" class="sidebar-cart">
@@ -58,9 +74,9 @@
                 <div class="cart-item">
                     @isset($contenirs)
                         @forelse ($contenirs as $contenir)
-                            <p>Panier n°: **{{ $contenir->idpanier }}**</p>
-                            <p>Produit n°: **{{ $contenir->idproduit }}**</p>
-                            <p>Quantité: **{{ $contenir->qteproduit }}**</p>
+                            <p>Panier n°: <strong>{{ $contenir->idpanier }}</strong></p>
+                            <p>Produit n°: <strong>{{ $contenir->idproduit }}</strong></p>
+                            <p>Quantité: <strong>{{ $contenir->qteproduit }}</strong></p>
                             <hr>
                         @empty
                             <p>Votre panier est vide.</p>
@@ -74,7 +90,6 @@
             <div class="cart-footer">
                 @php
                     $totalPanier = 0;
-                    
                     if (isset($paniers) && is_iterable($paniers)) {
                         foreach ($paniers as $panier) {
                             $totalPanier += (float) $panier->prixpanier;
@@ -104,16 +119,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             const cartPopup = document.getElementById('cart-popup');
             const cartOverlay = document.getElementById('cart-overlay');
             const closeBtn = document.getElementById('close-btn');
             const openCartBtn = document.getElementById('open-cart-btn');
             
             function openCart(event) {
-                if (event) {
-                    event.preventDefault();
-                }
+                if (event) { event.preventDefault(); }
                 cartPopup.classList.add('is-open');
                 cartOverlay.classList.add('is-open');
                 document.body.style.overflow = 'hidden';
@@ -125,17 +137,9 @@
                 document.body.style.overflow = '';
             }
 
-            if (openCartBtn) {
-                openCartBtn.addEventListener('click', openCart);
-            }
-            
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeCart);
-            }
-            
-            if (cartOverlay) {
-                cartOverlay.addEventListener('click', closeCart);
-            }
+            if (openCartBtn) openCartBtn.addEventListener('click', openCart);
+            if (closeBtn) closeBtn.addEventListener('click', closeCart);
+            if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
         });
     </script>
     @yield('scripts')
