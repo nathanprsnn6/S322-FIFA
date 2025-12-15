@@ -132,3 +132,28 @@ colorSelect.addEventListener('change', function() {
 });
 
 
+/* =========================================
+   4. GESTION DES VOTES (Version Strict)
+   ========================================= */
+   document.addEventListener('DOMContentLoaded', function() {
+    // On récupère tous les boutons radio de vote
+    const radios = document.querySelectorAll('.vote-radio');
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            // L'ID du joueur qu'on vient de cliquer
+            const playerId = this.dataset.player;
+            // Le rang qu'on vient de choisir (rank_1, rank_2 ou rank_3)
+            const currentRankName = this.name;
+
+            // Si on coche une case, on doit décocher ce même joueur 
+            // s'il était sélectionné ailleurs (sur une autre ligne de rang)
+            radios.forEach(otherRadio => {
+                // Si c'est le même joueur MAIS un rang différent
+                if (otherRadio.dataset.player === playerId && otherRadio.name !== currentRankName) {
+                    otherRadio.checked = false;
+                }
+            });
+        });
+    });
+});

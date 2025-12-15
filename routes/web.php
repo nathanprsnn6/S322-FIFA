@@ -12,11 +12,10 @@ use App\Http\Controllers\InscriptionPro;
 use App\Http\Controllers\Modification;
 use App\Http\Controllers\Connexion;
 use App\Http\Controllers\ProduitDetail;
-use App\Http\Controllers\Voter;
+use App\Http\Controllers\VoterController;
 use App\Http\Controllers\VoterDetail;
 use App\Http\Controllers\Payer;
-use App\Http\Controllers\Commande;
-use App\Http\Controllers\ExpeditionController;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +73,8 @@ Route::put('/modifier', [Modification::class, 'update'])->name('user.update');
 
 // --- VOTER ---
 // 1. La liste des joueurs
-Route::get('/voter', [Voter::class, 'index'])->name('voter.index'); 
+Route::get('/voter', [VoterController::class, 'index'])->name('voter.index');
+Route::post('/voter', [VoterController::class, 'store'])->name('voter.store');
 
 // 2. Le détail d'un joueur (C'est ici qu'on utilise le bon contrôleur VoterDetail)
 Route::get('/voter/{id}', [VoterDetail::class, 'show'])->name('voter.show');    
@@ -96,4 +96,13 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
+Route::get('/lancer-maj-stats', function () {
+    // Appel de la commande artisan créée précédemment
+    // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
+    $exitCode = Artisan::call('stats:update');
+
+    // On récupère la sortie texte de la console pour l'afficher à l'écran
+    $output = Artisan::output();
+
+    return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
 });

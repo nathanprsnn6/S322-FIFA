@@ -15,6 +15,7 @@ class Utilisateur extends Model
     protected $fillable = [
         'idpersonne',
         'idnation',
+        'idrole',
         'naiss_idnation',
         'courriel',
         'surnom',
