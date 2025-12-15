@@ -87,6 +87,15 @@ Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
 
 
 
+
+Route::middleware(['auth'])->group(function () {
+        Route::get('/mes-commandes', [Commande::class, 'index'])->name('commandes.index');
+    });
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
 Route::get('/lancer-maj-stats', function () {
     // Appel de la commande artisan créée précédemment
     // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
