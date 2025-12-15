@@ -53,17 +53,14 @@
         <div>
             <h2 class="text-2xl font-bold text-blue-900 mb-6 uppercase font-bebas">STATISTIQUES</h2>
             
-            <div class="flex flex-wrap justify-center md:justify-between gap-4">
-                @if(isset($player['stats']))
-                    @foreach($player['stats'] as $stat)
-                    <div class="hexagon-wrapper">
-                        <div class="hexagon">
-                            <div class="hexagon-inner text-center">
-                                <span class="text-[10px] font-bold text-blue-900 uppercase tracking-tight mb-1">{{ $stat['label'] }}</span>
-                                <span class="text-4xl font-bebas text-blue-900">{{ $stat['value'] }}</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="submit-wrapper">
+                    <button type="submit" class="btn-vote-submit">
+                        <span>Valider mon vote</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </button>
+                </div>
                     @endforeach
                 @endif
             </div>
