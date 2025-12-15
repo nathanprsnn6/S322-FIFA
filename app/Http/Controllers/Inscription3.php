@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WelcomeEmail;
 
 class Inscription3 extends Controller
 {
@@ -59,8 +61,9 @@ class Inscription3 extends Controller
                     throw new \Exception("Impossible de récupérer l'ID de la personne créée.");
                 }
 
-                Utilisateur::create([
-                    'idpersonne'      => $nouvellePersonne->idpersonne, 
+                $user = Utilisateur::create([
+                    'idpersonne'      => $nouvellePersonne->idpersonne,
+                    'idrole'          => 1, 
                     'idnation'        => $infosPerso['pays_residence'] ?? null,
                     'favori_idnation' => $infosProfil['favori_idnation'] ?? null,
                     'langue_idnation' => $infosPerso['langue'] ?? null,
@@ -73,6 +76,10 @@ class Inscription3 extends Controller
                 ]);
 
                 Log::info('Utilisateur créé avec succès.');
+
+                Mail::to($user->courriel)->send(new WelcomeEmail($user));
+
+                Log::info('Mail envoyée avec succès.');
             });
 
 
@@ -81,7 +88,7 @@ class Inscription3 extends Controller
             return redirect()->route('inscription4.index')->with('success', 'Inscription validée avec succès !');
         } catch (\Exception $e) {
             Log::error("Erreur Inscription : " . $e->getMessage());
-            return back()->withErrors(['error' => "Erreur technique : " . $e->getMessage()])->withInput();
+            return back()->withErrors(['error' => "Oups, on dirait que quelque chose n'a pas fonctionné."])->withInput();
         }
     }
 }
