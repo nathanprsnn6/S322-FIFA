@@ -8,7 +8,7 @@ use App\Models\Contenir;
 use App\Models\Panier;
 use App\Models\variant_produit;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth; // Garder pour Auth::id() qui peut être null
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -102,68 +102,49 @@ class ProduitDetail extends Controller
         $quantityToAdd = (int) $request->input('quantity', 1);
 
         $panierId = null;
-        $userId   = Auth::id(); // sera null si non connecté
+        $userId   = Auth::id();
 
+        if (!$userId) {
+            $userId = $request->input('ghost_user_id');
+    
+            if (!$userId) {
+                return back()
+                    ->withErrors(['error' => "Impossible d'identifier l'utilisateur invité."])
+                    ->withInput();
+            }
+        }
+    
         try {
             $limiteDate = Carbon::now()->subDays(7);
-
-            if ($userId) {
-                // --- UTILISATEUR CONNECTÉ : on lie le panier à idpersonne ---
-                $panier = DB::table('panier')
-                    ->where('idpersonne', $userId)
-                    ->where('datecreationpanier', '>=', $limiteDate)
-                    ->first();
-
-                if (!$panier) {
-                    $panierId = DB::table('panier')->insertGetId([
-                        'idpersonne'        => $userId,
-                        'prixpanier'        => 0,
-                        'datecreationpanier'=> now(),
-                    ], 'idpanier');
-                } else {
-                    $panierId = $panier->idpanier;
-                }
+    
+            $panier = DB::table('panier')
+                ->where('idpersonne', $userId)
+                ->where('datecreationpanier', '>=', $limiteDate)
+                ->first();
+    
+            if (!$panier) {
+                $panierId = DB::table('panier')->insertGetId([
+                    'idpersonne'        => $userId,
+                    'prixpanier'        => 0,
+                    'datecreationpanier'=> now(),
+                ], 'idpanier');
             } else {
-                // --- UTILISATEUR ANONYME : on laisse idpersonne à NULL et on stocke l'id du panier en session ---
-                $sessionPanierId = session('panier_id');
-
-                if ($sessionPanierId) {
-                    $panier = DB::table('panier')
-                        ->where('idpanier', $sessionPanierId)
-                        ->whereNull('idpersonne')
-                        ->where('datecreationpanier', '>=', $limiteDate)
-                        ->first();
-
-                    if ($panier) {
-                        $panierId = $panier->idpanier;
-                    }
-                }
-
-                if (!$panierId) {
-                    $panierId = DB::table('panier')->insertGetId([
-                        'idpersonne'        => null,
-                        'prixpanier'        => 0,
-                        'datecreationpanier'=> now(),
-                    ], 'idpanier');
-
-                    session(['panier_id' => $panierId]);
-                }
+                $panierId = $panier->idpanier;
             }
-
+    
             if (!$panierId) {
                 return back()
                     ->withErrors(['error' => "Impossible de créer ou récupérer le panier."])
                     ->withInput();
             }
-
-            // --- AJOUT / MISE À JOUR DE LA LIGNE DANS CONTENIR ---
+    
             $existingCartItem = DB::table('contenir')
                 ->where('idpanier', $panierId)
                 ->where('idproduit', $produitId)
                 ->where('idtaille', $selectedSize)
                 ->where('idcoloris', $selectedColor)
                 ->first();
-
+    
             if ($existingCartItem) {
                 DB::table('contenir')
                     ->where('idpanier', $panierId)
@@ -176,7 +157,7 @@ class ProduitDetail extends Controller
                     ->where('idpanier', $panierId)
                     ->max('ligneproduit');
                 $ligneproduit = ($ligneproduit === null) ? 1 : $ligneproduit + 1;
-
+    
                 DB::table('contenir')->insert([
                     'idproduit'   => $produitId,
                     'idpanier'    => $panierId,
@@ -184,11 +165,9 @@ class ProduitDetail extends Controller
                     'qteproduit'  => $quantityToAdd,
                     'idtaille'    => $selectedSize,
                     'idcoloris'   => $selectedColor,
-                    // 'idcommande' si tu veux le gérer plus tard
                 ]);
             }
-
-            // --- MISE À JOUR DU PRIX TOTAL DU PANIER ---
+    
             $totalPrice = DB::table('contenir')
                 ->join('variante_produit', function($join) {
                     $join->on('contenir.idproduit', '=', 'variante_produit.idproduit')
@@ -197,11 +176,11 @@ class ProduitDetail extends Controller
                 ->where('contenir.idpanier', $panierId)
                 ->select(DB::raw('SUM(contenir.qteproduit * variante_produit.prixproduit) as total'))
                 ->value('total');
-
+    
             DB::table('panier')
                 ->where('idpanier', $panierId)
                 ->update(['prixpanier' => $totalPrice ?? 0]);
-
+    
             return redirect()
                 ->route('produits.index')
                 ->with('success', 'Produit ajouté au panier avec succès !');
