@@ -28,4 +28,5 @@ class Joueur extends Model
         // belongsTo(ModeleCible, MaCléEtrangère, CléCible)
         return $this->belongsTo(Personne::class, 'idpersonne', 'idpersonne');
     }
+    
 }

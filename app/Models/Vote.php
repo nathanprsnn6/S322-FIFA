@@ -13,7 +13,7 @@ class Vote extends Model
     public $incrementing = false;
     public $timestamps = false;
 
-    protected $fillable = ['uti_idpersonne', 'idpersonne', 'position'];
+    protected $fillable = ['uti_idpersonne', 'idpersonne', 'position','idtypevote'];
     public function personne()
     {
         // belongsTo(ModeleCible, MaCléEtrangère, CléCible)
