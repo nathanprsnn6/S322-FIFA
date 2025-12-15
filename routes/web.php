@@ -15,6 +15,7 @@ use App\Http\Controllers\ProduitDetail;
 use App\Http\Controllers\VoterController;
 use App\Http\Controllers\VoterDetail;
 use App\Http\Controllers\Payer;
+use Illuminate\Support\Facades\Artisan;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,3 +84,16 @@ Route::get('/payer', action: [Payer::class, 'index'])->name('payer.index');
 // Route pour gérer la soumission du paiement
 Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
     ->name('payer.effectuer');
+
+
+
+Route::get('/lancer-maj-stats', function () {
+    // Appel de la commande artisan créée précédemment
+    // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
+    $exitCode = Artisan::call('stats:update');
+
+    // On récupère la sortie texte de la console pour l'afficher à l'écran
+    $output = Artisan::output();
+
+    return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
+});

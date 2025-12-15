@@ -650,50 +650,44 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
     transition: filter 0.4s ease-in-out; 
 }
 
-/* =========================================
-   SECTION VOTE (Mise à jour : Grille Large)
-   ========================================= */
-
-/* 1. Le Conteneur Principal : La Grille */
+/* 1. Le Conteneur Principal */
+/* Container global pour centrer le contenu */
 #joueurs {
-    padding: 40px 20px;
-    max-width: 1600px;
-    margin: 0 auto;
+    display: block;
     width: 100%;
+    max-width: 1400px; /* Largeur max raisonnable */
+    margin: 0 auto;
 }
 
+/* Grille des joueurs */
 .liste-joueurs-grid {
     display: grid;
-    /* CORRECTION ICI : 'columns' et non 'rows' */
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
-    gap: 40px;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 35px;
     width: 100%;
-    box-sizing: border-box;
-    /* On centre le contenu si une ligne n'est pas remplie */
-    justify-content: center; 
+    padding: 10px;
 }
 
-/* 2. La Carte Joueur (Plus grosse) */
+/* Carte Joueur */
 .div_joueurs {
     background-color: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 15px; /* Arrondi plus prononcé */
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Ombre plus présente */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     position: relative;
-    height: 100%; /* S'assure que toutes les cartes ont la même hauteur sur une ligne */
+    height: 100%; 
 }
 
 .div_joueurs:hover {
-    transform: translateY(-8px); /* Monte un peu plus haut au survol */
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-    border-color: #034f96;
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-color: #1e3a8a; /* bleu foncé */
 }
 
-/* Lien global (si besoin de cliquer sur l'image) */
 .div_joueurs a.link-overlay {
     text-decoration: none;
     color: inherit;
@@ -702,138 +696,130 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
     flex-direction: column;
 }
 
-/* 3. Image du joueur (Agrandie) */
+/* Image */
 .player-image-container {
     width: 100%;
-    height: 320px; /* Beaucoup plus haut pour une "grosse" carte */
+    height: 280px; /* Hauteur fixe pour uniformité */
     overflow: hidden;
     position: relative;
-    background-color: #f0f2f5;
-    border-bottom: 1px solid #eaeaea;
+    background-color: #f1f5f9;
 }
 
 .div_joueurs img {
     width: 100%;
-    height: 100%;
+    height: 280px;
     object-fit: cover;
     object-position: top center;
-    transition: transform 0.6s ease;
+    transition: transform 0.7s ease;
 }
 
 .div_joueurs:hover img {
-    transform: scale(1.08);
+    transform: scale(1.1);
 }
 
-/* 4. Infos Joueur (Texte plus gros) */
+/* Infos */
 .player-info {
-    padding: 25px; /* Plus d'espace intérieur */
+    padding: 20px;
     text-align: center;
     background: white;
+    flex-grow: 1;
+    border-top: 1px solid #f1f5f9;
 }
 
 .player-info h2 {
-    font-size: 1.8em; /* Nom du joueur plus gros */
-    color: #034f96;
-    margin: 0 0 12px 0;
+    font-size: 1.25rem;
+    color: #1e3a8a;
+    margin: 0 0 8px 0;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: -0.5px;
+    letter-spacing: 0.5px;
 }
 
 .player-info p {
-    font-size: 1.1em; /* Biographie plus lisible */
-    color: #6c757d;
+    font-size: 0.9rem;
+    color: #64748b;
     line-height: 1.5;
-    margin: 0;
 }
 
-/* 5. Zone de Vote */
+/* Zone de Vote */
 .vote-section {
-    padding: 20px 30px 30px; /* Marge interne agrandie */
-    background-color: #ffffff;
-    border-top: 1px solid #f0f0f0;
+    padding: 15px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
     display: flex;
     justify-content: center;
-    gap: 20px; /* Espacement entre les boules 1, 2, 3 */
+    gap: 15px;
 }
 
 .vote-radio { display: none; }
 
-/* 6. Les Boules de vote (Plus grosses) */
 .vote-label {
-    width: 55px;  /* Plus large */
-    height: 55px; /* Plus haut */
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
-    border: 2px solid #ddd;
+    border: 2px solid #cbd5e1; /* gris clair */
     background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 22px; /* Chiffre plus gros */
-    color: #b0b0b0;
+    font-size: 18px;
+    color: #94a3b8;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .vote-label:hover {
-    background-color: #f0f4ff;
-    border-color: #034f96;
-    color: #034f96;
-    transform: scale(1.1);
+    border-color: #1e3a8a;
+    color: #1e3a8a;
+    transform: translateY(-2px);
 }
 
-/* Couleurs actives (inchangées mais adaptées à la taille) */
+/* Couleurs des rangs au clic */
+/* Or pour le 1er */
 input[name="rank_1"]:checked + label {
-    background-color: #ffc107;
-    border-color: #ffc107;
+    background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+    border-color: #d97706;
     color: #fff;
-    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.5);
     transform: scale(1.15);
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.4);
 }
-
+/* Argent pour le 2ème */
 input[name="rank_2"]:checked + label {
-    background-color: #adb5bd;
-    border-color: #adb5bd;
+    background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
+    border-color: #64748b;
     color: #fff;
-    box-shadow: 0 5px 15px rgba(173, 181, 189, 0.5);
     transform: scale(1.15);
+    box-shadow: 0 4px 10px rgba(100, 116, 139, 0.4);
 }
-
+/* Bronze pour le 3ème */
 input[name="rank_3"]:checked + label {
-    background-color: #fd7e14;
-    border-color: #fd7e14;
+    background: linear-gradient(135deg, #fdba74 0%, #ea580c 100%);
+    border-color: #ea580c;
     color: #fff;
-    box-shadow: 0 5px 15px rgba(253, 126, 20, 0.5);
     transform: scale(1.15);
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4);
 }
 
-/* =========================================
-   RESPONSIVE (Mobile)
-   ========================================= */
-@media (max-width: 768px) {
-    #joueurs {
-        /* Sur mobile, on repasse en 1 seule colonne mais on garde le style "carte" */
-        grid-template-columns: 1fr; 
-        padding: 15px;
-        gap: 25px;
+/* Responsive */
+@media (max-width: 1024px) {
+    .liste-joueurs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
-    
+}
+
+@media (max-width: 640px) {
+    .liste-joueurs-grid {
+        grid-template-columns: 1fr;
+    }
     .div_joueurs {
-        min-height: auto;
-    }
-
-    .player-image-container {
-        height: 250px; /* Image un peu moins haute sur mobile */
-    }
-
-    .vote-label {
-        width: 45px;
-        height: 45px;
-        font-size: 18px;
+        max-width: 400px;
+        margin: 0 auto;
     }
 }
+
 
 .submit-wrapper {
     text-align: center;
@@ -887,8 +873,152 @@ input[name="rank_3"]:checked + label {
     .player-image-container { height: 260px; }
     .btn-vote-submit { width: 100%; justify-content: center; }
 }
+.player-photo{
+    height: 100%;
+    width: 600pX;
+}
+.player-header{
+    display: flex;
+    flex-direction: row;
+}
+.stats-grid{
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
 
+.type-radio {
+    display: none;
+}
+.typevote{
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+    gap:40px;
+}
 
+.type-card {
+    /* Forme */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px; /* Ajuste selon ta largeur voulue */
+    height: 80px;
+    position: relative;
+    
+    /* Couleurs de base (Inactif) */
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); /* Dégradé sombre */
+    border: 1px solid #334155; /* Bordure gris discret */
+    border-radius: 6px; /* Coins légèrement arrondis (moderne) */
+    
+    /* Texte */
+    color: #94a3b8;
+    font-family: 'Oswald', sans-serif; /* Ta police titre */
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+    overflow: hidden;
+}
+
+/* Effet de brillance au survol (Hover) */
+.type-card:hover {
+    border-color: #fbbf24; /* Jaune Or */
+    color: #fbbf24;
+    background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2); /* Légère lueur dorée */
+    transform: translateY(-2px);
+}
+
+/* --- ÉTAT SÉLECTIONNÉ (CHECKED) --- */
+/* C'est là que la magie opère */
+
+.type-radio:checked + .type-card {
+    /* Fond noir profond pour faire ressortir le néon */
+    background: #000000;
+    
+    /* Bordure Vert Néon FIFA */
+    border-color: #32f388; 
+    border-width: 2px;
+    
+    /* Texte Vert Néon */
+    color: #32f388;
+    
+    /* Lueur Intense (Glow) */
+    box-shadow: 
+        0 0 15px rgba(50, 243, 136, 0.4), 
+        inset 0 0 10px rgba(50, 243, 136, 0.1);
+}
+.btn-fifa-submit {
+    /* Mise en page & Taille */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; /* Espace entre texte et icône */
+    padding: 15px 40px;
+    
+    /* Typographie */
+    font-family: inherit; /* Ou ta font 'Oswald' */
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffffff;
+    
+    /* Couleurs & Fond (Bleu FIFA profond) */
+    background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
+    border: none;
+    border-radius: 50px; /* Forme pilule */
+    cursor: pointer;
+    
+    /* Effets & Transitions */
+    box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Interaction au survol (Hover) */
+.btn-fifa-submit:hover {
+    /* Le bouton grossit légèrement */
+    transform: translateY(-2px) scale(1.02);
+    
+    /* Le bleu devient plus électrique */
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+    
+    /* L'ombre devient plus intense (Glow bleu) */
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+}
+
+/* Interaction au clic (Active) */
+.btn-fifa-submit:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 10px rgba(30, 58, 138, 0.3);
+}
+
+/* Style de l'icône SVG à l'intérieur */
+.btn-fifa-submit svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+/* Petite animation de l'icône au survol */
+.btn-fifa-submit:hover svg {
+    transform: translateX(4px);
+}
+
+#btn_validervote{
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
 
 
 
