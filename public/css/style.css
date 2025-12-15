@@ -441,7 +441,7 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
 }
 
 #product-info { margin-right: 40px; margin-left: 40px; }
-#product-info h1 { font-size: 3.2em; margin-bottom: 5px; }
+#product-info h1 { font-size: 3.0em; margin-bottom: 5px; }
 
 #price { font-size: 30px; }
 .text_detail { font-size: 25px; }
@@ -538,6 +538,15 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
 }
 
 .size-button.active {
+    background-color: #034f96; 
+    color: #ffffff;
+    border-color: #0056b3;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    transform: none;
+    background: linear-gradient(to bottom, #008cff, #0069d9);
+}
+
+input[type="radio"][name="size"]:checked + label.size-button {
     background-color: #034f96; 
     color: #ffffff;
     border-color: #0056b3;
@@ -1123,6 +1132,7 @@ input[name="rank_3"]:checked + label {
 
 #lab_color,#lab_size{
     margin-right: 15px;
+    margin-bottom: 50px;
 }
 
         /* CSS personnalisé pour créer les hexagones */
