@@ -38,7 +38,7 @@ class GhostUserMiddleware
 
             $ghostUserId = $userId;
 
-            $cookie = cookie($cookieName, $ghostUserId, 60 * 24 * 30);
+            $cookie = cookie($cookieName, $ghostUserId, 60 * 24 * 30, '/', null, true, true, false, 'None');
 
             $response = $next($request);
             return $response->cookie($cookie);

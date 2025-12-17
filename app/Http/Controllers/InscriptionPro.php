@@ -19,17 +19,22 @@ class InscriptionPro extends Controller
 
 public function store(Request $request)
     {
-        // 1. Validation
         $validated = $request->validate([
             'nomsociete' => 'required|string|max:100',
-            'tva'        => 'required|string|max:30|unique:professionel,tva', 
+            'tva' => [
+                'required',
+                'string',
+                'max:20',
+                'unique:professionel,tva',
+                'regex:/^[A-Z]{2}[0-9A-Z]{2,15}$/'], 
             'activite'   => 'required|string|max:255',
         ],[
 
             'required' => 'Le champ :attribute est obligatoire.',
             'string' => 'Le champ :attribute doit être une chaîne de caractères.',
             'max' => 'Le champ :attribute ne doit pas dépasser :max caractères.',
-            'unique' => 'Le champ :attribute existe déjà.'
+            'unique' => 'Le champ :attribute existe déjà.',
+            'regex'    => 'Le format du TVA est invalide (Ex: FR123456789).',
         ]);
 
         $sessionData = session('idpersonne');

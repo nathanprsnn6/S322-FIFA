@@ -6,6 +6,9 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+
+    background-color: var(--bg-body);
+    color: var(--text-dark);
 }
 
 main {
@@ -23,7 +26,7 @@ main {
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 500px;
+    max-width: 700px;
     padding: 30px;
     box-sizing: border-box;
     position: relative;
@@ -130,7 +133,7 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
 .form-group { margin-bottom: 20px; }
 .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
 
-.form-group input[type="text"],
+.form-group input[type="text"],input[type="email"],input[type="password"],
 .form-group select {
     width: 100%;
     padding: 12px;
@@ -153,7 +156,7 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
     padding-right: 30px;
 }
 
-.form-group input[type="text"]:focus,
+.form-group input[type="text"],input[type="email"],input[type="password"],:focus,
 .form-group select:focus {
     border-color: #007bff;
     outline: none;
@@ -193,7 +196,6 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
 }
 .button-primary:hover { background-color: #0056b3; }
 
-/* Modification compte */
 .section-title {
     font-size: 1em;
     font-weight: 700;
@@ -427,7 +429,10 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
     margin-bottom: 15px;   
 }
 
-#img_maillot { height: auto; width: 75%; }
+#img_maillot { 
+    height: auto;
+    width: 75%;
+}
 
 .double, #double_img { display: grid; grid-template-columns: 1fr 2fr; }
 #double_img { grid-template-columns: 3fr 2fr; }
@@ -659,16 +664,16 @@ input[type="radio"][name="size"]:checked + label.size-button {
     transition: filter 0.4s ease-in-out; 
 }
 
-/* 1. Le Conteneur Principal */
-/* Container global pour centrer le contenu */
 #joueurs {
     display: block;
     width: 100%;
-    max-width: 1400px; /* Largeur max raisonnable */
+    max-width: 1400px;
     margin: 0 auto;
 }
+.bar_graph{
+    margin-top: 50px;
+}
 
-/* Grille des joueurs */
 .liste-joueurs-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
@@ -677,7 +682,6 @@ input[type="radio"][name="size"]:checked + label.size-button {
     padding: 10px;
 }
 
-/* Carte Joueur */
 .div_joueurs {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
@@ -694,7 +698,7 @@ input[type="radio"][name="size"]:checked + label.size-button {
 .div_joueurs:hover {
     transform: translateY(-10px);
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    border-color: #1e3a8a; /* bleu foncé */
+    border-color: #1e3a8a;
 }
 
 .div_joueurs a.link-overlay {
@@ -705,10 +709,9 @@ input[type="radio"][name="size"]:checked + label.size-button {
     flex-direction: column;
 }
 
-/* Image */
 .player-image-container {
     width: 100%;
-    height: 280px; /* Hauteur fixe pour uniformité */
+    height: 280px;
     overflow: hidden;
     position: relative;
     background-color: #f1f5f9;
@@ -726,7 +729,6 @@ input[type="radio"][name="size"]:checked + label.size-button {
     transform: scale(1.1);
 }
 
-/* Infos */
 .player-info {
     padding: 20px;
     text-align: center;
@@ -750,7 +752,6 @@ input[type="radio"][name="size"]:checked + label.size-button {
     line-height: 1.5;
 }
 
-/* Zone de Vote */
 .vote-section {
     padding: 15px;
     background-color: #f8fafc;
@@ -766,7 +767,7 @@ input[type="radio"][name="size"]:checked + label.size-button {
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    border: 2px solid #cbd5e1; /* gris clair */
+    border: 2px solid #cbd5e1;
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -785,8 +786,6 @@ input[type="radio"][name="size"]:checked + label.size-button {
     transform: translateY(-2px);
 }
 
-/* Couleurs des rangs au clic */
-/* Or pour le 1er */
 input[name="rank_1"]:checked + label {
     background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
     border-color: #d97706;
@@ -794,7 +793,7 @@ input[name="rank_1"]:checked + label {
     transform: scale(1.15);
     box-shadow: 0 4px 10px rgba(217, 119, 6, 0.4);
 }
-/* Argent pour le 2ème */
+
 input[name="rank_2"]:checked + label {
     background: linear-gradient(135deg, #e2e8f0 0%, #94a3b8 100%);
     border-color: #64748b;
@@ -802,7 +801,7 @@ input[name="rank_2"]:checked + label {
     transform: scale(1.15);
     box-shadow: 0 4px 10px rgba(100, 116, 139, 0.4);
 }
-/* Bronze pour le 3ème */
+
 input[name="rank_3"]:checked + label {
     background: linear-gradient(135deg, #fdba74 0%, #ea580c 100%);
     border-color: #ea580c;
@@ -811,7 +810,6 @@ input[name="rank_3"]:checked + label {
     box-shadow: 0 4px 10px rgba(234, 88, 12, 0.4);
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
     .liste-joueurs-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -843,7 +841,7 @@ input[name="rank_3"]:checked + label {
     justify-content: center;
     gap: 12px;
     
-    background-color: #034f96; /* Bleu officiel */
+    background-color: #034f96;
     color: #ffffff;
     
     padding: 16px 45px;
@@ -853,7 +851,7 @@ input[name="rank_3"]:checked + label {
     letter-spacing: 0.5px;
     
     border: none;
-    border-radius: 50px; /* Forme pilule */
+    border-radius: 50px;
     cursor: pointer;
     
     box-shadow: 0 8px 20px rgba(3, 79, 150, 0.25);
@@ -873,10 +871,10 @@ input[name="rank_3"]:checked + label {
 }
 
 .btn-vote-submit:hover svg {
-    transform: translateX(5px); /* Petite animation de la flèche */
+    transform: translateX(5px);
 }
 
-/* Responsive Mobile */
+
 @media (max-width: 768px) {
     #joueurs { grid-template-columns: 1fr; padding: 0 15px; }
     .player-image-container { height: 260px; }
@@ -908,22 +906,19 @@ input[name="rank_3"]:checked + label {
 }
 
 .type-card {
-    /* Forme */
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 200px; /* Ajuste selon ta largeur voulue */
+    width: 200px;
     height: 80px;
     position: relative;
     
-    /* Couleurs de base (Inactif) */
-    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); /* Dégradé sombre */
-    border: 1px solid #334155; /* Bordure gris discret */
-    border-radius: 6px; /* Coins légèrement arrondis (moderne) */
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border: 1px solid #334155;
+    border-radius: 6px;
     
-    /* Texte */
     color: #94a3b8;
-    font-family: 'Oswald', sans-serif; /* Ta police titre */
+    font-family: 'Oswald', sans-serif;
     font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
@@ -934,89 +929,70 @@ input[name="rank_3"]:checked + label {
     overflow: hidden;
 }
 
-/* Effet de brillance au survol (Hover) */
 .type-card:hover {
-    border-color: #fbbf24; /* Jaune Or */
+    border-color: #fbbf24;
     color: #fbbf24;
     background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2); /* Légère lueur dorée */
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
     transform: translateY(-2px);
 }
 
-/* --- ÉTAT SÉLECTIONNÉ (CHECKED) --- */
-/* C'est là que la magie opère */
-
 .type-radio:checked + .type-card {
-    /* Fond noir profond pour faire ressortir le néon */
     background: #000000;
     
-    /* Bordure Vert Néon FIFA */
     border-color: #32f388; 
     border-width: 2px;
     
-    /* Texte Vert Néon */
     color: #32f388;
-    
-    /* Lueur Intense (Glow) */
+
     box-shadow: 
         0 0 15px rgba(50, 243, 136, 0.4), 
         inset 0 0 10px rgba(50, 243, 136, 0.1);
 }
 .btn-fifa-submit {
-    /* Mise en page & Taille */
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 12px; /* Espace entre texte et icône */
+    gap: 12px;
     padding: 15px 40px;
     
-    /* Typographie */
-    font-family: inherit; /* Ou ta font 'Oswald' */
+    font-family: inherit;
     font-size: 18px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #ffffff;
-    
-    /* Couleurs & Fond (Bleu FIFA profond) */
+
     background: linear-gradient(135deg, #1e3a8a 0%, #172554 100%);
     border: none;
-    border-radius: 50px; /* Forme pilule */
+    border-radius: 50px;
     cursor: pointer;
-    
-    /* Effets & Transitions */
+
     box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
 }
 
-/* Interaction au survol (Hover) */
 .btn-fifa-submit:hover {
-    /* Le bouton grossit légèrement */
     transform: translateY(-2px) scale(1.02);
     
-    /* Le bleu devient plus électrique */
     background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
     
-    /* L'ombre devient plus intense (Glow bleu) */
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
 }
 
-/* Interaction au clic (Active) */
 .btn-fifa-submit:active {
     transform: translateY(1px) scale(0.98);
     box-shadow: 0 2px 10px rgba(30, 58, 138, 0.3);
 }
 
-/* Style de l'icône SVG à l'intérieur */
 .btn-fifa-submit svg {
     width: 24px;
     height: 24px;
     transition: transform 0.3s ease;
 }
 
-/* Petite animation de l'icône au survol */
 .btn-fifa-submit:hover svg {
     transform: translateX(4px);
 }
@@ -1135,14 +1111,13 @@ input[name="rank_3"]:checked + label {
     margin-bottom: 50px;
 }
 
-        /* CSS personnalisé pour créer les hexagones */
         .hexagon-wrapper {
             filter: drop-shadow(0 0 5px rgba(0,0,0,0.1));
         }
         .hexagon {
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            background-color: #e2e8f0; /* Couleur bordure (gris clair/bleuté) */
-            padding: 2px; /* Épaisseur de la bordure */
+            background-color: #e2e8f0;
+            padding: 2px;
             width: 160px;
             height: 180px;
             display: flex;
@@ -1161,28 +1136,23 @@ input[name="rank_3"]:checked + label {
             align-items: center;
             justify-content: center;
         }
-        /* Police style FFF/Nike */
         .font-bebas {
-            font-family: 'Oswald', sans-serif; /* Une google font proche */
+            font-family: 'Oswald', sans-serif;
         }
 
-/* --- DROPDOWN MON COMPTE --- */
-
-/* Conteneur principal */
 .user-dropdown {
     position: relative;
     display: inline-block;
-    padding-bottom: 10px; /* Zone tampon invisible pour éviter que le menu disparaisse quand on descend la souris */
+    padding-bottom: 10px;
     margin-bottom: -10px;
 }
 
-/* Le menu blanc caché */
 .dropdown-menu {
-    display: none; /* Caché par défaut */
+    display: none;
     position: absolute;
-    top: 100%; /* Juste en dessous du bouton */
+    top: 100%;
     left: 50%;
-    transform: translateX(-50%); /* Centré par rapport au bouton */
+    transform: translateX(-50%);
     background-color: #ffffff;
     min-width: 200px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -1193,7 +1163,6 @@ input[name="rank_3"]:checked + label {
     border: 1px solid #e0e0e0;
 }
 
-/* Petite flèche décorative au dessus du menu */
 .dropdown-menu::before {
     content: "";
     position: absolute;
@@ -1205,13 +1174,11 @@ input[name="rank_3"]:checked + label {
     border-color: transparent transparent #ffffff transparent;
 }
 
-/* Affichage au survol */
 .user-dropdown:hover .dropdown-menu {
     display: block;
     animation: fadeIn 0.2s ease-in-out;
 }
 
-/* Liens dans le menu */
 .dropdown-menu a {
     color: #333;
     padding: 12px 20px;
@@ -1219,40 +1186,32 @@ input[name="rank_3"]:checked + label {
     display: block;
     font-size: 14px;
     font-weight: 600;
-    text-transform: none; /* On garde une casse normale pour la lisibilité */
+    text-transform: none;
     transition: background-color 0.2s, color 0.2s;
     text-align: center;
 }
 
-/* Hover sur les liens du menu */
 .dropdown-menu a:hover {
     background-color: #f0f4ff;
     color: #034f96;
 }
 
-/* Petite animation d'apparition */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
     to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* --- CORRECTIF DU MENU QUI DISPARAIT --- */
-
-/* On crée un pont invisible au-dessus du menu */
 .dropdown-menu::after {
     content: "";
     position: absolute;
-    bottom: 100%;  /* Se place juste au-dessus du menu */
+    bottom: 100%;
     left: 0;
     width: 100%;
-    height: 30px;  /* Hauteur de la zone invisible (le pont) */
-    background: transparent; /* Totalement invisible */
+    height: 30px;
+    background: transparent;
     
-    /* Décommente la ligne ci-dessous pour VOIR la zone rouge et comprendre le truc */
-    /* background: rgba(255, 0, 0, 0.3); */ 
 }
 
-/* --- STYLE DES COMMANDES (Cartes & Historique) --- */
 
 .table-cards {
     width: 100%;
@@ -1288,14 +1247,12 @@ input[name="rank_3"]:checked + label {
     border-bottom: 1px solid #f0f0f0;
 }
 
-/* Arrondir les coins à droite de la carte */
 .card-row td:last-child {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     border-right: 1px solid #f0f0f0;
 }
 
-/* BADGES (Statut) */
 .badge {
     padding: 6px 12px;
     border-radius: 50px;
@@ -1310,7 +1267,6 @@ input[name="rank_3"]:checked + label {
 .badge-red { background-color: #f8d7da; color: #721c24; }
 .badge-gray { background-color: #eee; color: #555; }
 
-/* BOUTONS DÉTAILS */
 .btn-detail {
     background-color: #034f96;
     color: white;
@@ -1339,7 +1295,6 @@ input[name="rank_3"]:checked + label {
 
 .btn-detail-outline:hover { background-color: #f8f9fa; border-color: #bbb; }
 
-/* ZONE DÉTAILS (Cachée par défaut) */
 .detail-row { display: none; }
 
 .detail-content {
@@ -1390,14 +1345,6 @@ input[name="rank_3"]:checked + label {
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    font-family: system-ui, -apple-system, sans-serif;
-    background-color: var(--bg-body);
-    color: var(--text-dark);
-    padding: 2rem;
-    min-height: 100vh; /* Empêche le fond de remonter si peu de contenu */
-}
-
 .app-container { max-width: 1200px; margin: 0 auto; }
 header { margin-bottom: 2rem; }
 
@@ -1408,7 +1355,6 @@ h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; }
 
 .user-profile { font-size: 0.9rem; }
 
-/* --- CORRECTION DU FORMULAIRE --- */
 .filters-container {
     background: var(--bg-card); padding: 1.5rem; border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border);
@@ -1417,27 +1363,25 @@ h1 { font-size: 1.5rem; font-weight: 700; color: #0f172a; }
 .filter-form { 
     display: flex; 
     gap: 1.5rem; 
-    align-items: flex-end; /* Aligne le bouton avec le bas des inputs */
+    align-items: flex-end;
     flex-wrap: wrap; 
 }
 
 .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
 .form-group label { font-size: 0.875rem; font-weight: 600; color: var(--text-gray); }
 
-/* On fixe une hauteur identique pour éviter les décalages */
 input[type="date"], select {
     padding: 0.5rem 1rem; 
     border: 1px solid var(--border); 
     border-radius: 6px;
     font-size: 0.95rem; 
     min-width: 200px; 
-    height: 42px; /* Hauteur fixe pour alignement parfait */
+    height: 42px;
     background-color: #fff;
 }
 
 .form-actions { display: flex; gap: 0.5rem; }
 
-/* Hauteur fixe aussi pour les boutons */
 .btn-filter, .btn-reset {
     height: 42px; 
     display: inline-flex;
@@ -1459,65 +1403,115 @@ input[type="date"], select {
 .btn-reset { background-color: #e2e8f0; color: var(--text-dark); }
 .btn-reset:hover { background-color: #cbd5e1; }
 
-/* --- CORRECTION DU TABLEAU (STABILITÉ) --- */
-.table-card {
-    background: var(--bg-card); border-radius: 8px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden;
-    min-height: 200px; /* Évite que la carte s'écrase s'il n'y a pas de données */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
-.card-header {
-    padding: 1.5rem; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 1rem;
-}
-
-.badge-count {
-    background: #e2e8f0; padding: 0.25rem 0.75rem; border-radius: 1rem;
-    font-size: 0.875rem; font-weight: 600; color: var(--text-dark);
-}
-
-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    /* C'EST ICI LA MAGIE : */
-    table-layout: fixed; /* Oblige le tableau à respecter les largeurs définies */
-}
-
-th {
-    text-align: left; padding: 1rem 1.5rem; background: #f8fafc;
-    color: var(--text-gray); font-weight: 600; font-size: 0.8rem;
+.orders-table th {
+    text-align: left;
+    padding: 1rem 1.5rem;
+    background: #f8fafc;
+    color: var(--text-gray);
+    font-weight: 600;
+    font-size: 0.8rem;
     border-bottom: 1px solid var(--border);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-/* On définit la largeur de chaque colonne précisément (Total = 100%) */
-th:nth-child(1) { width: 8%; }  /* CMD # */
-th:nth-child(2) { width: 15%; } /* Client */
-th:nth-child(3) { width: 22%; } /* Adresse */
-th:nth-child(4) { width: 15%; } /* Type */
-th:nth-child(5) { width: 12%; } /* Date */
-th:nth-child(6) { width: 12%; } /* Créneau */
-th:nth-child(7) { width: 16%; } /* Statut */
+.orders-table th:nth-child(1) { width: 8%; }
+.orders-table th:nth-child(2) { width: 15%; }
+.orders-table th:nth-child(3) { width: 22%; }
+.orders-table th:nth-child(4) { width: 15%; }
+.orders-table th:nth-child(5) { width: 12%; }
+.orders-table th:nth-child(6) { width: 12%; }
+.orders-table th:nth-child(7) { width: 16%; }
 
-td { 
-    padding: 1rem 1.5rem; 
-    border-bottom: 1px solid var(--border); 
-    vertical-align: middle; 
+.orders-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
     font-size: 0.95rem;
-    /* Coupe le texte s'il est trop long pour éviter d'exploser la case */
-    white-space: nowrap; 
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Badges */
-.badge { padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase;}
-.badge-blue { background-color: #dbeafe; color: #1e40af; }
-.badge-gray { background-color: #f1f5f9; color: #475569; }
 
-.slot-tag { padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500; }
+
+.filter-form .form-group {
+    margin-bottom: 0;
+}
+
+.filter-form .form-actions {
+    margin-bottom: 2px;
+}
+
+.orders-table .badge { 
+    padding: 0.25rem 0.6rem; 
+    border-radius: 4px; 
+    font-size: 0.75rem; 
+    font-weight: 600; 
+    letter-spacing: 0.02em; 
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.orders-table .badge-blue { background-color: #dbeafe; color: #1e40af; }
+.orders-table .badge-gray { background-color: #f1f5f9; color: #475569; }
+
+.slot-tag { 
+    padding: 0.25rem 0.6rem; 
+    border-radius: 4px; 
+    font-size: 0.8rem; 
+    font-weight: 500; 
+    display: inline-block;
+}
 .slot-matin { background-color: #dcfce7; color: #166534; }
 .slot-pm { background-color: #fef9c3; color: #854d0e; }
 
-.empty-row { text-align: center; font-style: italic; color: var(--text-gray); padding: 3rem; }
+.empty-row { 
+    text-align: center; 
+    font-style: italic; 
+    color: var(--text-gray); 
+    padding: 3rem; 
+}
+
+
+.expedition-scope .table-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.expedition-scope .card-header {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.expedition-scope .card-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #0f172a;
+    font-weight: 700;
+    border: none;
+    padding: 0;
+}
+
+.expedition-scope .badge-count {
+    background: #f1f5f9;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+}

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="app-container">
+    <div class="app-container expedition-scope">
         <header>
             <div class="header-top">
                 <h1>Service Expédition</h1>

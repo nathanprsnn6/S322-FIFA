@@ -19,16 +19,8 @@ class Payer extends Controller
         $request->validate([
             'idcommande' => 'required|exists:orders,id',
             'idcb' => 'required|numeric',
-            // ... autres validations
         ]);
 
-        // 2. Logique de paiement (intégration avec Stripe, PayPal, etc.)
-        // ...
-
-        // 3. Mise à jour du statut de la commande
-        // Payer::create([...]); // Exemple d'enregistrement de transaction
-
-        // 4. Redirection avec un message de succès
         return redirect()->back()->with('success', 'Votre commande a été réglée avec succès !');
     }
 }

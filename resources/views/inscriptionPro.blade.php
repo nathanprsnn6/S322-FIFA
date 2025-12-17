@@ -2,7 +2,6 @@
 
 @section('content')
 <section id="ppro" class="container">
-    {{-- Fil d'ariane ou retour --}}
     <p class="header-top">
         <a href="{{ url('/') }}">&larr; Passer pour plus tard</a>
     </p>
@@ -15,7 +14,7 @@
         </p>
         
         <form method="post" action="{{ route('pro.store') }}">
-            @csrf {{-- OBLIGATOIRE pour la sécurité Laravel --}}
+            @csrf
 
             <div class="form-group">
                 <label for="nomsociete">Nom de la société *</label>

@@ -1,6 +1,3 @@
-/* =========================================
-   1. FONCTIONS DE VALIDATION (Pas de changement)
-   ========================================= */
    function checkFields1() {
     const fields = document.querySelectorAll('#nom,#jour_naissance, #mois_naissance, #annee_naissance, #pays_naissance, #langue, #prenom, #courriel');
     const button = document.getElementById('submitButton1');
@@ -30,8 +27,9 @@ function checkFields3() {
         button.disabled = !allFilled;
     }
 }
-// Ajoute tes autres checks ici si besoin...
-//========================================= LOGIQUE VILLE / CODE POSTAL (Modifié)
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const cpInput = document.getElementById('cp');
     const villeSelect = document.getElementById('ville_select');
@@ -39,9 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (cpInput && villeSelect && villeHidden) {
 
-        // Fonction pour charger les villes via l'API
         function lancerRechercheAPI(cp, villeActuelle) {
-            // On désactive le select visuellement le temps de charger pour montrer qu'il se passe un truc
             villeSelect.style.opacity = "0.5"; 
 
             const url = `https://geo.api.gouv.fr/communes?codePostal=${cp}&fields=nom&format=json&geometry=centre`;
@@ -49,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    villeSelect.style.opacity = "1"; // On réactive
-                    villeSelect.innerHTML = ''; // On vide la liste (on supprime la ville unique de Laravel)
+                    villeSelect.style.opacity = "1";
+                    villeSelect.innerHTML = '';
                     
                     if (data.length > 0) {
                         data.forEach(commune => {
@@ -58,14 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             option.value = commune.nom;
                             option.text = commune.nom;
                             
-                            // Si c'est la ville enregistrée, on la sélectionne
                             if (villeActuelle && commune.nom === villeActuelle) {
                                 option.selected = true;
                             }
                             villeSelect.appendChild(option);
                         });
                         
-                        // Sécurité : Si la ville actuelle n'est pas dans l'API, on la remet
                         if (villeActuelle && !Array.from(villeSelect.options).some(o => o.value === villeActuelle)) {
                             let opt = new Option(villeActuelle, villeActuelle, true, true);
                             villeSelect.add(opt);
@@ -80,13 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
 
-        // 1. AU DÉMARRAGE : On lance la recherche directe
         if (cpInput.value.length === 5) {
             console.log("Lancement auto API...");
             lancerRechercheAPI(cpInput.value, villeHidden.value);
         }
 
-        // 2. SÉCURITÉ : Si on clique sur la liste et qu'il n'y a qu'1 seule option (celle de Laravel), on relance !
         villeSelect.addEventListener('focus', function() {
             if (this.options.length <= 1 && cpInput.value.length === 5) {
                 console.log("Relance API au clic...");
@@ -94,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 3. Changement de CP manuel
         cpInput.addEventListener('input', function() {
             if (this.value.length === 5) {
                 villeHidden.value = ""; 
@@ -102,7 +93,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 4. Sélection d'une ville
         villeSelect.addEventListener('change', function() {
             villeHidden.value = this.value;
         });
@@ -184,28 +174,62 @@ document.addEventListener('DOMContentLoaded', function() {
     updateProductInfo();
 });
 
-/* =========================================
-   4. GESTION DES VOTES (Version Strict)
-   ========================================= */
+
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
-    // On récupère tous les boutons radio de vote
     const radios = document.querySelectorAll('.vote-radio');
 
     radios.forEach(radio => {
         radio.addEventListener('change', function() {
-            // L'ID du joueur qu'on vient de cliquer
             const playerId = this.dataset.player;
-            // Le rang qu'on vient de choisir (rank_1, rank_2 ou rank_3)
             const currentRankName = this.name;
 
-            // Si on coche une case, on doit décocher ce même joueur 
-            // s'il était sélectionné ailleurs (sur une autre ligne de rang)
             radios.forEach(otherRadio => {
-                // Si c'est le même joueur MAIS un rang différent
                 if (otherRadio.dataset.player === playerId && otherRadio.name !== currentRankName) {
                     otherRadio.checked = false;
                 }
             });
         });
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.js-toggle-order-details');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = btn.getAttribute('data-id');
+            const row = document.getElementById('details-' + id);
+            if (row) {
+                const isHidden = getComputedStyle(row).display === 'none';
+                row.style.display = isHidden ? 'table-row' : 'none';
+            }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cartPopup = document.getElementById('cart-popup');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const closeBtn = document.getElementById('close-btn');
+    const openCartBtn = document.getElementById('open-cart-btn');
+    
+    const openCart = (e) => {
+        if (e) e.preventDefault();
+        if (cartPopup) cartPopup.classList.add('is-open');
+        if (cartOverlay) cartOverlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeCart = () => {
+        if (cartPopup) cartPopup.classList.remove('is-open');
+        if (cartOverlay) cartOverlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+    };
+
+    if (openCartBtn) openCartBtn.addEventListener('click', openCart);
+    if (closeBtn) closeBtn.addEventListener('click', closeCart);
+    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 });

@@ -3,10 +3,8 @@
 @section('content')
     <div class="player-container">
         
-        {{-- En-tête : Photo (Gauche) + Infos (Droite) --}}
         <div class="player-header">
             
-            {{-- Photo --}}
             <div class="player-photo-wrapper">
                 <img 
                     src="{{ asset($joueur->destinationphoto) }}" 
@@ -43,7 +41,6 @@
 
         <hr class="player-separator">
 
-        {{-- Section Biographie --}}
         <div class="player-bio-section">
             <h2 class="section-title">BIOGRAPHIE</h2>
             <div class="bio-content">
@@ -57,7 +54,6 @@
             </div>
         </div>
 
-        {{-- Section Statistiques --}}
         <div class="stats-section">
             <h2 class="section-title mb-6">STATISTIQUES</h2>
             

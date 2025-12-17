@@ -35,7 +35,7 @@
                                 <span class="badge badge-blue">{{ $commande->etatcommande }}</span>
                             </td>
                             <td>
-                                <button onclick="toggleDetails({{ $commande->idcommande }})" class="btn-detail">
+                                <button class="btn-detail js-toggle-order-details" data-id="{{ $commande->idcommande }}">
                                     Voir les articles
                                 </button>
                             </td>
@@ -110,7 +110,7 @@
                                 <span class="badge {{ $badgeClass }}">{{ $commande->etatcommande }}</span>
                             </td>
                             <td>
-                                <button onclick="toggleDetails({{ $commande->idcommande }})" class="btn-detail-outline">
+                                <button class="btn-detail-outline js-toggle-order-details" data-id="{{ $commande->idcommande }}">
                                     Voir le détail
                                 </button>
                             </td>
@@ -142,16 +142,3 @@
         @endif
     </div>
 </div>
-
-<script>
-    function toggleDetails(id) {
-        var row = document.getElementById('details-' + id);
-        if (row.style.display === 'none' || row.style.display === '') {
-            row.style.display = 'table-row';
-        } else {
-            row.style.display = 'none';
-        }
-    }
-</script>
-
-@endsection

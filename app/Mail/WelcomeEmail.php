@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-// 👇 1. Change l'import ici (Remplace User par Utilisateur)
 use App\Models\Utilisateur; 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -14,10 +13,8 @@ class WelcomeEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    // 👇 2. Change le type de la variable publique
     public $utilisateur; 
 
-    // 👇 3. Modifie le constructeur pour accepter "Utilisateur"
     public function __construct(Utilisateur $utilisateur)
     {
         $this->utilisateur = $utilisateur;

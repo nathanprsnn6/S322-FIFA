@@ -32,9 +32,6 @@
             @auth
                 <div style="display: flex; align-items: center; gap: 15px;">
                     
-                    {{-- 
-                        DETECTION DU ROLE : SERVICE EXPEDITION 
-                    --}}
                     @if(Auth::user()->idrole == 3)
                         <a href="{{ route('expedition.index') }}" class="btn-auth" style="background-color: #27ae60; color: white; border: none;">
                             <i class="fas fa-truck"></i> Espace Expédition
@@ -117,31 +114,6 @@
         @yield('content')
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const cartPopup = document.getElementById('cart-popup');
-            const cartOverlay = document.getElementById('cart-overlay');
-            const closeBtn = document.getElementById('close-btn');
-            const openCartBtn = document.getElementById('open-cart-btn');
-            
-            function openCart(event) {
-                if (event) { event.preventDefault(); }
-                cartPopup.classList.add('is-open');
-                cartOverlay.classList.add('is-open');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeCart() {
-                cartPopup.classList.remove('is-open');
-                cartOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
-            }
-
-            if (openCartBtn) openCartBtn.addEventListener('click', openCart);
-            if (closeBtn) closeBtn.addEventListener('click', closeCart);
-            if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
-        });
-    </script>
     @yield('scripts')
 
 </body>

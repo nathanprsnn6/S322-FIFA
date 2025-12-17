@@ -48,7 +48,6 @@ class Modification extends Controller
             $personne->prenom = $request->prenom;
             $personne->lieunaissance = $request->naiss_ville;
             
-            // Reconstitution de la date
             try {
                 $personne->datenaissance = Carbon::createFromDate(
                     $request->annee_naissance, 

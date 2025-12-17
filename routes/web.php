@@ -16,6 +16,8 @@ use App\Http\Controllers\VoterController;
 use App\Http\Controllers\VoterDetail;
 use App\Http\Controllers\Payer;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Commande;
+use App\Http\Controllers\ExpeditionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -94,15 +96,20 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
-Route::get('/lancer-maj-stats', function () {
-    // Appel de la commande artisan créée précédemment
-    // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
-    $exitCode = Artisan::call('stats:update');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
+    
+        Route::get('/lancer-maj-stats', function () {
+            // Appel de la commande artisan créée précédemment
+            // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
+            $exitCode = Artisan::call('stats:update');
+    
+            // On récupère la sortie texte de la console pour l'afficher à l'écran
+            $output = Artisan::output();
+    
+            return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
+        });
+    
+    }); 
 
-    // On récupère la sortie texte de la console pour l'afficher à l'écran
-    $output = Artisan::output();
-
-    return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
-});
+    Route::get('/verifier-vote/{idtypevote}', [App\Http\Controllers\VoterController::class, 'checkVote'])->name('verifier.vote');
