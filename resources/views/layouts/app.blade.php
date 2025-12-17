@@ -55,39 +55,38 @@
 
             <div class="cart-items-container ">
                 <h2>Articles du Panier</h2>
-                <div class="cart-item">
-                    @isset($contenirs)
-                        @forelse ($contenirs as $contenir)
-                            <p>Panier n°: **{{ $contenir->idpanier }}**</p>
-                            <p>Produit n°: **{{ $contenir->idproduit }}**</p>
-                            <p>Quantité: **{{ $contenir->qteproduit }}**</p>
-                            <hr>
-                        @empty
-                            <p>Votre panier est vide.</p>
-                        @endforelse
-                    @else
-                        <p>Les données du panier n'ont pas été chargées.</p>
-                    @endisset
+    
+                <div class="cart-item-list"> 
+                    @forelse ($contenirs as $contenir)                        
+                        <div class="cart-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
+                            
+                        <img src="{{ asset($contenir->produit->photo->destinationphoto ?? 'path/to/default/image.png') }}" 
+                            style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px; border-radius: 4px;">
+
+                            <p style="flex-grow: 1; margin: 0; font-size: 14px;">
+                                <span style="font-weight: bold;">{{ $contenir->qteproduit }} x</span> {{ $contenir->produit->titreproduit ?? '' }}
+                            </p>
+                            
+                            <span style="font-weight: bold; white-space: nowrap; font-size: 14px;">
+                                ({{ number_format($contenir->prixLigne, 2, ',', ' ') }} €)
+                            </span>
+                        </div>
+                        <hr style="margin: 5px 0;">
+                    @empty
+                        <p>Votre panier est vide.</p>
+                    @endforelse
                 </div>
             </div>
             
             <div class="cart-footer">
-                @php
-                    $totalPanier = 0;
-                    
-                    if (isset($paniers) && is_iterable($paniers)) {
-                        foreach ($paniers as $panier) {
-                            $totalPanier += (float) $panier->prixpanier;
-                        }
-                    }
-                @endphp
-
                 <div class="total-row">
                     <span>Total</span>
                     <span>{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
                 </div>
-                <button class="checkout-btn">RÉGLER VOS ACHATS</button>
-           </div>
+                <a href="{{ route('commander.index') }}" class="checkout-btn" style="text-decoration: none; display: block; text-align: center;">
+                    RÉGLER VOS ACHATS
+                </a>
+            </div>
         </div>
 
     </header>
@@ -137,6 +136,8 @@
                 cartOverlay.addEventListener('click', closeCart);
             }
         });
+
+        
     </script>
     @yield('scripts')
 

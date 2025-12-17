@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Illustrer; 
 
 class Produit extends Model
 {
@@ -17,5 +18,23 @@ class Produit extends Model
         'idcategorie',
         'idcompetition',
         'titreproduit'
+        //'idphoto'
     ];
+
+
+    public function illustrer() {
+        return $this->hasMany(Illustrer::class, 'idproduit', 'idproduit'); 
+    }
+    
+    public function photo()
+    {
+        return $this->hasOneThrough(
+            Photo::class,
+            Illustrer::class,
+            'idproduit',
+            'idphoto',
+            'idproduit',
+            'idphoto'
+        );
+    }
 }

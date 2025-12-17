@@ -14,7 +14,10 @@ use App\Http\Controllers\Connexion;
 use App\Http\Controllers\ProduitDetail;
 use App\Http\Controllers\Voter;
 use App\Http\Controllers\VoterDetail;
-use App\Http\Controllers\Payer;
+use App\Http\Controllers\CarteBancaireController;
+use App\Http\Controllers\Commander;
+use App\Http\Controllers\Contenir;
+use App\Http\Controllers\PanierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,8 +80,11 @@ Route::get('/voter', [Voter::class, 'index'])->name('voter.index');
 // 2. Le détail d'un joueur (C'est ici qu'on utilise le bon contrôleur VoterDetail)
 Route::get('/voter/{id}', [VoterDetail::class, 'show'])->name('voter.show');    
 
+//--- COMMANDER ---
+Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
+
 // --- PAYER ---
-Route::get('/payer', action: [Payer::class, 'index'])->name('payer.index');
-// Route pour gérer la soumission du paiement
-Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
-    ->name('payer.effectuer');
+Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
+Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
+
+Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');

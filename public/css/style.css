@@ -769,11 +769,8 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    width: 100%;
     font-weight: bold;
 }
-
-
 
 #panier-text {
     display: none;
@@ -840,3 +837,65 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
         .font-bebas {
             font-family: 'Oswald', sans-serif; /* Une google font proche */
         }
+
+
+.form-group {
+    margin-bottom: 20px; 
+}
+
+.form-control {
+    width: 100%; 
+    padding: 12px 15px; 
+    font-size: 16px; 
+    line-height: 1.5;
+    box-sizing: border-box;
+    
+    background-color: #f7f9fc; 
+    border: 1px solid #e1e4e8; 
+    border-radius: 6px; 
+    box-shadow: none; 
+    
+    
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control:focus {    
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); 
+    outline: none; 
+}
+
+/* Style pour le bouton "SUITE" */
+.btn-submit {
+    width: 100%;
+    padding: 15px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 30px;
+}
+
+/* Cache les étapes qui ne doivent pas être visibles */
+.formulaireLivraison.hidden {
+    display: none;
+}
+
+/* Assure que l'étape active est visible */
+.formulaireLivraison.active {
+    display: block;
+}
+
+/* Styles pour les boutons de navigation (SUITE, PRÉCÉDENT) */
+.btn-prev, .btn-submit {
+    /* Utilisez ici les styles de votre bouton "SUITE" */
+    padding: 15px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+}
+
