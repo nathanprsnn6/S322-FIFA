@@ -96,6 +96,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+<<<<<<< HEAD
     Route::middleware(['auth'])->group(function () {
         Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
     
@@ -113,3 +114,26 @@ Route::middleware(['auth'])->group(function () {
     }); 
 
     Route::get('/verifier-vote/{idtypevote}', [App\Http\Controllers\VoterController::class, 'checkVote'])->name('verifier.vote');
+=======
+Route::middleware(['auth'])->group(function () {
+    Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
+
+    Route::get('/lancer-maj-stats', function () {
+        // Appel de la commande artisan créée précédemment
+        // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
+        $exitCode = Artisan::call('stats:update');
+
+        // On récupère la sortie texte de la console pour l'afficher à l'écran
+        $output = Artisan::output();
+
+        return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
+    });
+
+});
+
+    // On récupère la sortie texte de la console pour l'afficher à l'écran
+    $output = Artisan::output();
+
+    return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
+});
+>>>>>>> 057a51f1c8a44646697de33fb98eb4f78dee91f8
