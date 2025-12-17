@@ -1,6 +1,3 @@
-/* =========================================
-   1. FONCTIONS DE VALIDATION (Pas de changement)
-   ========================================= */
    function checkFields1() {
     const fields = document.querySelectorAll('#nom,#jour_naissance, #mois_naissance, #annee_naissance, #pays_naissance, #langue, #prenom, #courriel');
     const button = document.getElementById('submitButton1');
@@ -30,8 +27,9 @@ function checkFields3() {
         button.disabled = !allFilled;
     }
 }
-// Ajoute tes autres checks ici si besoin...
-//========================================= LOGIQUE VILLE / CODE POSTAL (Modifié)
+
+
+
 document.addEventListener('DOMContentLoaded', function() {
     const cpInput = document.getElementById('cp');
     const villeSelect = document.getElementById('ville_select');
@@ -39,9 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (cpInput && villeSelect && villeHidden) {
 
-        // Fonction pour charger les villes via l'API
         function lancerRechercheAPI(cp, villeActuelle) {
-            // On désactive le select visuellement le temps de charger pour montrer qu'il se passe un truc
             villeSelect.style.opacity = "0.5"; 
 
             const url = `https://geo.api.gouv.fr/communes?codePostal=${cp}&fields=nom&format=json&geometry=centre`;
@@ -49,8 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(url)
                 .then(res => res.json())
                 .then(data => {
-                    villeSelect.style.opacity = "1"; // On réactive
-                    villeSelect.innerHTML = ''; // On vide la liste (on supprime la ville unique de Laravel)
+                    villeSelect.style.opacity = "1";
+                    villeSelect.innerHTML = '';
                     
                     if (data.length > 0) {
                         data.forEach(commune => {
@@ -58,14 +54,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             option.value = commune.nom;
                             option.text = commune.nom;
                             
-                            // Si c'est la ville enregistrée, on la sélectionne
                             if (villeActuelle && commune.nom === villeActuelle) {
                                 option.selected = true;
                             }
                             villeSelect.appendChild(option);
                         });
                         
-                        // Sécurité : Si la ville actuelle n'est pas dans l'API, on la remet
                         if (villeActuelle && !Array.from(villeSelect.options).some(o => o.value === villeActuelle)) {
                             let opt = new Option(villeActuelle, villeActuelle, true, true);
                             villeSelect.add(opt);
@@ -80,13 +74,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
         }
 
-        // 1. AU DÉMARRAGE : On lance la recherche directe
         if (cpInput.value.length === 5) {
             console.log("Lancement auto API...");
             lancerRechercheAPI(cpInput.value, villeHidden.value);
         }
 
-        // 2. SÉCURITÉ : Si on clique sur la liste et qu'il n'y a qu'1 seule option (celle de Laravel), on relance !
         villeSelect.addEventListener('focus', function() {
             if (this.options.length <= 1 && cpInput.value.length === 5) {
                 console.log("Relance API au clic...");
@@ -94,7 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 3. Changement de CP manuel
         cpInput.addEventListener('input', function() {
             if (this.value.length === 5) {
                 villeHidden.value = ""; 
@@ -102,32 +93,143 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // 4. Sélection d'une ville
         villeSelect.addEventListener('change', function() {
             villeHidden.value = this.value;
         });
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const stockDisplay = document.getElementById('stock');
+    const priceDisplay = document.querySelector('#price b');
+    const colorSelect = document.getElementById('color');
+    const sizeInputs = document.querySelectorAll('.size-input');
+    const sizeLabels = document.querySelectorAll('.size-button');
+    const addButton = document.getElementById('add-button');
+    const stockData = window.stockData || {};
 
-const stockDisplay = document.querySelector('#stock')
+    function updateProductInfo() {
+        const selectedColorId = colorSelect.value;
+        const selectedSizeInput = document.querySelector('input[name="size"]:checked');
+        
+        const selectedOption = colorSelect.options[colorSelect.selectedIndex];
+        const price = parseFloat(selectedOption.getAttribute('data-price'));
+        priceDisplay.textContent = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
 
-document.querySelectorAll('.size-button').forEach(button => {
-    button.addEventListener('click', function() {
-        document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        const selectedSize = this.dataset.id;
-        stockDisplay.textContent = "Stock restant : " + '5'
+        if (selectedSizeInput) {
+            const selectedSizeId = selectedSizeInput.value;
+            
+            let stockQty = 0;
+            if (stockData[selectedColorId] && stockData[selectedColorId][selectedSizeId]) {
+                stockQty = stockData[selectedColorId][selectedSizeId];
+            }
+
+            if (stockQty > 0) {
+                stockDisplay.textContent = "Stock restant : " + stockQty;
+                stockDisplay.style.color = "green";
+                addButton.disabled = false;
+                addButton.style.opacity = "1";
+                addButton.style.cursor = "pointer";
+
+                const quantityInput = document.getElementById('quantity');
+                quantityInput.max = stockQty;
+
+                if (parseInt(quantityInput.value) > stockQty) {
+                    quantityInput.value = stockQty;
+                }
+            } else {
+                stockDisplay.textContent = "Rupture de stock";
+                stockDisplay.style.color = "red";
+                addButton.disabled = true;
+                addButton.style.opacity = "0.5";
+                addButton.style.cursor = "not-allowed";
+
+                const quantityInput = document.getElementById('quantity');
+                quantityInput.max = 0;
+                quantityInput.value = 0;
+            }
+        } else {
+            stockDisplay.textContent = "Veuillez sélectionner une taille";
+            stockDisplay.style.color = "#333";
+            addButton.disabled = true;
+
+            const quantityInput = document.getElementById('quantity');
+            quantityInput.max = 1;
+            quantityInput.value = 1;
+        }
+    }
+
+    sizeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            sizeLabels.forEach(lbl => lbl.classList.remove('active'));
+            const label = document.querySelector(`label[for="${this.id}"]`);
+            if(label) label.classList.add('active');
+            
+            updateProductInfo();
+        });
+    });
+
+    colorSelect.addEventListener('change', updateProductInfo);
+
+    updateProductInfo();
+});
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const radios = document.querySelectorAll('.vote-radio');
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            const playerId = this.dataset.player;
+            const currentRankName = this.name;
+
+            radios.forEach(otherRadio => {
+                if (otherRadio.dataset.player === playerId && otherRadio.name !== currentRankName) {
+                    otherRadio.checked = false;
+                }
+            });
+        });
     });
 });
 
-const colorSelect = document.getElementById('color');
-const priceDisplay = document.querySelector('#price b');
-
-
-colorSelect.addEventListener('change', function() {
-    const selectedOption = this.options[this.selectedIndex];
-    const newPrice = parseFloat(selectedOption.getAttribute('data-price'));
-    priceDisplay.textContent = newPrice.toFixed(2) + ' €';
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.js-toggle-order-details');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const id = btn.getAttribute('data-id');
+            const row = document.getElementById('details-' + id);
+            if (row) {
+                const isHidden = getComputedStyle(row).display === 'none';
+                row.style.display = isHidden ? 'table-row' : 'none';
+            }
+        });
+    });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const cartPopup = document.getElementById('cart-popup');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const closeBtn = document.getElementById('close-btn');
+    const openCartBtn = document.getElementById('open-cart-btn');
+    
+    const openCart = (e) => {
+        if (e) e.preventDefault();
+        if (cartPopup) cartPopup.classList.add('is-open');
+        if (cartOverlay) cartOverlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    const closeCart = () => {
+        if (cartPopup) cartPopup.classList.remove('is-open');
+        if (cartOverlay) cartOverlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+    };
+
+    if (openCartBtn) openCartBtn.addEventListener('click', openCart);
+    if (closeBtn) closeBtn.addEventListener('click', closeCart);
+    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+});

@@ -4,33 +4,51 @@ namespace App\Http\Controllers;
 
 use App\Models\Joueur;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VoterDetail extends Controller
 {
     public function show($id)
     {
-        // 1. On récupère le Joueur, pas le Produit. 
-        // On charge 'personne' pour avoir le nom/prénom
-        $joueur = Joueur::with('personne')->findOrFail($id);
+        $joueur = Joueur::with('personne')
+            ->join('photo', 'joueur.idphotodetails', '=', 'photo.idphoto')
+            ->select('joueur.*', 'photo.destinationphoto')
+            ->findOrFail($id);
 
-        // 2. Préparation des données pour la vue
-        // Ta vue attend un tableau $player avec 'bio' et 'stats', on le simule ici :
-        $playerData = [
-            'bio' => [
-                "Ceci est la première ligne de la biographie (à remplacer par la BDD).",
-                "Ceci est la deuxième ligne."
-            ],
-            'stats' => [
-                ['label' => 'Matchs', 'value' => 12],
-                ['label' => 'Buts', 'value' => 5],
-                ['label' => 'Passes', 'value' => 3],
-            ]
-        ];
+        $playerData = DB::table('statistiques')
+            ->join('joueur', 'statistiques.idjoueur', '=', 'joueur.idpersonne')
+            ->where('statistiques.idjoueur', $id)
+            ->select(
+                'statistiques.matchs_joues',
+                'statistiques.titularisations',
+                'statistiques.minutes_jouees',
+                'statistiques.buts',
+                'statistiques.nb_selections',
+                'statistiques.premiere_selection_date',
+                'statistiques.premiere_selection_adversaire',
+                'statistiques.premiere_selection_score'
+            )
+            ->first();
 
-        // 3. On envoie les données à la vue
+        $equipe = DB::table('equipe')
+            ->join('joueur', 'equipe.idequipe', '=', 'joueur.idequipe')
+            ->where('joueur.idpersonne', $id)
+            ->select('equipe.libelleequipe', 'equipe.idequipe')
+            ->first();
+
+        $nation = DB::table('nation')
+            ->join('joueur', 'nation.idnation', '=', 'joueur.idnation')
+            ->where('joueur.idpersonne', $id)
+            ->select('nation.nomnation')
+            ->first();
+            
+        $prefill = session('vote_attente', []);
+
         return view('voterDetail', [
-            'joueur' => $joueur,
-            'player' => $playerData // On passe les données supplémentaires
+            'joueur'     => $joueur,
+            'playerData' => $playerData,
+            'equipe'     => $equipe,
+            'nation'     => $nation
         ]);
     }
 }

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIFA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="shortcut icon" href="{{ asset('img/FIFA.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
@@ -13,7 +14,6 @@
         
         <div class="header-left">
             <a href="{{ url('/') }}" class="logo-fifa">FIFA</a>
-            
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
         </div>
@@ -22,6 +22,7 @@
             <a href="#" class="btn-auth" id="open-cart-btn">
                 <span class="panier-icon"></span> <span id="panier-text">Panier</span>
             </a>
+
             @guest
                 <a href="{{ route('login') }}" class="btn-auth">
                     <span class="user-icon"></span> Inscription / Connexion
@@ -30,10 +31,24 @@
 
             @auth
                 <div style="display: flex; align-items: center; gap: 15px;">
-                    <a href="{{ route('user.edit') }}" class="btn-auth" style="background-color: white; color: #034f96;">
-                        <span class="user-icon" style="border-color: #034f96;"></span> 
-                        {{ Auth::user()->prenom ?? 'Mon Compte' }}
-                    </a>
+                    
+                    @if(Auth::user()->idrole == 3)
+                        <a href="{{ route('expedition.index') }}" class="btn-auth" style="background-color: #27ae60; color: white; border: none;">
+                            <i class="fas fa-truck"></i> Espace Expédition
+                        </a>
+                    @endif
+
+                    <div class="user-dropdown">
+                        <a href="#" class="btn-auth" style="background-color: white; color: #034f96;">
+                            <span class="user-icon" style="border-color: #034f96;"></span> 
+                            {{ Auth::user()->prenom ?? 'Mon Compte' }}
+                        </a>
+
+                        <div class="dropdown-menu">
+                            <a href="{{ route('user.edit') }}">Mes informations</a>
+                            <a href="{{ route('commandes.index') }}">Mes commandes</a>
+                        </div>
+                    </div>
 
                     <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                         @csrf
@@ -43,8 +58,6 @@
                     </form>
                 </div>
             @endauth
-
-            
         </div>
 
         <div id="cart-popup" class="sidebar-cart">
@@ -55,6 +68,7 @@
 
             <div class="cart-items-container ">
                 <h2>Articles du Panier</h2>
+
     
                 <div class="cart-item-list"> 
                     @forelse ($contenirs as $contenir)                        
@@ -75,10 +89,12 @@
                     @empty
                         <p>Votre panier est vide.</p>
                     @endforelse
+
                 </div>
             </div>
             
             <div class="cart-footer">
+
                 <div class="total-row">
                     <span>Total</span>
                     <span>{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
@@ -139,6 +155,7 @@
 
         
     </script>
+
     @yield('scripts')
 
 </body>

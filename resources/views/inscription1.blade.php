@@ -88,7 +88,7 @@
 
                 <select id="annee_naissance" name="annee_naissance" required>
                     <option value="" disabled selected>Année *</option>
-                    @for ($i = date('Y'); $i >= 1920; $i--)
+                    @for ($i = date('Y')-3; $i >= 1920; $i--)
                         <option value="{{ $i }}" {{ old('annee_naissance') == $i ? 'selected' : '' }}>{{ $i }}</option>
                     @endfor
                 </select>

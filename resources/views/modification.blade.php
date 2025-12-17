@@ -13,7 +13,6 @@
         <h1>Mon Profil</h1>
         <h2>Modifier mes informations</h2>
 
-        {{-- Affichage des messages de succès ou erreur --}}
         @if (session('success'))
             <div style="background-color: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
                 {{ session('success') }}
@@ -22,7 +21,7 @@
 
         <form method="post" action="{{ route('user.update') }}">
             @csrf
-            @method('PUT') {{-- Indique que c'est une mise à jour --}}
+            @method('PUT')
 
             <h3 class="section-title">Informations personnelles</h3>
             
