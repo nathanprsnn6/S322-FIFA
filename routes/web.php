@@ -14,10 +14,17 @@ use App\Http\Controllers\Connexion;
 use App\Http\Controllers\ProduitDetail;
 use App\Http\Controllers\VoterController;
 use App\Http\Controllers\VoterDetail;
+<<<<<<< HEAD
+use App\Http\Controllers\CarteBancaireController;
+use App\Http\Controllers\Commander;
+use App\Http\Controllers\Contenir;
+use App\Http\Controllers\PanierController;
+=======
 use App\Http\Controllers\Payer;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Commande;
 use App\Http\Controllers\ExpeditionController;
+>>>>>>> 7faf6862bf141f9dd3adffcf35e43f29cdfab355
 
 /*
 |--------------------------------------------------------------------------
@@ -81,7 +88,16 @@ Route::post('/voter', [VoterController::class, 'store'])->name('voter.store');
 // 2. Le détail d'un joueur (C'est ici qu'on utilise le bon contrôleur VoterDetail)
 Route::get('/voter/{id}', [VoterDetail::class, 'show'])->name('voter.show');    
 
+//--- COMMANDER ---
+Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
+
 // --- PAYER ---
+<<<<<<< HEAD
+Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
+Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
+
+Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
+=======
 Route::get('/payer', action: [Payer::class, 'index'])->name('payer.index');
 // Route pour gérer la soumission du paiement
 Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
@@ -137,3 +153,4 @@ Route::middleware(['auth'])->group(function () {
     return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
 });
 >>>>>>> 057a51f1c8a44646697de33fb98eb4f78dee91f8
+>>>>>>> 7faf6862bf141f9dd3adffcf35e43f29cdfab355

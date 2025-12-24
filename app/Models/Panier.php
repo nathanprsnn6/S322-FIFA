@@ -11,6 +11,7 @@ class Panier extends Model
     protected $primarykey = "idpanier";
     protected $fillable = [
         'idpanier',
+        'idpersonne',        
         'prixpanier',
         'datecreationpanier'
     ];
