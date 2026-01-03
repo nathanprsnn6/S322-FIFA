@@ -15,7 +15,7 @@ class Inscription2 extends Controller
         }
 
 
-        $nations = Nation::all(); 
+        $nations = Nation::orderBy('nomnation', 'asc')->get();
 
         return view('inscription2', [
             'nations' => $nations

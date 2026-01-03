@@ -9,7 +9,7 @@ class Inscription1 extends Controller
 {
     public function index()
     {
-        $nations = Nation::all(); 
+        $nations = Nation::orderBy('nomnation', 'asc')->get();
 
         return view('inscription1', [
             'nations' => $nations 

@@ -14,18 +14,16 @@ use App\Http\Controllers\Connexion;
 use App\Http\Controllers\ProduitDetail;
 use App\Http\Controllers\VoterController;
 use App\Http\Controllers\VoterDetail;
-<<<<<<< HEAD
 use App\Http\Controllers\CarteBancaireController;
 use App\Http\Controllers\Commander;
 use App\Http\Controllers\Contenir;
 use App\Http\Controllers\PanierController;
-=======
 use App\Http\Controllers\Payer;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Commande;
 use App\Http\Controllers\ExpeditionController;
->>>>>>> 7faf6862bf141f9dd3adffcf35e43f29cdfab355
-
+use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\PublicationDetail;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -92,12 +90,12 @@ Route::get('/voter/{id}', [VoterDetail::class, 'show'])->name('voter.show');
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
 
 // --- PAYER ---
-<<<<<<< HEAD
+
 Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
 Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
 
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
-=======
+
 Route::get('/payer', action: [Payer::class, 'index'])->name('payer.index');
 // Route pour gérer la soumission du paiement
 Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
@@ -112,7 +110,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-<<<<<<< HEAD
     Route::middleware(['auth'])->group(function () {
         Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
     
@@ -130,27 +127,28 @@ Route::middleware(['auth'])->group(function () {
     }); 
 
     Route::get('/verifier-vote/{idtypevote}', [App\Http\Controllers\VoterController::class, 'checkVote'])->name('verifier.vote');
-=======
-Route::middleware(['auth'])->group(function () {
-    Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
 
-    Route::get('/lancer-maj-stats', function () {
-        // Appel de la commande artisan créée précédemment
-        // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
-        $exitCode = Artisan::call('stats:update');
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
 
-        // On récupère la sortie texte de la console pour l'afficher à l'écran
-        $output = Artisan::output();
+//     Route::get('/lancer-maj-stats', function () {
+//         // Appel de la commande artisan créée précédemment
+//         // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
+//         $exitCode = Artisan::call('stats:update');
 
-        return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
-    });
+//         // On récupère la sortie texte de la console pour l'afficher à l'écran
+//         $output = Artisan::output();
 
-});
+//         return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
+//     });
 
-    // On récupère la sortie texte de la console pour l'afficher à l'écran
-    $output = Artisan::output();
+// });
 
-    return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
-});
->>>>>>> 057a51f1c8a44646697de33fb98eb4f78dee91f8
->>>>>>> 7faf6862bf141f9dd3adffcf35e43f29cdfab355
+//     // On récupère la sortie texte de la console pour l'afficher à l'écran
+//     $output = Artisan::output();
+
+//     return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
+
+
+Route::get('/publication', [PublicationController::class, 'index'])->name('publication.index');
+Route::get('/publication/{id}', [PublicationDetail::class, 'show'])->name('publication.show');    
