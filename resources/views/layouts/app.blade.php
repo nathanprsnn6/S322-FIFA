@@ -39,6 +39,12 @@
                         </a>
                     @endif
 
+                    @if(Auth::user()->idrole == 3)
+                        <a href="{{ route('produitService.index') }}" class="btn-auth" style="background-color: #27ae60; color: white; border: none;">
+                            <i class="fas fa-truck"></i> Nouveau produit
+                        </a>
+                    @endif
+
                     <div class="user-dropdown">
                         <a href="#" class="btn-auth" style="background-color: white; color: #034f96;">
                             <span class="user-icon" style="border-color: #034f96;"></span> 

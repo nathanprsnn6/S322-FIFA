@@ -89,6 +89,34 @@
         @endforeach
     </div>
 @endif
+{{-- Section Produits Consultés --}}
+@if($produitsConsultes->count() > 0)
+    <div class="container" style="max-width: 100%; background: none; box-shadow: none; padding: 0 20px; margin-top: 50px;">
+        <h3 class="section-title" style="font-size: 1.5em; border-bottom: 1px solid #034f96; padding-bottom: 15px;">
+            Vos dernières consultations
+        </h3>
+    </div>
+
+    <div id="produits">
+        @foreach($produitsConsultes as $consulte)
+            <div class="div_produit">
+                <a href="{{ url('/produit/' . $consulte->idproduit) }}">
+                    <img src="{{ asset($consulte->destinationphoto) }}" 
+                         alt="{{ $consulte->titreproduit }}" 
+                         style="height: 180px; width: auto; object-fit: contain; margin-bottom: 10px;">
+                    
+                    <h4 style="font-size: 1em; color: #333; margin: 10px 0; height: 40px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                        {{ $consulte->titreproduit }}
+                    </h4>
+
+                    <span style="font-size: 1.1em; font-weight: bold; color: #034f96;">
+                        {{ number_format($consulte->prix, 2, ',', ' ') }} €
+                    </span>
+                </a>
+            </div>
+        @endforeach
+    </div>
+@endif
 
 @section('scripts')
 <script src="{{ asset('js/main.js') }}" defer></script>
