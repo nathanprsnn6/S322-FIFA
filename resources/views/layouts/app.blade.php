@@ -16,6 +16,7 @@
             <a href="{{ url('/') }}" class="logo-fifa">FIFA</a>
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
+            <a href="{{ url('publication') }}" class="nav-link">Publication</a>
         </div>
 
         <div class="header-right">
@@ -35,6 +36,12 @@
                     @if(Auth::user()->idrole == 3)
                         <a href="{{ route('expedition.index') }}" class="btn-auth" style="background-color: #27ae60; color: white; border: none;">
                             <i class="fas fa-truck"></i> Espace Expédition
+                        </a>
+                    @endif
+
+                    @if(Auth::user()->idrole == 6)
+                        <a href="{{ route('produitService.sans_prix') }}" class="btn-auth btn-management">
+                            <i class="fas fa-tags"></i> Gestion Prix
                         </a>
                     @endif
 
