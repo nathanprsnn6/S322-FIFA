@@ -1790,3 +1790,116 @@ input[type="date"], select {
     color: #333;
     text-align: justify;
 }
+
+/* Palette FIFA : Bleu #034f96 | Vert #27ae60 */
+
+.fifa-container {
+    background-color: #f4f7f6;
+    padding: 40px 20px;
+    min-height: 80vh;
+}
+
+.fifa-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.fifa-card-header {
+    background-color: #034f96 !important; /* Bleu FIFA */
+    color: white !important;
+    padding: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fifa-table {
+    margin-bottom: 0;
+}
+
+.fifa-table thead th {
+    background-color: #f8f9fa;
+    color: #034f96;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border-top: none;
+    padding: 15px;
+}
+
+.fifa-table tbody tr {
+    transition: all 0.3s;
+}
+
+.fifa-table tbody tr:hover {
+    background-color: rgba(39, 174, 96, 0.05); /* Léger vert au survol */
+}
+
+.fifa-input-prix {
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 5px 10px;
+    transition: border-color 0.3s;
+    width: 120px;
+}
+
+.fifa-input-prix:focus {
+    border-color: #034f96;
+    outline: none;
+}
+
+.fifa-btn-save {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    transition: transform 0.2s, background 0.3s;
+}
+
+.fifa-btn-save:hover {
+    background-color: #219150;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.alert-fifa {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+/* Style spécifique pour le bouton Gestion/Prix */
+.btn-management {
+    background: linear-gradient(135deg, #034f96 0%, #023a6f 100%) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.btn-management i {
+    font-size: 16px;
+    color: #ffd700; /* Une touche dorée pour le côté "FIFA Reward/Gold" */
+}
+
+.btn-management:hover {
+    background: #023a6f !important;
+    box-shadow: 0 4px 12px rgba(3, 79, 150, 0.3);
+    transform: translateY(-1px);
+    border-color: #ffd700 !important; /* La bordure devient dorée au survol */
+}

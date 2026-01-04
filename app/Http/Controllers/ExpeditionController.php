@@ -46,7 +46,7 @@ class ExpeditionController extends Controller
 
         $orders = $query->orderBy('livrer.creneaulivraison', 'desc')->get();
 
-        return view('expedition', [
+        return view('produitService', [
             'orders' => $orders,
             'transportTypes' => $transportTypes,
             'currentDate' => $selectedDate,

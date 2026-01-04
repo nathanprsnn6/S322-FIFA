@@ -39,9 +39,9 @@
                         </a>
                     @endif
 
-                    @if(Auth::user()->idrole == 3)
-                        <a href="{{ route('produitService.index') }}" class="btn-auth" style="background-color: #27ae60; color: white; border: none;">
-                            <i class="fas fa-truck"></i> Nouveau produit
+                    @if(Auth::user()->idrole == 6)
+                        <a href="{{ route('produitService.sans_prix') }}" class="btn-auth btn-management">
+                            <i class="fas fa-tags"></i> Gestion Prix
                         </a>
                     @endif
 
