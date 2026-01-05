@@ -19,10 +19,12 @@ use App\Http\Controllers\CarteBancaireController;
 use App\Http\Controllers\Commander;
 use App\Http\Controllers\Contenir;
 use App\Http\Controllers\PanierController;
+
 use App\Http\Controllers\Payer;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Commande;
 use App\Http\Controllers\ExpeditionController;
+
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicationDetail;
 use App\Http\Controller\ExpeditionService;
@@ -90,8 +92,13 @@ Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('command
 Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
 
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
+
+Route::put('/panier/update-quantity/{compositeId}', [PanierController::class, 'updateQuantity'])
+     ->name('panier.update_quantity');
+Route::delete('/panier/{compositeId}', [PanierController::class, 'removeItem'])
+     ->name('panier.remove_item');
+
 Route::get('/payer', action: [Payer::class, 'index'])->name('payer.index');
-// Route pour gérer la soumission du paiement
 Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
     ->name('payer.effectuer');
 
@@ -107,6 +114,7 @@ Route::get('/publication/{id}', [PublicationDetail::class, 'show'])->name('publi
 Route::middleware(['auth'])->group(function () {
         Route::get('/mes-commandes', [Commande::class, 'index'])->name('commandes.index');
     });
+
 
 
     Route::middleware(['auth'])->group(function () {
@@ -126,6 +134,7 @@ Route::middleware(['auth'])->group(function () {
     }); 
     Route::post('/expedition/expedier/{id}', [App\Http\Controllers\ExpeditionController::class, 'expedier'])->name('expedition.expedier');
 
+    Route::get('/verifier-vote/{idtypevote}', [App\Http\Controllers\VoterController::class, 'checkVote'])->name('verifier.vote');
     Route::get('/verifier-vote/{idtypevote}', [App\Http\Controllers\VoterController::class, 'checkVote'])->name('verifier.vote');
 Route::middleware(['auth'])->group(function () {
     Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');

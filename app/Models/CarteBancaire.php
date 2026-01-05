@@ -10,8 +10,7 @@ class CarteBancaire extends Model
     protected $table ="cartebancaire";
     protected $primarykey = "idcb";
     public $timestamps = false;
-    protected $filable = [
-        'idcb',
+    protected $fillable = [
         'idpersonne',
         'refcb',
         'dateexpirationcb',

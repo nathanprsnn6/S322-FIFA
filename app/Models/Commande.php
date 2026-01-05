@@ -10,7 +10,7 @@ class Commande extends Model
     protected $table ="commande";
     protected $primarykey = "idcommande";
     public $timestamps = false;
-    protected $filable = [
+    protected $fillable = [
         'idcommande',
         'idpanier',
         'idtransaction',
