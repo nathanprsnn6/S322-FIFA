@@ -11,7 +11,8 @@ class Contenir extends Model
 {
     protected $table = "contenir";
     public $timestamps = false;
-    protected $primarykey = "idpanier"; 
+   // protected $primarykey = "idpanier"; 
+   public $incrementing = false;
     protected $fillable = [
         'idpanier',
         'idproduit',

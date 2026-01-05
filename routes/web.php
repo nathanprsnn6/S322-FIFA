@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-
 use App\Http\Controllers\PersonneTest;
 use App\Http\Controllers\UtilisateurTest;
 use App\Http\Controllers\ProduitTest;
@@ -40,21 +39,28 @@ Route::get('/produits', [ProduitTest::class, 'index'])->name('produits.index');
 Route::get('/produit/{id}', [ProduitDetail::class, 'show'])->name('produit.show');
 Route::post('/produits', [ProduitDetail::class, 'store'])->name('produit.store');
 
-// --- GESTION PRIX (Nathan) ---
+// --- GESTION PRIX ---
 Route::get('produitService', [ProduitService::class, 'produitsSansPrix'])->name('produitService.sans_prix');
 Route::post('/produits/save-prix', [ProduitService::class, 'updatePrix'])->name('produits.save_prix');
 
-// --- INSCRIPTION ---
+// --- INSCRIPTION (Etapes) ---
+Route::get('/inscription1', [Inscription1::class, 'index']); // Ancien lien ?
 Route::get('/inscription/etape1', [Inscription1::class, 'index'])->name('inscription1.index');
 Route::post('/inscription/etape1', [Inscription1::class, 'store'])->name('inscription1.store');
+ 
 Route::get('/inscription/etape2', [Inscription2::class, 'index'])->name('inscription2.index');
 Route::post('/inscription/etape2', [Inscription2::class, 'store'])->name('inscription2.store');
+ 
 Route::get('/inscription/etape3', [Inscription3::class, 'index'])->name('inscription3.index');
 Route::post('/inscription/etape3', [Inscription3::class, 'store'])->name('inscription3.store');
+ 
 Route::get('/inscription/etape4', [Inscription4::class, 'index'])->name('inscription4.index');
-
+ 
+ 
+// --- INSCRIPTION PRO ---
 Route::get('/devenir-pro', [InscriptionPro::class, 'create'])->name('pro.create');
 Route::post('/devenir-pro', [InscriptionPro::class, 'store'])->name('pro.store');
+
 
 // --- AUTHENTIFICATION ---
 Route::get('/connexion', [Connexion::class, 'show'])->name('login');
@@ -73,6 +79,9 @@ Route::get('/verifier-vote/{idtypevote}', [VoterController::class, 'checkVote'])
 
 // --- PANIER & COMMANDE ---
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
+Route::put('/panier/update-quantity/{compositeId}', [PanierController::class, 'updateQuantity'])->name('panier.update_quantity');
+Route::delete('/panier/{compositeId}', [PanierController::class, 'removeItem'])->name('panier.remove_item');
+
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
 Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
 Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
@@ -85,8 +94,9 @@ Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])->name('payer.
 Route::get('/publication', [PublicationController::class, 'index'])->name('publication.index');
 Route::get('/publication/{id}', [PublicationDetail::class, 'show'])->name('publication.show');
 
-// --- ROUTES PROTÉGÉES ---
+// --- ROUTES PROTÉGÉES (AUTH) ---
 Route::middleware(['auth'])->group(function () {
+    
     Route::get('/mes-commandes', [Commande::class, 'index'])->name('commandes.index');
 
     // EXPEDITION

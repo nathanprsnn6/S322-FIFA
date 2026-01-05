@@ -15,4 +15,9 @@ class Panier extends Model
         'prixpanier',
         'datecreationpanier'
     ];
+
+    public function commande()
+    {
+        return $this->hasOne(Commande::class, 'idpanier'); 
+    }
 }
