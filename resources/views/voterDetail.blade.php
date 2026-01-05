@@ -79,6 +79,10 @@
                 @endforeach
             </div>
         </div>
-
+        <div class="more-details-section">
+            <a href="{{ route('publication.index', ['search' => $joueur->personne->prenom . ' ' . $joueur->personne->nom]) }}" class="btn-more-details">
+                VOIR PLUS DE DÉTAILS SUR {{ $joueur->personne->prenom }} {{ $joueur->personne->nom }}
+            </a>
+        </div>
     </div>
 @endsection

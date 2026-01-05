@@ -16,6 +16,7 @@
             <a href="{{ url('/') }}" class="logo-fifa">FIFA</a>
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
+            <a href="{{ url('publication') }}" class="nav-link">Publication</a>
         </div>
 
         <div class="header-right">

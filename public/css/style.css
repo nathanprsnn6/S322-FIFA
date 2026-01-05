@@ -1576,194 +1576,330 @@ input[type="date"], select {
     color: #475569;
 }
 
-
-/* --- ESPACE VENTE (Admin) --- */
-
-/* =========================================
-   ESPACE VENTE (Admin / Création Produit)
-   ========================================= */
-
-.vente-container {
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Ombre douce */
-    width: 100%;
+/* Container principal */
+.container-publications {
     max-width: 900px;
-    padding: 40px;
-    margin: 50px auto;
-    border-top: 6px solid #034f96; /* Bleu FIFA */
-    font-family: inherit;
+    margin: 20px auto;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
 }
 
-/* --- TYPOGRAPHIE --- */
-.vente-title {
-    color: #034f96;
-    font-size: 2.2rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 10px;
-    letter-spacing: -1px;
-}
-
-.vente-subtitle {
-    color: #64748b;
-    text-align: center;
-    margin-bottom: 50px;
-    font-size: 1.1rem;
-}
-
-.vente-label {
-    display: block;
-    margin-bottom: 10px;
-    font-weight: 700;
-    color: #1e293b;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* --- GRILLE DU FORMULAIRE --- */
-.vente-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colonnes égales */
-    gap: 30px; /* Espace entre les éléments */
-}
-
-.vente-full-width {
-    grid-column: span 2; /* L'élément prend toute la largeur */
-}
-
-/* --- CHAMPS (INPUTS & SELECTS) --- */
-.vente-input, 
-.vente-select, 
-.vente-textarea {
-    width: 100%;
-    height: 55px; /* Hauteur fixe pour éviter le texte coupé */
-    padding: 0 20px; /* Espace interne gauche/droite */
-    
-    font-size: 16px;
-    font-family: inherit;
-    color: #333;
-    
-    background-color: #f8fafc;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    
-    box-sizing: border-box; /* Important pour les dimensions */
-    transition: all 0.3s ease;
-    
-    /* Centre le texte verticalement dans l'input */
-    display: flex; 
-    align-items: center; 
-}
-
-/* Focus : Quand on clique dans le champ */
-.vente-input:focus, 
-.vente-select:focus, 
-.vente-textarea:focus {
-    border-color: #034f96;
-    background-color: #ffffff;
-    outline: none;
-    box-shadow: 0 0 0 4px rgba(3, 79, 150, 0.1); /* Halo bleu */
-}
-
-/* --- STYLE SPÉCIFIQUE SELECT (Liste déroulante) --- */
-.vente-select {
-    cursor: pointer;
-    appearance: none;        /* Retire le style moche par défaut */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    
-    /* Flèche personnalisée bleue */
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23034f96' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 20px center;
-    background-size: 16px;
-    
-    padding-right: 50px; /* Empêche le texte de passer sous la flèche */
-}
-
-/* Groupe Catégorie + Sous-catégorie */
-.vente-select-group {
+/* Carte de publication */
+.pub-card {
     display: flex;
-    gap: 20px;
-    width: 100%;
-}
-.vente-select-group > * {
-    flex: 1; /* Chaque select prend 50% de la place */
-}
-
-/* --- TEXTAREA (Description) --- */
-.vente-textarea {
-    height: auto;     /* Pas de hauteur fixe pour le textarea */
-    min-height: 150px; 
-    padding: 15px 20px; /* Padding haut/bas différent des inputs */
-    resize: vertical;
-    line-height: 1.6;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    transition: transform 0.2s;
+    text-decoration: none;
 }
 
-/* --- UPLOAD FICHIER --- */
-.vente-file-upload {
-    height: auto;
+.pub-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Partie Visuelle (Gauche) */
+.pub-visual {
+    width: 200px;
+    min-width: 200px;
     padding: 15px;
-    background-color: white;
-    border: 2px dashed #cbd5e1;
-    text-align: center;
-    cursor: pointer;
-}
-.vente-file-upload:hover {
-    border-color: #034f96;
-    background-color: #f0f9ff;
+    position: relative;
 }
 
-/* --- BOUTON VALIDER --- */
-.vente-btn-submit {
-    grid-column: span 2;
-    margin-top: 20px;
-    width: 100%;
-    height: 60px;
-    
-    background: linear-gradient(135deg, #034f96 0%, #02366b 100%);
-    color: white;
-    
-    border: none;
-    border-radius: 50px;
-    
-    font-size: 1.2rem;
-    font-weight: 800;
+.pub-type {
+    display: inline-block;
+    background: #e9ecef;
+    color: #495057;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    
-    cursor: pointer;
-    box-shadow: 0 10px 20px rgba(3, 79, 150, 0.3);
-    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.vente-btn-submit:hover {
+.pub-image img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+/* Partie Texte (Droite) */
+.pub-content {
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pub-date {
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+.pub-title {
+    margin: 0 0 10px 0;
+    font-size: 1.25rem;
+    line-height: 1.3;
+}
+
+.pub-title a {
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.arrow {
+    font-size: 1.1rem;
+    margin-left: 5px;
+}
+
+.pub-excerpt {
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+/* Fond bleu marine pour l'entête */
+.search-header {
+    padding: 15px 0;
+    width: 100%;
+    margin-top: 0px;
+}
+
+.header-content {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+}
+
+/* Style du lien Retourner */
+.btn-back {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    margin-right: 20px;
+    font-family: sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.btn-back .dot {
+    margin-right: 5px;
+    font-size: 1.2rem;
+}
+
+/* Formulaire et Input */
+.search-form {
+    flex: 1; /* Prend toute la place restante */
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-wrapper input {
+    width: 100%;
+    padding: 10px 20px 10px 45px; /* Espace pour l'icône à gauche */
+    border-radius: 25px; /* Forme pilule */
+    border: 2px solid #3e5b84;
+    background-color: white;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+/* Icône loupe (nécessite FontAwesome ou un SVG) */
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #0b162a;
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+.more-details-section {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.btn-more-details {
+    display: inline-block;
+    background-color: #0b162a; /* Bleu marine comme ton entête */
+    color: white;
+    padding: 15px 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s;
+    border: 1px solid #3e5b84;
+}
+
+.btn-more-details:hover {
+    background-color: #162a4d;
     transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(3, 79, 150, 0.4);
-    background: linear-gradient(135deg, #045cb0 0%, #034f96 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
-/* --- MOBILE RESPONSIVE --- */
-@media (max-width: 768px) {
-    .vente-form-grid {
-        grid-template-columns: 1fr; /* 1 seule colonne */
-        gap: 20px;
-    }
-    
-    .vente-full-width {
-        grid-column: span 1;
-    }
-    
-    .vente-select-group {
-        flex-direction: column; /* Les selects passent l'un sous l'autre */
-        gap: 15px;
-    }
-    
-    .vente-container {
-        padding: 20px;
-        margin: 20px auto;
-    }
+.article-container {
+    max-width: 800px; /* Plus étroit pour faciliter la lecture */
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.main-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #0b162a;
+    text-align: center;
+    margin-bottom: 30px;
+    line-height: 1.2;
+}
+
+.article-hero img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.article-meta {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    color: #666;
+    font-style: italic;
+}
+
+.article-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+    text-align: justify;
+}
+
+/* Palette FIFA : Bleu #034f96 | Vert #27ae60 */
+
+.fifa-container {
+    background-color: #f4f7f6;
+    padding: 40px 20px;
+    min-height: 80vh;
+}
+
+.fifa-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.fifa-card-header {
+    background-color: #034f96 !important; /* Bleu FIFA */
+    color: white !important;
+    padding: 20px;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fifa-table {
+    margin-bottom: 0;
+}
+
+.fifa-table thead th {
+    background-color: #f8f9fa;
+    color: #034f96;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border-top: none;
+    padding: 15px;
+}
+
+.fifa-table tbody tr {
+    transition: all 0.3s;
+}
+
+.fifa-table tbody tr:hover {
+    background-color: rgba(39, 174, 96, 0.05); /* Léger vert au survol */
+}
+
+.fifa-input-prix {
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 5px 10px;
+    transition: border-color 0.3s;
+    width: 120px;
+}
+
+.fifa-input-prix:focus {
+    border-color: #034f96;
+    outline: none;
+}
+
+.fifa-btn-save {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    transition: transform 0.2s, background 0.3s;
+}
+
+.fifa-btn-save:hover {
+    background-color: #219150;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.alert-fifa {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+/* Style spécifique pour le bouton Gestion/Prix */
+.btn-management {
+    background: linear-gradient(135deg, #034f96 0%, #023a6f 100%) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.btn-management i {
+    font-size: 16px;
+    color: #ffd700; /* Une touche dorée pour le côté "FIFA Reward/Gold" */
+}
+
+.btn-management:hover {
+    background: #023a6f !important;
+    box-shadow: 0 4px 12px rgba(3, 79, 150, 0.3);
+    transform: translateY(-1px);
+    border-color: #ffd700 !important; /* La bordure devient dorée au survol */
 }

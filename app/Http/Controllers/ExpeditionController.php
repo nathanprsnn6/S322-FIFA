@@ -55,7 +55,7 @@ class ExpeditionController extends Controller
             ->orderBy('livrer.datelivraison', 'desc')
             ->get();
 
-        return view('expedition', [
+        return view('produitService', [
             'orders' => $orders,
             'transportTypes' => $transportTypes,
             'currentDate' => $selectedDate,
