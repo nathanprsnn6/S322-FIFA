@@ -7,6 +7,7 @@ use App\Models\Taille;
 use App\Models\Contenir;
 use App\Models\Panier;
 use App\Models\variant_produit;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -18,13 +19,13 @@ class ProduitDetail extends Controller
     public function show($id)
     {
         $produit = Produit::findOrFail($id);
-        $photo =
-        DB::table('photo')
+        $photo = DB::table('photo')
         ->join('illustrer', 'photo.idphoto', '=', 'illustrer.idphoto')
         ->where('illustrer.idproduit', $id)
         ->select('photo.destinationphoto')
         ->first();
 
+        
         $tailles = Taille::whereIn('idtaille', function($query) use ($id) {
             $query->select('idtaille')
                   ->from('reference')
@@ -86,6 +87,34 @@ class ProduitDetail extends Controller
     }
 
 
+    public function createGuestUser()
+    {
+        $guestNom = 'Invité';
+        $guestPrenom = 'Guest-' . Str::substr(Str::uuid(), 0, 8);
+
+        $idPersonne = DB::table('personne')->insertGetId([
+            'nom' => $guestNom,
+            'prenom' => $guestPrenom,
+            'lieunaissance' => 'Inconnu',
+            'datenaissance' => '2025-01-01',
+        ],'idpersonne');
+
+        DB::table('utilisateur')->insert([
+            'idpersonne' => $idPersonne,
+            'idnation' => 1,
+            'idrole' => 1,
+            'naiss_idnation' => 1,
+            'langue_idnation' => 1,
+            'courriel' => $guestPrenom . '@invite.com',
+            'cp'  => 11111,
+            'ville' => "Inconnu",
+            'mdp' => "Inconnu",
+        ]);
+
+        return $idPersonne;
+    }
+
+
 
     public function store(Request $request)
     {
@@ -96,55 +125,69 @@ class ProduitDetail extends Controller
             'quantity'  => 'required|numeric|min:1',
         ]);
 
-        $produitId     = $request->input('produitId');
-        $selectedSize  = $request->input('size');
+        $produitId = $request->input('produitId');
+        $selectedSize = $request->input('size');
         $selectedColor = $request->input('color');
         $quantityToAdd = (int) $request->input('quantity', 1);
 
         $panierId = null;
-        $userId   = Auth::id();
+        $userId = Auth::id();
 
-        if (!$userId) {
-            $userId = $request->input('ghost_user_id');
-    
-            if (!$userId) {
-                return back()
-                    ->withErrors(['error' => "Impossible d'identifier l'utilisateur invité."])
-                    ->withInput();
-            }
-        }
-    
         try {
             $limiteDate = Carbon::now()->subDays(7);
-    
-            $panier = DB::table('panier')
-                ->where('idpersonne', $userId)
-                ->where('datecreationpanier', '>=', $limiteDate)
-                ->first();
-    
-            if (!$panier) {
-                $panierId = DB::table('panier')->insertGetId([
-                    'idpersonne'        => $userId,
-                    'prixpanier'        => 0,
-                    'datecreationpanier'=> now(),
-                ], 'idpanier');
+
+            if ($userId) {
+                $panier = DB::table('panier')
+                    ->where('idpersonne', $userId)
+                    ->where('datecreationpanier', '>=', $limiteDate)
+                    ->first();
+
+                if (!$panier) {
+                    $panierId = DB::table('panier')->insertGetId([
+                        'idpersonne'        => $userId,
+                        'prixpanier'        => 0,
+                        'datecreationpanier'=> now(),
+                    ], 'idpanier');
+                } else {
+                    $panierId = $panier->idpanier;
+                }
             } else {
-                $panierId = $panier->idpanier;
+                $guestUserId = session('guest_user_id');
+
+                if (!$guestUserId) {
+                    $guestUserId = $this->createGuestUser();
+                    session(['guest_user_id' => $guestUserId]);
+                }
+
+                $panier = DB::table('panier')
+                    ->where('idpersonne', $guestUserId)
+                    ->where('datecreationpanier', '>=', $limiteDate)
+                    ->first();
+
+                if (!$panier) {
+                    $panierId = DB::table('panier')->insertGetId([
+                        'idpersonne'        => $guestUserId,
+                        'prixpanier'        => 0,
+                        'datecreationpanier'=> now(),
+                    ], 'idpanier');
+                } else {
+                    $panierId = $panier->idpanier;
+                }
             }
-    
+
             if (!$panierId) {
                 return back()
                     ->withErrors(['error' => "Impossible de créer ou récupérer le panier."])
                     ->withInput();
             }
-    
+
             $existingCartItem = DB::table('contenir')
                 ->where('idpanier', $panierId)
                 ->where('idproduit', $produitId)
                 ->where('idtaille', $selectedSize)
                 ->where('idcoloris', $selectedColor)
                 ->first();
-    
+
             if ($existingCartItem) {
                 DB::table('contenir')
                     ->where('idpanier', $panierId)
@@ -157,7 +200,7 @@ class ProduitDetail extends Controller
                     ->where('idpanier', $panierId)
                     ->max('ligneproduit');
                 $ligneproduit = ($ligneproduit === null) ? 1 : $ligneproduit + 1;
-    
+
                 DB::table('contenir')->insert([
                     'idproduit'   => $produitId,
                     'idpanier'    => $panierId,
@@ -167,20 +210,20 @@ class ProduitDetail extends Controller
                     'idcoloris'   => $selectedColor,
                 ]);
             }
-    
+
             $totalPrice = DB::table('contenir')
                 ->join('variante_produit', function($join) {
                     $join->on('contenir.idproduit', '=', 'variante_produit.idproduit')
-                         ->on('contenir.idcoloris', '=', 'variante_produit.idcoloris');
+                        ->on('contenir.idcoloris', '=', 'variante_produit.idcoloris');
                 })
                 ->where('contenir.idpanier', $panierId)
                 ->select(DB::raw('SUM(contenir.qteproduit * variante_produit.prixproduit) as total'))
                 ->value('total');
-    
+
             DB::table('panier')
                 ->where('idpanier', $panierId)
                 ->update(['prixpanier' => $totalPrice ?? 0]);
-    
+
             return redirect()
                 ->route('produits.index')
                 ->with('success', 'Produit ajouté au panier avec succès !');
@@ -192,4 +235,5 @@ class ProduitDetail extends Controller
                 ->withInput();
         }
     }
+
 }
