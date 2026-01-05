@@ -54,6 +54,12 @@
                         </li>
                     @endif
 
+                    @if(Auth::user()->idrole == 6)
+                        <a href="{{ route('produitService.sans_prix') }}" class="btn-auth btn-management">
+                            <i class="fas fa-tags"></i> Gestion Prix
+                        </a>
+                    @endif
+
                     <div class="user-dropdown">
                         <a href="#" class="btn-auth" style="background-color: white; color: #034f96;">
                             <span class="user-icon" style="border-color: #034f96;"></span> 
