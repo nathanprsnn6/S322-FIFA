@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>FIFA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="shortcut icon" href="{{ asset('img/FIFA.png') }}" type="image/x-icon">
@@ -68,28 +69,55 @@
 
             <div class="cart-items-container ">
                 <h2>Articles du Panier</h2>
-
     
                 <div class="cart-item-list"> 
                     @forelse ($contenirs as $contenir)                        
-                        <div class="cart-item-row" style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0;">
-                            
-                        <img src="{{ asset($contenir->produit->photo->destinationphoto ?? 'path/to/default/image.png') }}" 
-                            style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px; border-radius: 4px;">
+                        <?php
+                            $compositeId = $contenir->idproduit . '-' . $contenir->idcoloris . '-' . $contenir->idtaille;
+                        ?>
 
-                            <p style="flex-grow: 1; margin: 0; font-size: 14px;">
-                                <span style="font-weight: bold;">{{ $contenir->qteproduit }} x</span> {{ $contenir->produit->titreproduit ?? '' }}
-                            </p>
+                        <div class="cart-item-row" data-ids="{{ $compositeId }}" 
+                            style="display: flex; flex-direction: column; align-items: flex-start; padding: 10px 0;">
+                                
+                            <div class="item-details" style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                                <img src="{{ asset($contenir->produit->photo->destinationphoto ?? 'path/to/default/image.png') }}" 
+                                    style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px; border-radius: 4px;">
+
+                                <p style="flex-grow: 1; margin: 0; font-size: 15px; padding-right: 10px;">
+                                    {{ $contenir->produit->titreproduit ?? '' }}
+                                </p>
+                                
+                                <span class="item-price" style="font-weight: bold; white-space: nowrap; font-size: 14px;">
+                                    ({{ number_format($contenir->prixLigne, 2, ',', ' ') }} €)
+                                </span>
+                            </div>
                             
-                            <span style="font-weight: bold; white-space: nowrap; font-size: 14px;">
-                                ({{ number_format($contenir->prixLigne, 2, ',', ' ') }} €)
-                            </span>
+                            <div class="item-actions" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 5px;">
+                                
+                                <div class="quantity-control" style="display: flex; align-items: center;">
+                                    <button class="quantity-btn decrease-btn" data-ids="{{ $compositeId }}">-</button>
+                                    <input type="number" 
+                                        class="quantity-input" 
+                                        data-ids="{{ $compositeId }}" 
+                                        value="{{ $contenir->qteproduit }}" 
+                                        min="1" 
+                                        style="width: 40px; text-align: center; margin: 0 5px;"
+                                        onchange="updateCartItem('{{ $compositeId }}', this.value)">
+                                        
+                                    <button class="quantity-btn increase-btn" data-ids="{{ $compositeId }}">+</button>
+                                </div>
+                                
+                                <button class="remove-item-btn" 
+                                        data-ids="{{ $compositeId }}"
+                                        style="background: none; border: none; color: #c0392b; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 5px;">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>
+                            </div>
                         </div>
                         <hr style="margin: 5px 0;">
                     @empty
                         <p>Votre panier est vide.</p>
                     @endforelse
-
                 </div>
             </div>
             
@@ -153,7 +181,114 @@
             }
         });
 
+        function updateCartItem(compositeId, newQuantity) {            
+            if (newQuantity < 1) {
+                newQuantity = 1;
+                document.querySelector(`.quantity-input[data-ids="${compositeId}"]`).value = 1;
+            }
+
+            fetch('{{ url("panier/update-quantity") }}/' + compositeId, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+                },
+                body: JSON.stringify({
+                    quantity: newQuantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const itemRow = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`).closest('.cart-item-row');
+                    itemRow.querySelector('.item-price').textContent = '(' + data.new_item_price + ' €)';
+
+                    document.querySelector('.total-row span:last-child').textContent = data.new_total_price + ' €';
+
+                    console.log('Panier mis à jour avec succès.');
+                } else {
+                    alert('Erreur lors de la mise à jour : ' + (data.message || ''));
+                }
+            })
+            .catch(error => {
+                console.error('Erreur réseau ou du serveur:', error);
+                alert('Une erreur est survenue lors de la communication avec le serveur.');
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.quantity-control button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const compositeId = this.getAttribute('data-ids'); 
+                    const input = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`);
+                    let currentValue = parseInt(input.value);
+                    
+                    if (this.classList.contains('increase-btn')) {
+                        currentValue++;
+                    } else if (this.classList.contains('decrease-btn') && currentValue > 1) {
+                        currentValue--;
+                    }
+                    
+                    input.value = currentValue;
+                    updateCartItem(compositeId, currentValue);
+                });
+            });
+        });
         
+        function removeCartItem(compositeId) {
+            const url = `/panier/${compositeId}`; 
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errorData => {
+                        throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const itemRow = document.querySelector(`.cart-item-row[data-ids="${data.removed_composite_id}"]`);
+                    if (itemRow) {
+                        itemRow.remove();
+                    }
+
+                    document.querySelector('.total-row span:last-child').textContent = data.new_total_price + ' €';
+
+                    console.log('Produit supprimé avec succès.');
+                } else {
+                    alert('Erreur lors de la suppression : ' + (data.message || ''));
+                }
+            })
+            .catch(error => {
+                console.error('Erreur réseau ou du serveur:', error);
+                alert('Une erreur est survenue lors de la communication avec le serveur.');
+            });
+        }
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // ... (Logique existante pour les boutons + et -) ...
+
+            document.querySelectorAll('.remove-item-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Récupère l'ID composite associé au bouton
+                    const compositeId = this.getAttribute('data-ids');
+                    
+                    if (confirm("Êtes-vous sûr de vouloir supprimer cet article du panier ?")) {
+                        removeCartItem(compositeId);
+                    }
+                });
+            });
+        });
     </script>
 
     @yield('scripts')
