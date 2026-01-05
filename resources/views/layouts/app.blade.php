@@ -38,6 +38,21 @@
                         </a>
                     @endif
 
+                    @if(Auth::user()->idrole == 5)
+                        <a href="{{ route('vente.create') }}" class="btn-auth" style="background-color: #e67e22; color: white; border: none;">
+                            <i class="fas fa-tags"></i> Service Vente
+                        </a>
+                    @endif
+
+                    @if(Auth::user()->idrole == 7)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('siege.index') }}" 
+                            style="color: #b91c1c; font-weight: bold; border: 2px solid #b91c1c; border-radius: 30px; padding: 5px 15px; margin-left: 10px;">
+                                <i class="fas fa-building"></i> Espace Siège
+                            </a>
+                        </li>
+                    @endif
+
                     <div class="user-dropdown">
                         <a href="#" class="btn-auth" style="background-color: white; color: #034f96;">
                             <span class="user-icon" style="border-color: #034f96;"></span> 
@@ -156,7 +171,8 @@
         
     </script>
 
+    <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
+    
     @yield('scripts')
-
 </body>
 </html>

@@ -15,6 +15,22 @@
         <input type="hidden" name="produitId" value="{{ $produit->idproduit }}">
         <div id="product-info">
             <h1>{{ $produit->titreproduit }}</h1>
+            <h1>{{ $produit->titreproduit }}</h1>
+
+            {{-- BOUTON MODIFIER (Visible uniquement pour Service Vente) --}}
+            @auth
+                @if(Auth::user()->idrole == 5)
+                    <div style="margin-bottom: 20px;">
+                        <a href="{{ route('vente.edit', $produit->idproduit) }}" 
+                           style="background-color: #e67e22; color: white; padding: 5px 15px; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: 0.9em; display: inline-flex; align-items: center; gap: 8px;">
+                           <i class="fas fa-pen"></i> Modifier ce produit
+                        </a>
+                    </div>
+                @endif
+            @endauth
+
+            <p class="text_detail">
+                <b>Description :</b><br>
 
             <p class="text_detail">
                 <b>Description :</b><br>
