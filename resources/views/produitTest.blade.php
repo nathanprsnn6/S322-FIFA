@@ -99,10 +99,16 @@
 
 <div id="produits">
     @forelse($produits as $produit)
-        <a href="{{ route('produit.show', ['id' => $produit->idproduit]) }}">
-            <div class="div_produit">
+        {{-- On retire le <a> qui englobait tout pour faire du DIV l'élément principal de la grille --}}
+        <div class="div_produit" style="position: relative;">
+            
+            {{-- Lien vers le détail (Partie cliquable client) --}}
+            <a href="{{ route('produit.show', ['id' => $produit->idproduit]) }}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; width: 100%; flex-grow: 1;">
+                
                 <img src="{{ asset($produit->destinationphoto) }}" alt="{{ $produit->titreproduit }}" id="img_maillot">
+                
                 <h2>{{ $produit->titreproduit }}</h2>
+                
                 <p>
                     @if(isset($produit->min_prix) && isset($produit->max_prix) && $produit->min_prix != $produit->max_prix)
                         <span style="font-size: 0.8em; color: #666;">À partir de</span> <br>
@@ -111,8 +117,21 @@
                         <strong>{{ number_format($produit->min_prix ?? $produit->prix ?? 0, 2) }}€</strong>
                     @endif
                 </p> 
-            </div>
-        </a>
+            </a>
+
+            {{-- BOUTON MODIFIER (Visible uniquement pour le Service Vente - ID 5) --}}
+            @auth
+                @if(Auth::user()->idrole == 5)
+                    <div style="width: 100%; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                        <a href="{{ route('vente.edit', $produit->idproduit) }}" 
+                           style="display: block; background-color: #e67e22; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.9em; transition: 0.2s;">
+                           <i class="fas fa-pen"></i> Modifier le produit
+                        </a>
+                    </div>
+                @endif
+            @endauth
+
+        </div>
     @empty
         <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
             <h3>Aucun résultat</h3>

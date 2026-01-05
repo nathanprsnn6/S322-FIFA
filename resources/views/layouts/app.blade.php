@@ -17,6 +17,7 @@
             <a href="{{ url('/') }}" class="logo-fifa">FIFA</a>
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
+            <a href="{{ url('publication') }}" class="nav-link">Publication</a>
         </div>
 
         <div class="header-right">
@@ -37,6 +38,21 @@
                         <a href="{{ route('expedition.index') }}" class="btn-auth" style="background-color: #27ae60; color: white; border: none;">
                             <i class="fas fa-truck"></i> Espace Expédition
                         </a>
+                    @endif
+
+                    @if(Auth::user()->idrole == 5)
+                        <a href="{{ route('vente.create') }}" class="btn-auth" style="background-color: #e67e22; color: white; border: none;">
+                            <i class="fas fa-tags"></i> Service Vente
+                        </a>
+                    @endif
+
+                    @if(Auth::user()->idrole == 7)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('siege.index') }}" 
+                            style="color: #b91c1c; font-weight: bold; border: 2px solid #b91c1c; border-radius: 30px; padding: 5px 15px; margin-left: 10px;">
+                                <i class="fas fa-building"></i> Espace Siège
+                            </a>
+                        </li>
                     @endif
 
                     <div class="user-dropdown">
@@ -291,7 +307,8 @@
         });
     </script>
 
+    <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
+    
     @yield('scripts')
-
 </body>
 </html>
