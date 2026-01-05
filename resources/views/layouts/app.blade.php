@@ -39,10 +39,19 @@
                         </a>
                     @endif
 
-                    @if(Auth::user()->idrole == 6)
-                        <a href="{{ route('produitService.sans_prix') }}" class="btn-auth btn-management">
-                            <i class="fas fa-tags"></i> Gestion Prix
+                    @if(Auth::user()->idrole == 5)
+                        <a href="{{ route('vente.create') }}" class="btn-auth" style="background-color: #e67e22; color: white; border: none;">
+                            <i class="fas fa-tags"></i> Service Vente
                         </a>
+                    @endif
+
+                    @if(Auth::user()->idrole == 7)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('siege.index') }}" 
+                            style="color: #b91c1c; font-weight: bold; border: 2px solid #b91c1c; border-radius: 30px; padding: 5px 15px; margin-left: 10px;">
+                                <i class="fas fa-building"></i> Espace Siège
+                            </a>
+                        </li>
                     @endif
 
                     <div class="user-dropdown">
@@ -163,7 +172,8 @@
         
     </script>
 
+    <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
+    
     @yield('scripts')
-
 </body>
 </html>

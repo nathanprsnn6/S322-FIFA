@@ -83,8 +83,18 @@ Route::get('/verifier-vote/{idtypevote}', [VoterController::class, 'checkVote'])
 // --- PANIER & COMMANDE ---
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
+
+// --- PAYER ---
+
 Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
-Route::post('/commander/paiement', [Commander::class, 'processPayment'])->name('commander.processPayment');
+Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
+
+Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
+Route::get('/payer', action: [Payer::class, 'index'])->name('payer.index');
+// Route pour gérer la soumission du paiement
+Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])
+    ->name('payer.effectuer');
+
 
 Route::get('/payer', [Payer::class, 'index'])->name('payer.index');
 Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])->name('payer.effectuer');
@@ -95,7 +105,29 @@ Route::get('/publication/{id}', [PublicationDetail::class, 'show'])->name('publi
 
 // --- ROUTES PROTÉGÉES (AUTH) ---
 Route::middleware(['auth'])->group(function () {
-    Route::get('/mes-commandes', [Commande::class, 'index'])->name('commandes.index');
+        Route::get('/mes-commandes', [Commande::class, 'index'])->name('commandes.index');
+    });
+
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
+    
+        Route::get('/lancer-maj-stats', function () {
+            // Appel de la commande artisan créée précédemment
+            // Le 0 à la fin capte le code de retour (0 = succès, autre = erreur)
+            $exitCode = Artisan::call('stats:update');
+    
+            // On récupère la sortie texte de la console pour l'afficher à l'écran
+            $output = Artisan::output();
+    
+            return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
+        });
+    
+    }); 
+    Route::post('/expedition/expedier/{id}', [App\Http\Controllers\ExpeditionController::class, 'expedier'])->name('expedition.expedier');
+
+    Route::get('/verifier-vote/{idtypevote}', [App\Http\Controllers\VoterController::class, 'checkVote'])->name('verifier.vote');
+Route::middleware(['auth'])->group(function () {
     Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
     
     // Route utilitaire pour les stats
@@ -104,4 +136,22 @@ Route::middleware(['auth'])->group(function () {
         $output = Artisan::output();
         return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . $output . "</pre>";
     });
+
 });
+
+
+
+
+
+Route::middleware(['auth'])->group(function () {
+    
+    Route::get('/vente/ajouter', [VenteController::class, 'create'])->name('vente.create');
+    Route::post('/vente/ajouter', [VenteController::class, 'store'])->name('vente.store');
+    Route::get('/api/sous-categories/{idCategorie}', [VenteController::class, 'getSousCategories']);
+    
+});
+Route::get('/vente/produit/{id}/modifier', [VenteController::class, 'edit'])->name('vente.edit');
+Route::put('/vente/produit/{id}', [VenteController::class, 'update'])->name('vente.update');
+
+
+Route::get('/siege/commandes-express', [SiegeController::class, 'index'])->name('siege.index');

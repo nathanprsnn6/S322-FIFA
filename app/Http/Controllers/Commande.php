@@ -23,7 +23,10 @@ class Commande extends Controller
                 'commande.etatcommande',
                 'panier.prixpanier',
                 'transaction.datetransaction',
-                'typelivraison.libelletypelivraison'
+                'typelivraison.libelletypelivraison',
+                // AJOUT : Informations logistiques pour l'User Story
+                'livrer.datelivraison', 
+                'livrer.creneaulivraison'
             )
             ->orderBy('commande.idcommande', 'desc')
             ->get();
