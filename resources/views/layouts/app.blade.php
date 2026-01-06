@@ -150,9 +150,15 @@
                     <span>{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
                 </div>
                 @if($totalPanier > 0)
-                    <a href="{{ route('commander.index') }}" class="checkout-btn" style="text-decoration: none; display: block; text-align: center;">
-                        RÉGLER VOS ACHATS
-                    </a>
+                    @if(Auth::check())
+                        <a href="{{ route('commander.index') }}" class="checkout-btn" style="text-decoration: none; display: block; text-align: center;">
+                            RÉGLER VOS ACHATS
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="checkout-btn" style="text-decoration: none; display: block; text-align: center;">
+                            CONNECTEZ VOUS AVANT DE REGLER VOS ACHATS
+                        </a>
+                    @endif
                 @else
                     <a href="javascript:void(0);" class="checkout-btn disabled" style="text-decoration: none; display: block; text-align: center; pointer-events: none; opacity: 0.5; cursor: default;">
                         AJOUTER D'ABORD UN ARTICLE A VOTRE PANIER

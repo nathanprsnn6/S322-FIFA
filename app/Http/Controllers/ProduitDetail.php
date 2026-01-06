@@ -114,33 +114,6 @@ if (!empty($idsToFetch)) {
         return view('produitDetails', compact('produit', 'tailles', 'variantes', 'produitsSimilaires', 'produitsConsultes', 'photo', 'stock', 'maxQuantity', 'premierIdColoris'));
     }
 
-    public function createGuestUser()
-    {
-        $guestNom = 'Invité';
-        $guestPrenom = 'Guest-' . Str::substr(Str::uuid(), 0, 8);
-
-        $idPersonne = DB::table('personne')->insertGetId([
-            'nom' => $guestNom,
-            'prenom' => $guestPrenom,
-            'lieunaissance' => 'Inconnu',
-            'datenaissance' => '2025-01-01',
-        ],'idpersonne');
-
-        DB::table('utilisateur')->insert([
-            'idpersonne' => $idPersonne,
-            'idnation' => 1,
-            'idrole' => 1,
-            'naiss_idnation' => 1,
-            'langue_idnation' => 1,
-            'courriel' => $guestPrenom . '@invite.com',
-            'cp'  => 11111,
-            'ville' => "Inconnu",
-            'mdp' => "Inconnu",
-        ]);
-
-        return $idPersonne;
-    }
-
 
     public function createGuestUser()
     {
