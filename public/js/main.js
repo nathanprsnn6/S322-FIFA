@@ -331,3 +331,154 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+/* ==========================================
+   8. gestion du panier
+   ========================================== */
+document.addEventListener('DOMContentLoaded', function() {
+
+    const cartPopup = document.getElementById('cart-popup');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const closeBtn = document.getElementById('close-btn');
+    const openCartBtn = document.getElementById('open-cart-btn');
+    
+    function openCart(event) {
+        if (event) {
+            event.preventDefault();
+        }
+        if (cartPopup) cartPopup.classList.add('is-open');
+        if (cartOverlay) cartOverlay.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+        if (cartPopup) cartPopup.classList.remove('is-open');
+        if (cartOverlay) cartOverlay.classList.remove('is-open');
+        document.body.style.overflow = '';
+    }
+
+    if (openCartBtn) {
+        openCartBtn.addEventListener('click', openCart);
+    }
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeCart);
+    }
+    
+    if (cartOverlay) {
+        cartOverlay.addEventListener('click', closeCart);
+    }
+});
+
+function updateCartItem(compositeId, newQuantity) {            
+    if (newQuantity < 1) {
+        newQuantity = 1;
+        const input = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`);
+        if (input) input.value = 1;
+    }
+
+    fetch(`${window.Laravel.panierUpdateQuantityUrl}/${compositeId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': window.Laravel.csrfToken
+        },
+        body: JSON.stringify({
+            quantity: newQuantity
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const itemRow = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`)?.closest('.cart-item-row');
+            if (itemRow) {
+                const priceElem = itemRow.querySelector('.item-price');
+                if (priceElem) priceElem.textContent = '(' + data.new_item_price + ' €)';
+            }
+
+            const totalElem = document.querySelector('.total-row span:last-child');
+            if (totalElem) totalElem.textContent = data.new_total_price + ' €';
+
+            console.log('Panier mis à jour avec succès.');
+        } else {
+            alert('Erreur lors de la mise à jour : ' + (data.message || ''));
+        }
+    })
+    .catch(error => {
+        console.error('Erreur réseau ou du serveur:', error);
+        alert('Une erreur est survenue lors de la communication avec le serveur.');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.quantity-control button').forEach(button => {
+        button.addEventListener('click', function() {
+            const compositeId = this.getAttribute('data-ids'); 
+            const input = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`);
+            if (!input) return;
+            let currentValue = parseInt(input.value);
+            
+            if (this.classList.contains('increase-btn')) {
+                currentValue++;
+            } else if (this.classList.contains('decrease-btn') && currentValue > 1) {
+                currentValue--;
+            }
+            
+            input.value = currentValue;
+            updateCartItem(compositeId, currentValue);
+        });
+    });
+});
+
+function removeCartItem(compositeId) {
+    const url = `${window.Laravel.panierRemoveItemUrl}/${compositeId}`;
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': window.Laravel.csrfToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            const itemRow = document.querySelector(`.cart-item-row[data-ids="${data.removed_composite_id}"]`);
+            if (itemRow) {
+                itemRow.remove();
+            }
+
+            const totalElem = document.querySelector('.total-row span:last-child');
+            if (totalElem) totalElem.textContent = data.new_total_price + ' €';
+
+            console.log('Produit supprimé avec succès.');
+        } else {
+            alert('Erreur lors de la suppression : ' + (data.message || ''));
+        }
+    })
+    .catch(error => {
+        console.error('Erreur réseau ou du serveur:', error);
+        alert('Une erreur est survenue lors de la communication avec le serveur.');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.remove-item-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const compositeId = this.getAttribute('data-ids');
+            
+            if (confirm("Êtes-vous sûr de vouloir supprimer cet article du panier ?")) {
+                removeCartItem(compositeId);
+            }
+        });
+    });
+});
+
