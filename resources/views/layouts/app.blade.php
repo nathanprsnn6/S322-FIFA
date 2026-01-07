@@ -18,6 +18,7 @@
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
             <a href="{{ url('publication') }}" class="nav-link">Publication</a>
+            <a href="{{ url('faq') }}" class="nav-link">FAQ</a>
         </div>
 
         <div class="header-right">

@@ -25,6 +25,7 @@ use App\Http\Controllers\SiegeController;
 use App\Http\Controllers\ProduitService;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicationDetail;
+use App\Http\Controllers\Faq;
 
 Route::get('/', function () {
     return view('welcome');
@@ -93,6 +94,9 @@ Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])->name('payer.
 // --- PUBLICATIONS ---
 Route::get('/publication', [PublicationController::class, 'index'])->name('publication.index');
 Route::get('/publication/{id}', [PublicationDetail::class, 'show'])->name('publication.show');
+
+// --- FAQ ---
+Route::get('/faq', [Faq::class, 'index'])->name('faq.index');
 
 // --- ROUTES PROTÉGÉES (AUTH) ---
 Route::middleware(['auth'])->group(function () {
