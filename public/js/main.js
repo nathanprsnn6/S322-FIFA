@@ -1,4 +1,7 @@
-   function checkFields1() {
+/* ==========================================
+   1. VALIDATION DES FORMULAIRES
+   ========================================== */
+function checkFields1() {
     const fields = document.querySelectorAll('#nom,#jour_naissance, #mois_naissance, #annee_naissance, #pays_naissance, #langue, #prenom, #courriel');
     const button = document.getElementById('submitButton1');
     let allFilled = true;
@@ -7,6 +10,7 @@
         button.disabled = !allFilled;
     }
 }
+
 function checkFields2() {
     const fields = document.querySelectorAll('#nickname, #favorite');
     const button = document.getElementById('submitButton2');
@@ -16,6 +20,7 @@ function checkFields2() {
         button.disabled = !allFilled;
     }
 }
+
 function checkFields3() {
     const fields = document.querySelectorAll('#choose_pwd, #conf_pwd');
     const checkbox = document.getElementById('checkbox3');
@@ -28,8 +33,9 @@ function checkFields3() {
     }
 }
 
-
-
+/* ==========================================
+   2. API GOUV (CODE POSTAL / VILLE)
+   ========================================== */
 document.addEventListener('DOMContentLoaded', function() {
     const cpInput = document.getElementById('cp');
     const villeSelect = document.getElementById('ville_select');
@@ -75,13 +81,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         if (cpInput.value.length === 5) {
-            console.log("Lancement auto API...");
             lancerRechercheAPI(cpInput.value, villeHidden.value);
         }
 
         villeSelect.addEventListener('focus', function() {
             if (this.options.length <= 1 && cpInput.value.length === 5) {
-                console.log("Relance API au clic...");
                 lancerRechercheAPI(cpInput.value, villeHidden.value);
             }
         });
@@ -99,6 +103,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+/* ==========================================
+   3. GESTION PRODUIT (STOCK, PRIX, COULEUR)
+   ========================================== */
 document.addEventListener('DOMContentLoaded', function() {
     const stockDisplay = document.getElementById('stock');
     const priceDisplay = document.querySelector('#price b');
@@ -107,6 +114,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const sizeLabels = document.querySelectorAll('.size-button');
     const addButton = document.getElementById('add-button');
     const stockData = window.stockData || {};
+
+    // Sécurité si on n'est pas sur la page produit
+    if (!colorSelect) return;
 
     function updateProductInfo() {
         const selectedColorId = colorSelect.value;
@@ -174,10 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
     updateProductInfo();
 });
 
-
-
-
-
+/* ==========================================
+   4. SYSTEME DE VOTE
+   ========================================== */
 document.addEventListener('DOMContentLoaded', function() {
     const radios = document.querySelectorAll('.vote-radio');
 
@@ -195,21 +204,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.js-toggle-order-details');
-    buttons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const id = btn.getAttribute('data-id');
-            const row = document.getElementById('details-' + id);
-            if (row) {
-                const isHidden = getComputedStyle(row).display === 'none';
-                row.style.display = isHidden ? 'table-row' : 'none';
-            }
-        });
-    });
-});
-
+/* ==========================================
+   5. GESTION DU PANIER (POPUP)
+   ========================================== */
 document.addEventListener('DOMContentLoaded', () => {
     const cartPopup = document.getElementById('cart-popup');
     const cartOverlay = document.getElementById('cart-overlay');
@@ -232,4 +229,105 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openCartBtn) openCartBtn.addEventListener('click', openCart);
     if (closeBtn) closeBtn.addEventListener('click', closeCart);
     if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+});
+
+/* ==========================================
+   6. AJAX CATEGORIES (PAGE CREATION)
+   ========================================== */
+document.addEventListener('DOMContentLoaded', function() {
+    const selectCategorie = document.getElementById('idcategorie');
+    const selectSousCat = document.getElementById('idsouscategorie');
+
+    if (!selectCategorie || !selectSousCat) {
+        return;
+    }
+
+    selectCategorie.addEventListener('change', function() {
+        const idCat = this.value;
+
+        selectSousCat.innerHTML = '<option value="">Chargement...</option>';
+        selectSousCat.disabled = true;
+
+        if (idCat) {
+            fetch('/api/sous-categories/' + idCat)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur réseau');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    selectSousCat.innerHTML = '<option value="">2. Choisir la sous-catégorie</option>';
+                    
+                    if (data.length > 0) {
+                        data.forEach(sub => {
+                            const option = document.createElement('option');
+                            option.value = sub.idsouscategorie;
+                            option.textContent = sub.nomsouscategorie;
+                            selectSousCat.appendChild(option);
+                        });
+                        selectSousCat.disabled = false;
+                    } else {
+                        selectSousCat.innerHTML = '<option value="">Aucune sous-catégorie</option>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    selectSousCat.innerHTML = '<option value="">Erreur de chargement</option>';
+                });
+        } else {
+            selectSousCat.innerHTML = '<option value="">En attente de catégorie...</option>';
+            selectSousCat.disabled = true;
+        }
+    });
+});
+
+/* ==========================================
+   7. DETAILS DES COMMANDES (Voir/Masquer)
+   ========================================== */
+document.addEventListener('DOMContentLoaded', function() {
+    
+
+    const detailRows = document.querySelectorAll('.detail-row');
+    if (detailRows.length > 0) {
+        detailRows.forEach(row => {
+            row.style.display = 'none';
+        });
+    }
+
+
+    const toggleButtons = document.querySelectorAll('.js-toggle-order-details');
+
+    if (toggleButtons.length > 0) {
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+
+                const orderId = this.getAttribute('data-id');
+                const detailsRow = document.getElementById('details-' + orderId);
+                
+                if (detailsRow) {
+                    if (detailsRow.style.display === 'none' || detailsRow.style.display === '') {
+                        detailsRow.style.display = 'table-row'; 
+                        
+                        if (this.classList.contains('btn-detail-outline')) {
+                            this.textContent = 'Masquer le détail';
+                        } else {
+                            this.textContent = 'Masquer les articles';
+                        }
+                    } else {
+                        detailsRow.style.display = 'none'; 
+                        
+
+                        if (this.classList.contains('btn-detail-outline')) {
+                            this.textContent = 'Voir le détail';
+                        } else {
+                            this.textContent = 'Voir les articles';
+                        }
+                    }
+                }
+            });
+        });
+    }
 });
