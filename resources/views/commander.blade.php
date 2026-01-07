@@ -27,7 +27,15 @@
                     <h4>Adresse de livraison</h4>
 
                     <label for="pays">Pays *</label>
-                    <input type="text" name="pays" id="pays" value="{{ old('pays') }}" required placeholder="Entrez votre pays de résidence" class="form-control">
+                    <select id="pays" name="pays" class="form-control" required>
+                        <option value="">-- Choisir un pays de residence --</option>
+                        @foreach($nations as $nation)
+                            <option value="{{ $nation->idnation ?? $nation->id }}" {{ old('pays') == ($nation->idnation ?? $nation->id) ? 'selected' : '' }}>
+                                {{ $nation->nomnation }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('pays') <span class="text-danger">{{ $message }}</span> @enderror
 
                     <label for="adr">Adresse *</label>
                     <input type="text" name="adr" id="adr" value="{{ old('adr') }}" required placeholder="Entrez votre adresse" class="form-control">
@@ -36,17 +44,22 @@
                     <input type="text" name="adr_facultative" id="adr_facultative" value="{{ old('adr_facultative') }}" class="form-control">
 
                     <div style="display: flex; gap: 20px;"> 
-                        <div class="form-group" style="flex: 1;"> 
-                            <label for="cpostal">Code postal *</label>
-                            <input type="text" name="cpostal" id="cpostal" value="{{ old('cpostal') }}" required class="form-control">
-                            @error('cpostal') <span class="text-danger">{{ $message }}</span> @enderror
+                        <div class="form-group">
+                            <label for="cp">Code Postal *</label>
+                            <input type="text" id="cp" name="cp" maxlength="5" value="{{ old('cp') }}" placeholder="Ex: 75001" required class="form-control">
                         </div>
 
-                        <div class="form-group" style="flex: 1;">
+
+                        <div class="form-group">
                             <label for="ville">Ville *</label>
-                            <input type="text" name="ville" id="ville" value="{{ old('ville') }}" required class="form-control">
-                            @error('ville') <span class="text-danger">{{ $message }}</span> @enderror
+                            
+
+                            <select id="ville_select" name="ville">
+                                <option value="">-- Remplissez le Code Postal d'abord --</option>
+                            </select>
+                            <input type="hidden" id="ville_real_name" name="ville_in" value="{{ old('ville') }}" class="form-control">
                         </div>
+
                     </div>
 
                     <label for="tel">Téléphone *</label>
@@ -138,6 +151,56 @@
         <div class="container commande-form-box">
             <h2 style="text-align: center; color: #034f96;">Récapitulatif du panier</h2>
             <hr>
+            <div class="cart-items-container ">
+                <h2>Articles du Panier</h2>
+
+                <div class="cart-item-list"> 
+                    @forelse ($contenirs as $contenir)                        
+                        <?php
+                            $compositeId = $contenir->idproduit . '-' . $contenir->idcoloris . '-' . $contenir->idtaille;
+                        ?>
+
+                        <div class="cart-item-row" data-ids="{{ $compositeId }}" 
+                            style="display: flex; flex-direction: column; align-items: flex-start; padding: 10px 0;">
+                                
+                            <div class="item-details" style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                                <img src="{{ asset($contenir->produit->photo->destinationphoto ?? 'path/to/default/image.png') }}" 
+                                    style="width: 50px; height: 50px; object-fit: cover; margin-right: 10px; border-radius: 4px;">
+
+                                <p style="flex-grow: 1; margin: 0; font-size: 15px; padding-right: 10px;">
+                                    {{ $contenir->produit->titreproduit ?? '' }}
+                                </p>
+                                
+                                <span class="item-price" style="font-weight: bold; white-space: nowrap; font-size: 14px;">
+                                    ({{ number_format($contenir->prixLigne, 2, ',', ' ') }} €)
+                                </span>
+                            </div>
+
+                            <div class="quantity-control" style="display: flex; align-items: center;">
+                                <input type="number" 
+                                    class="quantity-input" 
+                                    data-ids="{{ $compositeId }}" 
+                                    value="{{ $contenir->qteproduit }}" 
+                                    min="1" 
+                                    style="width: 40px; text-align: center; margin: 0 5px;"
+                                    readonly>
+                                    
+                            </div>
+                            
+                        </div>
+                        <hr style="margin: 5px 0;">
+                    @empty
+                        <p>Votre panier est vide.</p>
+                    @endforelse
+                </div>
+                <div class="cart-footer">
+
+                    <div class="total-row">
+                        <span>Total</span>
+                        <span>{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

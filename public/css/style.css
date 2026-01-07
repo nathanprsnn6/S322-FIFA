@@ -1590,7 +1590,7 @@ input[type="date"], select {
 
 .form-column{
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 .commande-form-box {
