@@ -150,9 +150,21 @@
                     <span>Total</span>
                     <span>{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
                 </div>
-                <a href="{{ route('commander.index') }}" class="checkout-btn" style="text-decoration: none; display: block; text-align: center;">
-                    RÉGLER VOS ACHATS
-                </a>
+                @if($totalPanier > 0)
+                    @if(Auth::check())
+                        <a href="{{ route('commander.index') }}" class="checkout-btn" style="text-decoration: none; display: block; text-align: center;">
+                            RÉGLER VOS ACHATS
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="checkout-btn" style="text-decoration: none; display: block; text-align: center;">
+                            CONNECTEZ VOUS AVANT DE REGLER VOS ACHATS
+                        </a>
+                    @endif
+                @else
+                    <a href="javascript:void(0);" class="checkout-btn disabled" style="text-decoration: none; display: block; text-align: center; pointer-events: none; opacity: 0.5; cursor: default;">
+                        AJOUTER D'ABORD UN ARTICLE A VOTRE PANIER
+                    </a>
+                @endif
             </div>
         </div>
 
@@ -169,149 +181,11 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-
-            const cartPopup = document.getElementById('cart-popup');
-            const cartOverlay = document.getElementById('cart-overlay');
-            const closeBtn = document.getElementById('close-btn');
-            const openCartBtn = document.getElementById('open-cart-btn');
-            
-            function openCart(event) {
-                if (event) {
-                    event.preventDefault();
-                }
-                cartPopup.classList.add('is-open');
-                cartOverlay.classList.add('is-open');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeCart() {
-                cartPopup.classList.remove('is-open');
-                cartOverlay.classList.remove('is-open');
-                document.body.style.overflow = '';
-            }
-
-            if (openCartBtn) {
-                openCartBtn.addEventListener('click', openCart);
-            }
-            
-            if (closeBtn) {
-                closeBtn.addEventListener('click', closeCart);
-            }
-            
-            if (cartOverlay) {
-                cartOverlay.addEventListener('click', closeCart);
-            }
-        });
-
-        function updateCartItem(compositeId, newQuantity) {            
-            if (newQuantity < 1) {
-                newQuantity = 1;
-                document.querySelector(`.quantity-input[data-ids="${compositeId}"]`).value = 1;
-            }
-
-            fetch('{{ url("panier/update-quantity") }}/' + compositeId, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}' 
-                },
-                body: JSON.stringify({
-                    quantity: newQuantity
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const itemRow = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`).closest('.cart-item-row');
-                    itemRow.querySelector('.item-price').textContent = '(' + data.new_item_price + ' €)';
-
-                    document.querySelector('.total-row span:last-child').textContent = data.new_total_price + ' €';
-
-                    console.log('Panier mis à jour avec succès.');
-                } else {
-                    alert('Erreur lors de la mise à jour : ' + (data.message || ''));
-                }
-            })
-            .catch(error => {
-                console.error('Erreur réseau ou du serveur:', error);
-                alert('Une erreur est survenue lors de la communication avec le serveur.');
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.quantity-control button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const compositeId = this.getAttribute('data-ids'); 
-                    const input = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`);
-                    let currentValue = parseInt(input.value);
-                    
-                    if (this.classList.contains('increase-btn')) {
-                        currentValue++;
-                    } else if (this.classList.contains('decrease-btn') && currentValue > 1) {
-                        currentValue--;
-                    }
-                    
-                    input.value = currentValue;
-                    updateCartItem(compositeId, currentValue);
-                });
-            });
-        });
-        
-        function removeCartItem(compositeId) {
-            const url = `/panier/${compositeId}`; 
-
-            fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(errorData => {
-                        throw new Error(errorData.message || `Erreur HTTP ${response.status}`);
-                    });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    const itemRow = document.querySelector(`.cart-item-row[data-ids="${data.removed_composite_id}"]`);
-                    if (itemRow) {
-                        itemRow.remove();
-                    }
-
-                    document.querySelector('.total-row span:last-child').textContent = data.new_total_price + ' €';
-
-                    console.log('Produit supprimé avec succès.');
-                } else {
-                    alert('Erreur lors de la suppression : ' + (data.message || ''));
-                }
-            })
-            .catch(error => {
-                console.error('Erreur réseau ou du serveur:', error);
-                alert('Une erreur est survenue lors de la communication avec le serveur.');
-            });
-        }
-
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // ... (Logique existante pour les boutons + et -) ...
-
-            document.querySelectorAll('.remove-item-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    // Récupère l'ID composite associé au bouton
-                    const compositeId = this.getAttribute('data-ids');
-                    
-                    if (confirm("Êtes-vous sûr de vouloir supprimer cet article du panier ?")) {
-                        removeCartItem(compositeId);
-                    }
-                });
-            });
-        });
+        window.Laravel = {
+            csrfToken: '{{ csrf_token() }}',
+            panierUpdateQuantityUrl: '{{ url("panier/update-quantity") }}',
+            panierRemoveItemUrl: '{{ url("panier") }}'
+        };
     </script>
 
     <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>

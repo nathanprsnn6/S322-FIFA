@@ -73,6 +73,7 @@ if (!empty($idsToFetch)) {
             ->select('photo.destinationphoto')
             ->first();
 
+        
         $tailles = Taille::whereIn('idtaille', function($query) use ($id) {
             $query->select('idtaille')
                   ->from('reference')
@@ -112,6 +113,7 @@ if (!empty($idsToFetch)) {
 
         return view('produitDetails', compact('produit', 'tailles', 'variantes', 'produitsSimilaires', 'produitsConsultes', 'photo', 'stock', 'maxQuantity', 'premierIdColoris'));
     }
+
 
     public function createGuestUser()
     {
