@@ -1590,7 +1590,7 @@ input[type="date"], select {
 
 .form-column{
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
 }
 
 .commande-form-box {
@@ -2219,4 +2219,325 @@ input[type="date"], select {
         padding: 20px;
         margin: 20px auto;
     }
+}
+
+/* Couleurs Officielles FIFA */
+:root {
+    --fifa-blue: #004797;
+    --fifa-light-blue: #00a3e0;
+    --fifa-white: #ffffff;
+    --fifa-background: #f4f7f9;
+    --fifa-text: #1a1a1a;
+    --fifa-gray: #666666;
+}
+
+:root {
+    --fifa-blue: #003366;
+    --fifa-light-blue: #00a3e0;
+    --fifa-background: #f4f7f9;
+    --fifa-white: #ffffff;
+    --fifa-text: #333333;
+}
+
+/* Reset et base */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background-color: var(--fifa-background);
+    font-family: 'Arial', sans-serif;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+.faq-page {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* En-tête sans fond bleu */
+.faq-header {
+    background-color: transparent; /* Retrait du fond bleu */
+    color: var(--fifa-blue); /* Texte en bleu FIFA pour la visibilité */
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.faq-header h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+/* Conteneur principal plein écran */
+.faq-wrapper {
+    width: 100%;
+    max-width: 100%; /* Occupation totale de l'écran */
+    margin: 0;
+    padding: 40px; /* Marges intérieures pour ne pas coller aux bords physiques */
+}
+
+.faq-section {
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.category-title {
+    color: var(--fifa-blue);
+    font-size: 1.6rem;
+    border-left: 6px solid var(--fifa-light-blue);
+    padding-left: 20px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Cartes FAQ plein écran */
+.faq-card {
+    width: 100%; /* Largeur totale même fermée */
+    background: var(--fifa-white);
+    margin-bottom: 15px;
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.faq-card:hover {
+    border-color: var(--fifa-light-blue);
+    transform: translateY(-2px);
+}
+
+/* Détails et Summary */
+details {
+    width: 100%;
+}
+
+summary {
+    padding: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    list-style: none;
+    color: var(--fifa-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    outline: none;
+}
+
+/* Suppression de la flèche par défaut sur certains navigateurs */
+summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Icône personnalisée (+/-) */
+summary::after {
+    content: '+';
+    font-size: 1.8rem;
+    color: var(--fifa-light-blue);
+    transition: transform 0.3s ease;
+    font-weight: normal;
+}
+
+details[open] summary::after {
+    content: '−'; /* Utilisation d'un vrai signe moins */
+    transform: rotate(180deg);
+}
+
+/* Zone de réponse */
+.faq-answer {
+    padding: 0 25px 25px 25px;
+    color: var(--fifa-text);
+    line-height: 1.8;
+    border-top: 1px solid #f0f0f0;
+    background-color: #fafafa;
+    font-size: 1.05rem;
+}
+
+.faq-answer ul {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.faq-answer li {
+    margin-bottom: 10px;
+}
+
+/* Animation */
+details[open] .faq-answer {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Adaptabilité mobile */
+@media (max-width: 768px) {
+    .faq-wrapper {
+        padding: 20px 10px;
+    }
+    
+    .faq-header h1 {
+        font-size: 1.8rem;
+    }
+}
+/* Section Contact en bas de page */
+.faq-contact-section {
+    width: 100%;
+    padding: 60px 40px;
+    background-color: var(--fifa-white);
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.contact-card {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.contact-card h3 {
+    color: var(--fifa-blue);
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+.contact-card p {
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+}
+
+.contact-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Boutons de contact */
+.btn-contact {
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.btn-contact.primary {
+    background-color: var(--fifa-light-blue);
+    color: white;
+    border: 2px solid var(--fifa-light-blue);
+}
+
+.btn-contact.primary:hover {
+    background-color: var(--fifa-blue);
+    border-color: var(--fifa-blue);
+    transform: translateY(-3px);
+}
+
+.btn-contact.secondary {
+    background-color: transparent;
+    color: var(--fifa-blue);
+    border: 2px solid var(--fifa-blue);
+}
+
+.btn-contact.secondary:hover {
+    background-color: #f0f4f8;
+    transform: translateY(-3px);
+}
+
+/* Version Mobile */
+@media (max-width: 768px) {
+    .faq-contact-section {
+        padding: 40px 20px;
+    }
+    .contact-actions {
+        flex-direction: column;
+    }
+    .btn-contact {
+        width: 100%;
+    }
+}
+
+/* Conteneur principal (inchangé) */
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+    cursor: help;
+    vertical-align: middle;
+}
+
+/* Style de l'icône "i" mis à jour */
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* On augmente légèrement le cercle pour accueillir la grosse lettre */
+    width: 20px;
+    height: 20px;
+    
+    background-color: #0056b3;
+    color: white;
+    border-radius: 50%;
+    
+    /* Police plus grosse et moderne */
+    font-size: 15px; 
+    font-weight: 800; /* Très gras pour que ça ressorte bien */
+    font-family: 'Verdana', 'Arial', sans-serif;
+    
+    /* Petit ajustement visuel pour centrer le 'i' optiquement */
+    padding-bottom: 1px; 
+}
+
+/* Style de la bulle (inchangé) */
+.tooltip-box {
+    visibility: hidden;
+    width: 240px;
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 12px;
+    position: absolute;
+    z-index: 10;
+    bottom: 130%;
+    left: 50%;
+    margin-left: -120px;
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 1.5;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Triangle sous la bulle */
+.tooltip-box::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -6px;
+    border-width: 6px;
+    border-style: solid;
+    border-color: #222 transparent transparent transparent;
+}
+
+/* Affichage au survol */
+.tooltip-container:hover .tooltip-box {
+    visibility: visible;
+    opacity: 1;
+    bottom: 140%; /* Petit effet de montée au survol */
 }

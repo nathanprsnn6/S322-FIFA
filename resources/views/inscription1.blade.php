@@ -11,7 +11,7 @@
         Vous avez déjà un compte ? <a href="connexion">&nbsp; Se connecter</a>
     </p>
     <p class="header-top">
-        Les champs marqués d'un <b>&nbsp;*&nbsp;</b> sont obligatoires<br><br>
+        Les champs marqués d'un &nbsp;*&nbsp; sont obligatoires<br><br>
     </p>
 
     {{-- AFFICHER LES ERREURS (Pour comprendre pourquoi ça bloque) --}}
@@ -95,11 +95,19 @@
             </p>
         </div>
 
-        <div class="form-group">
-            <label for="courriel">Courriel *</label>
-            <p class="hint-text">Voici votre identifiant FIFA</p>
-            <input type="email" id="courriel" name="courriel" value="{{ old('courriel') }}" required>
-        </div>
+<div class="form-group">
+    <label for="courriel">
+        Courriel *
+        <span class="tooltip-container">
+            <span class="info-icon">i</span>
+            <span class="tooltip-box">
+                Le courriel doit respecter le format général. Il vous servira d'identifiant de connexion pour vous connecter à votre compte.
+            </span>
+        </span>
+        </label>
+    <p class="hint-text">Voici votre identifiant FIFA</p>
+    <input type="email" id="courriel" name="courriel" value="{{ old('courriel') }}" required>
+</div>
 
 
         <div class="form-group">
