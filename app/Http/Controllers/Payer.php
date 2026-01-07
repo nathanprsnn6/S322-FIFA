@@ -29,7 +29,7 @@ class Payer extends Controller
             }
 
             $userId = Auth::id();
-            $idcb = $carte->idcb;
+            
             
             $panierActif = Panier::where('idpersonne', $userId)->first();
             
@@ -38,19 +38,21 @@ class Payer extends Controller
             }
     
             $idPanier = $panierActif->idpanier;
-
+            
             $transaction = new Transaction();
             $transaction->idpersonne = $userId;
             $transaction->idcb = $idcb;
             $transaction->save();
-
+            
             $carte = new CarteBancaire();
+            $idcb = $carte->idcb;
             $carte->idpersonne = $userId;
 
             $carte->refcb = $request->input('card_number');
             $carte->nomcb = $request->input('card_name');
             $carte->dateexpirationcb = $request->input('expiry_date');
             $carte->save();
+            
 
            // Contenir::where('idpanier', $idPanier)->delete();
            // Panier::where('idpanier', $idPanier)->delete();

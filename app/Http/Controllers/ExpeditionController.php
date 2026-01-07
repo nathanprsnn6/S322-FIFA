@@ -14,55 +14,55 @@ use App\Notifications\OrderShippedSMS;
 class ExpeditionController extends Controller
 {
     public function index(Request $request)
-    {
-        $selectedDate = $request->input('date'); 
-        $selectedSlot = $request->input('slot');
-        $selectedTransport = $request->input('transport');
+{
+    $selectedDate = $request->input('date'); 
+    $selectedSlot = $request->input('slot');
+    $selectedTransport = $request->input('transport');
 
-        $transportTypes = DB::table('typelivraison')->get();
+    $transportTypes = DB::table('typelivraison')->get();
 
-        $query = DB::table('commande')
-            ->join('client', 'commande.idpersonne', '=', 'client.idpersonne')
-            ->leftJoin('livrer', 'commande.idcommande', '=', 'livrer.idcommande')
-            ->leftJoin('typelivraison', 'livrer.idtypelivraison', '=', 'typelivraison.idtypelivraison')
-            ->whereIn('commande.etatcommande', ['En préparation', 'En cours de livraison', 'Livrée'])
-            ->select(
-                'commande.idcommande',
-                'client.nomcomplet',
-                'client.ruelivraison',
-                'client.cplivraison',
-                'client.villelivraison',
-                'typelivraison.libelletypelivraison',
-                'livrer.datelivraison',
-                'livrer.creneaulivraison',
-                'commande.etatcommande'
-            );
+    $query = DB::table('commande')
+        ->join('client', 'commande.idpersonne', '=', 'client.idpersonne')
+        ->leftJoin('livrer', 'commande.idcommande', '=', 'livrer.idcommande')
+        ->leftJoin('typelivraison', 'livrer.idtypelivraison', '=', 'typelivraison.idtypelivraison')
+        ->whereIn('commande.etatcommande', ['En préparation', 'En cours de livraison', 'Livrée'])
+        ->select(
+            'commande.idcommande',
+            'client.nomcomplet',
+            'client.ruelivraison',
+            'client.cplivraison',
+            'client.villelivraison',
+            'typelivraison.libelletypelivraison',
+            'livrer.datelivraison',
+            'livrer.creneaulivraison',
+            'commande.etatcommande'
+        );
 
-        if ($selectedDate) {
-            $query->whereDate('livrer.datelivraison', $selectedDate);
-        }
-
-        if ($selectedSlot && $selectedSlot !== 'all') {
-            $query->where('livrer.creneaulivraison', $selectedSlot);
-        }
-
-        if ($selectedTransport && $selectedTransport !== 'all') {
-            $query->where('livrer.idtypelivraison', $selectedTransport);
-        }
-
-        $orders = $query
-            ->orderByRaw("CASE WHEN commande.etatcommande = 'En préparation' THEN 1 ELSE 2 END")
-            ->orderBy('livrer.datelivraison', 'desc')
-            ->get();
-
-        return view('produitService', [
-            'orders' => $orders,
-            'transportTypes' => $transportTypes,
-            'currentDate' => $selectedDate,
-            'currentSlot' => $selectedSlot,
-            'currentTransport' => $selectedTransport
-        ]);
+    if ($selectedDate) {
+        $query->whereDate('livrer.datelivraison', $selectedDate);
     }
+
+    if ($selectedSlot && $selectedSlot !== 'all') {
+        $query->where('livrer.creneaulivraison', $selectedSlot);
+    }
+
+    if ($selectedTransport && $selectedTransport !== 'all') {
+        $query->where('livrer.idtypelivraison', $selectedTransport);
+    }
+
+    $orders = $query
+        ->orderByRaw("CASE WHEN commande.etatcommande = 'En préparation' THEN 1 ELSE 2 END")
+        ->orderBy('livrer.datelivraison', 'desc')
+        ->get();
+
+    return view('expedition', [
+        'orders' => $orders,
+        'transportTypes' => $transportTypes,
+        'currentDate' => $selectedDate,
+        'currentSlot' => $selectedSlot,
+        'currentTransport' => $selectedTransport
+    ]);
+}
 
     public function expedier($id)
     {

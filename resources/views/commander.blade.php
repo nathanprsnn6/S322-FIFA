@@ -25,6 +25,10 @@
 
                     <br>
                     <h4>Adresse de livraison</h4>
+
+                    <label for="pays">Pays *</label>
+                    <input type="text" name="pays" id="pays" value="{{ old('pays') }}" required placeholder="Entrez votre pays de résidence" class="form-control">
+
                     <label for="adr">Adresse *</label>
                     <input type="text" name="adr" id="adr" value="{{ old('adr') }}" required placeholder="Entrez votre adresse" class="form-control">
 
@@ -135,6 +139,10 @@
                 </div>
 
             </form>
+        </div>
+        <div class="container commande-form-box">
+            <h2 style="text-align: center; color: #034f96;">Récapitulatif du panier</h2>
+            <hr>
         </div>
     </div>
 </div>
