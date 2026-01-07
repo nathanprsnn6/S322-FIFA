@@ -8,7 +8,7 @@
             <h2 style="text-align: center; color: #034f96;">Commande</h2>
             <hr>
             
-            <form id="commande-form" method="POST" action="{{ route('commander.processPayment') }}">    
+            <form id="commande-form" method="POST" action="{{ route('payer.processPayment', 'payer.store') }}">    
                 @csrf
 
                 <div id="coordonnees" class="formulaireLivraison active">
@@ -96,53 +96,58 @@
                     
                     <br>
                     
-                    
                     <h3>3. Paiement</h3>
                     <p style="font-size: 14px; color: #555;">Toutes les transactions sont chiffrées et sécurisées.</p>
 
-                    <div id="carteBancaire">
-                        <label for="card_number">Numéro de carte *</label>
-                        <input type="text" class="form-control" id="card_number" name="card_number" required>
+                    <div style="display: none;">
+                        <input type="hidden" id="card_number_hidden" name="card_number">
+                        <input type="hidden" id="card_name_hidden" name="card_name">
+                        <input type="hidden" id="expiry_date_hidden" name="expiry_date">
+                    </div>
+
+                    <div id="carteBancaire_saisie">
+                        <label for="card_number_saisie">Numéro de carte *</label>
+                        <input type="text" class="form-control" id="card_number_saisie" required>
                                 
-                        <label for="card_name">Nom figurant sur la carte *</label>
-                        <input type="text" class="form-control" id="card_name" name="card_name" required>
+                        <label for="card_name_saisie">Nom figurant sur la carte *</label>
+                        <input type="text" class="form-control" id="card_name_saisie" required>
                                 
                         <div style="display: flex; gap: 20px;">
                             <div class="form-group" style="flex-grow: 1;">
-                                <label for="cvv">CVV *</label>
-                                <input type="text" class="form-control" id="cvv" name="cvv" required>
+                                <label for="cvv_saisie">CVV *</label>
+                                <input type="text" class="form-control" id="cvv_saisie" required>
                             </div>
                             <div class="form-group" style="flex-grow: 1;">
-                                <label for="expiry_date">Date d'expiration (MM/AA) *</label>
-                                <input type="text" class="form-control" id="expiry_date" name="expiry_date" placeholder="MM/AA" required>
+                                <label for="expiry_date_saisie">Date d'expiration (MM/AA) *</label>
+                                <input type="text" class="form-control" id="expiry_date_saisie" placeholder="MM/AA" required>
                             </div>
                         </div>
+                    </div>
 
-                        <br>
-                        <h3>4. Facturation</h3>
-                        <div class="delivery-option">
-                            <label>
-                                <span class="radio-custom"></span>
-                                <input type="radio" name="billing_address" value="same" checked>
-                                <div class="details">
-                                    <span>Même adresse que l'adresse de livraison</span>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="delivery-option">
-                            <label>
-                                <span class="radio-custom"></span>
-                                <input type="radio" name="billing_address" value="different">
-                                <div class="details">
-                                    <span>Utiliser une adresse de facturation différente</span>
-                                </div>
-                            </label>
-                        </div>
-                        </div>
+                    <br>
+                    <h3>4. Facturation</h3>
+                    <div class="delivery-option">
+                        <label>
+                            <span class="radio-custom"></span>
+                            <input type="radio" name="billing_address" value="same" checked>
+                            <div class="details">
+                                <span>Même adresse que l'adresse de livraison</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="delivery-option">
+                        <label>
+                            <span class="radio-custom"></span>
+                            <input type="radio" name="billing_address" value="different">
+                            <div class="details">
+                                <span>Utiliser une adresse de facturation différente</span>
+                            </div>
+                        </label>
+                    </div>                    
                     
                     <div style="display: flex; gap: 20px;">
                         <button type="button" class="btn-submit btn-prev" data-prev-step="coordonnees" style="background-color: #ccc; color: #333; flex: 1;">PRÉCÉDENT</button>
-                        <button type="submit" class="btn-submit" style="flex: 2;">FINALISER LA COMMANDE</button>
+                        <button type="button" id="finaliser_commande_btn" class="btn-submit" style="flex: 2;">FINALISER LA COMMANDE</button>
                     </div>
                 </div>
 
@@ -207,89 +212,75 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        
-        function validateStep(stepElement) {
-            const requiredFields = stepElement.querySelectorAll('[required]');
-            let formIsValid = true;
-            let firstErrorField = null;
+    document.addEventListener('DOMContentLoaded', function () {
+        // Logique pour le bouton "SUITE"
+        const nextButton = document.querySelector('.btn-next');
+        if (nextButton) {
+            nextButton.addEventListener('click', function (e) {
+                // Empêcher l'envoi du formulaire si des champs requis de la première étape sont vides
+                const coordonneesForm = document.getElementById('coordonnees');
+                const requiredInputs = coordonneesForm.querySelectorAll('[required]');
+                let allValid = true;
 
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    formIsValid = false;                    
-                    field.style.border = '1px solid red'; 
-                    if (!firstErrorField) {
-                        firstErrorField = field;
+                requiredInputs.forEach(input => {
+                    if (!input.value) {
+                        allValid = false;
+                        // Vous pouvez ajouter ici une logique de validation visuelle (par exemple, bordure rouge)
+                    }
+                });
+
+                if (allValid) {
+                    const nextStepId = this.getAttribute('data-next-step'); // 'livraison'
+                    const currentStep = this.closest('.formulaireLivraison'); // '#coordonnees'
+                    const nextStep = document.getElementById(nextStepId); // '#livraison'
+
+                    if (currentStep && nextStep) {
+                        currentStep.classList.remove('active');
+                        currentStep.classList.add('hidden');
+                        nextStep.classList.remove('hidden');
+                        nextStep.classList.add('active');
                     }
                 } else {
-                    field.style.border = '1px solid #ddd';
+                    alert('Veuillez remplir tous les champs obligatoires.'); // Afficher une alerte ou un message d'erreur
                 }
             });
-
-            if (!formIsValid && firstErrorField) {
-                 firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-
-            return formIsValid;
         }
 
-        const nextButtons = document.querySelectorAll('.btn-next');
-        const prevButtons = document.querySelectorAll('.btn-prev');
-        
-        nextButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault(); 
+        // Logique pour le bouton "PRÉCÉDENT"
+        const prevButton = document.querySelector('.btn-prev');
+        if (prevButton) {
+            prevButton.addEventListener('click', function () {
+                const prevStepId = this.getAttribute('data-prev-step'); // 'coordonnees'
+                const currentStep = this.closest('.formulaireLivraison'); // '#livraison'
+                const prevStep = document.getElementById(prevStepId); // '#coordonnees'
 
-                const currentStep = this.closest('.formulaireLivraison');
-                
-                if (!validateStep(currentStep)) {
-                    alert('Veuillez remplir tous les champs obligatoires de l\'étape actuelle.');
-                    return; 
-                }
-
-                const nextStepId = this.dataset.nextStep;
-                const nextStep = document.getElementById(nextStepId);
-
-                if (nextStep) {
+                if (currentStep && prevStep) {
                     currentStep.classList.remove('active');
                     currentStep.classList.add('hidden');
-                    
-                    nextStep.classList.remove('hidden');
-                    nextStep.classList.add('active');
-                    window.scrollTo(0, 0);
-                }
-            });
-        });
-
-        prevButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault(); 
-                
-                const currentStep = this.closest('.formulaireLivraison');
-                const prevStepId = this.dataset.prevStep;
-                const prevStep = document.getElementById(prevStepId);
-
-                if (prevStep) {
-                    currentStep.classList.remove('active');
-                    currentStep.classList.add('hidden');
-                    
                     prevStep.classList.remove('hidden');
                     prevStep.classList.add('active');
-                    window.scrollTo(0, 0);
                 }
             });
-        });
+        }
+        const finaliserBtn = document.getElementById('finaliser_commande_btn');
+        const carteForm = document.getElementById('cartebancaire-form');
+        const commandeForm = document.getElementById('commande-form');
 
-        document.querySelectorAll('input[name="billing_address"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const billingAddressFields = document.getElementById('billing-address-fields');
-                if (this.value === 'different') {
-                    billingAddressFields.style.display = 'block';
-                } else {
-                    billingAddressFields.style.display = 'none';
-                }
+        if (finaliserBtn) {
+            finaliserBtn.addEventListener('click', function (e) {
+                e.preventDefault(); 
+                
+                const cardNumber = document.getElementById('card_number_saisie').value;
+                const cardName = document.getElementById('card_name_saisie').value;
+                const expiryDate = document.getElementById('expiry_date_saisie').value;
+
+                document.getElementById('card_number_hidden').value = cardNumber;
+                document.getElementById('card_name_hidden').value = cardName;
+                document.getElementById('expiry_date_hidden').value = expiryDate;
+
+                commandeForm.submit();
             });
-        });
+        }
     });
 </script>
 @endsection

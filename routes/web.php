@@ -83,9 +83,11 @@ Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.g
 Route::put('/panier/update-quantity/{compositeId}', [PanierController::class, 'updateQuantity'])->name('panier.update_quantity');
 Route::delete('/panier/{compositeId}', [PanierController::class, 'removeItem'])->name('panier.remove_item');
 
+Route::get('/payer', [Payer::class, 'carteBancaire'])->name('payer.carteBancaire');
+Route::post('/', [Payer::class, 'processPayment'])->name('payer.processPayment');
+Route::post('/payer', [Payer::class, 'store'])->name('payer.store');
+
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
-Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
-Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
 
 // --- PAYER ---
 Route::get('/payer', [Payer::class, 'index'])->name('payer.index');
