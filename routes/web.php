@@ -91,8 +91,9 @@ Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
 
 // --- PAYER ---
 
-Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
-Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
+Route::get('/payer', [Payer::class, 'carteBancaire'])->name('payer.carteBancaire');
+Route::post('/', [Payer::class, 'processPayment'])->name('payer.processPayment');
+Route::post('/payer', [Payer::class, 'store'])->name('payer.store');
 
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
 
