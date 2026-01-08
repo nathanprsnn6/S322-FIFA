@@ -156,6 +156,7 @@
                     
                     <div style="display: flex; gap: 20px;">
                         <button type="button" class="btn-submit btn-prev" data-prev-step="coordonnees" style="background-color: #ccc; color: #333; flex: 1;">PRÉCÉDENT</button>
+
                         <button type="button" id="finaliser_commande_btn" class="btn-submit" style="flex: 2;">
                             FINALISER LA COMMANDE
                             <div class="tooltip-container">
@@ -165,6 +166,7 @@
                                 </div>
                             </div>
                         </button>
+
                     </div>
                 </div>
 
