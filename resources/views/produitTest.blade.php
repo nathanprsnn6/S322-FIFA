@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <section class="filter-section container">
     <div class="nation-scroll-container">
         <a href="{{ request()->fullUrlWithQuery(['nation' => null]) }}" 
@@ -38,7 +37,16 @@
             
             @if($availableSubCats->count() > 0)
             <div class="filter-group" style="width: 100%; border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px;">
-                <span class="filter-label">Type :</span>
+                <span class="filter-label">
+                    Type :
+                    {{-- TOOLTIP TYPE --}}
+                    <span class="tooltip-container">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-box">
+                            Filtrez par catégorie d'article (Maillots, Shorts, Accessoires, etc.) pour affiner votre recherche.
+                        </span>
+                    </span>
+                </span>
                 <div class="checkbox-list">
                     @foreach($availableSubCats as $sub)
                         <label class="checkbox-pill">
@@ -53,7 +61,16 @@
 
             {{-- Groupe Couleurs --}}
             <div class="filter-group">
-                <span class="filter-label">Couleurs :</span>
+                <span class="filter-label">
+                    Couleurs :
+                    {{-- TOOLTIP COULEURS --}}
+                    <span class="tooltip-container">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-box">
+                            Sélectionnez une ou plusieurs couleurs. Les produits contenant au moins une des couleurs choisies seront affichés.
+                        </span>
+                    </span>
+                </span>
                 <div class="checkbox-list">
                     @foreach($allColors as $color)
                         <label class="checkbox-pill">
@@ -67,7 +84,16 @@
 
             {{-- Groupe Tailles --}}
             <div class="filter-group">
-                <span class="filter-label">Tailles :</span>
+                <span class="filter-label">
+                    Tailles :
+                    {{-- TOOLTIP TAILLES --}}
+                    <span class="tooltip-container">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-box">
+                            Affiche uniquement les produits disponibles dans la taille sélectionnée (XS à XXL).
+                        </span>
+                    </span>
+                </span>
                 <div class="checkbox-list">
                     @foreach($allSizes as $size)
                         <label class="checkbox-pill">
@@ -82,16 +108,26 @@
         </div>
 
         <div class="filter-actions">
-        <a href="{{ url()->current() }}?{{ http_build_query(request()->only(['cat', 'nation'])) }}" 
-   style="color: #034f96; font-weight: bold;">
-   Réinitialiser les filtres</a>
+            <a href="{{ url()->current() }}?{{ http_build_query(request()->only(['cat', 'nation'])) }}" 
+               style="color: #034f96; font-weight: bold;">
+               Réinitialiser les filtres
+            </a>
             <button type="submit" class="btn-apply">APPLIQUER LES FILTRES</button>
 
-            <select name="sort" onchange="this.form.submit()" class="sort-select">
-                <option value="">Trier par prix...</option>
-                <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Prix croissant</option>
-                <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>Prix décroissant</option>
-            </select>
+            <div style="display:inline-block; position: relative;">
+                <select name="sort" onchange="this.form.submit()" class="sort-select">
+                    <option value="">Trier par prix...</option>
+                    <option value="asc" {{ request('sort') == 'asc' ? 'selected' : '' }}>Prix croissant</option>
+                    <option value="desc" {{ request('sort') == 'desc' ? 'selected' : '' }}>Prix décroissant</option>
+                </select>
+                {{-- TOOLTIP TRI (Optionnel, juste à côté du select) --}}
+                <span class="tooltip-container" style="vertical-align: middle; margin-left: 5px;">
+                    <span class="info-icon" style="background:#034f96; color:white;">i</span>
+                    <span class="tooltip-box" style="right: 0; left: auto;">
+                        Organisez les résultats du moins cher au plus cher ou inversement.
+                    </span>
+                </span>
+            </div>
         </div>
 
     </form>
@@ -99,10 +135,8 @@
 
 <div id="produits">
     @forelse($produits as $produit)
-        {{-- On retire le <a> qui englobait tout pour faire du DIV l'élément principal de la grille --}}
         <div class="div_produit" style="position: relative;">
             
-            {{-- Lien vers le détail (Partie cliquable client) --}}
             <a href="{{ route('produit.show', ['id' => $produit->idproduit]) }}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; width: 100%; flex-grow: 1;">
                 
                 <img src="{{ asset($produit->destinationphoto) }}" alt="{{ $produit->titreproduit }}" id="img_maillot">
@@ -119,7 +153,6 @@
                 </p> 
             </a>
 
-            {{-- BOUTON MODIFIER (Visible uniquement pour le Service Vente - ID 5) --}}
             @auth
                 @if(Auth::user()->idrole == 5)
                     <div style="width: 100%; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
@@ -142,4 +175,3 @@
 </div>
 
 @endsection
-

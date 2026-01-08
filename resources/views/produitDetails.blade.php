@@ -15,7 +15,6 @@
         <input type="hidden" name="produitId" value="{{ $produit->idproduit }}">
         <div id="product-info">
             <h1>{{ $produit->titreproduit }}</h1>
-            <h1>{{ $produit->titreproduit }}</h1>
 
             {{-- BOUTON MODIFIER (Visible uniquement pour Service Vente) --}}
             @auth
@@ -31,15 +30,22 @@
 
             <p class="text_detail">
                 <b>Description :</b><br>
-
-            <p class="text_detail">
-                <b>Description :</b><br>
                 {{ $produit->descriptionproduit }}
             </p>
 
             <div>
                 <div class="size-buttons-wrapper">
-                <label id="lab_size" class="text_detail"><b>Taille :</b></label>
+                    <label id="lab_size" class="text_detail">
+                        <b>Taille :</b>
+                        {{-- TOOLTIP TAILLE --}}
+                        <span class="tooltip-container">
+                            <span class="info-icon">i</span>
+                            <span class="tooltip-box">
+                                Sélectionnez votre taille habituelle. Le prix reste le même quelle que soit la taille choisie.
+                            </span>
+                        </span>
+                    </label>
+                    
                     @foreach($tailles as $taille)
                         <input type="radio" class="size-input" id="size_{{ $taille->idtaille }}" name="size" value="{{ $taille->idtaille }}" style="display:none;">
                         <label class="size-button" for="size_{{ $taille->idtaille }}">
@@ -48,7 +54,17 @@
                     @endforeach
                 </div>
 
-                <label id="lab_color" class="text_detail" for="color"><b>Couleur :</b></label>
+                <label id="lab_color" class="text_detail" for="color">
+                    <b>Couleur :</b>
+                    {{-- TOOLTIP COULEUR --}}
+                    <span class="tooltip-container">
+                        <span class="info-icon">i</span>
+                        <span class="tooltip-box">
+                            Attention, le prix du produit peut varier en fonction du coloris (modèle) sélectionné.
+                        </span>
+                    </span>
+                </label>
+                
                 <select class="text_detail" id="color" name="color">
                     @foreach($variantes as $variante)
                         <option value="{{ $variante->idcoloris }}" data-price="{{ $variante->prixproduit }}">
@@ -60,7 +76,17 @@
 
             <br>
 
-            <label id="lab_quantity" class="text_detail" for="quantity"><b>Quantité :</b></label>
+            <label id="lab_quantity" class="text_detail" for="quantity">
+                <b>Quantité :</b>
+                {{-- TOOLTIP QUANTITÉ --}}
+                <span class="tooltip-container">
+                    <span class="info-icon">i</span>
+                    <span class="tooltip-box">
+                        La quantité maximale sélectionnable dépend du stock disponible pour la taille et la couleur choisies.
+                    </span>
+                </span>
+            </label>
+            
             <input type="number" id="quantity" name="quantity" min="0" max="{{ $maxQuantity }}" value="1" required>
 
             <p id="price">
@@ -105,6 +131,7 @@
         @endforeach
     </div>
 @endif
+
 {{-- Section Produits Consultés --}}
 @if($produitsConsultes->count() > 0)
     <div class="container" style="max-width: 100%; background: none; box-shadow: none; padding: 0 20px; margin-top: 50px;">

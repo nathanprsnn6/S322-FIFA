@@ -188,8 +188,22 @@
         };
     </script>
 
-    <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
     
+    <script>
+        var botmanWidget = {
+            aboutText: 'Assistant FIFA',
+            introMessage: "Bonjour ! Je peux vous aider avec vos votes, le suivi de commande ou les infos produits.",
+            title: "Support FIFA",
+            mainColor: "#034f96",
+            bubbleBackground: "#034f96", 
+            headerTextColor: "#fff",
+        };
+    </script>
+    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
+    
+
+
     @yield('scripts')
 </body>
 </html>
