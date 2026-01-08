@@ -23,7 +23,6 @@ class CarteBancaire extends Model
         try {
             return Crypt::decryptString($value);
         } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
-            // Gérer l'erreur si le chiffrement échoue (ex: ancienne donnée non chiffrée)
             return $value; 
         }
     }

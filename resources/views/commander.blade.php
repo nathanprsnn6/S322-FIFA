@@ -17,7 +17,7 @@
             
             <hr>
             
-            <form id="commande-form" method="POST" action="{{ route('payer.processPayment', 'payer.store') }}">    
+            <form id="commande-form" method="POST" action="{{ route('payer.processPayment') }}">    
                 @csrf
 
                 <div id="coordonnees" class="formulaireLivraison active">
@@ -28,7 +28,7 @@
                     @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                     
                     <label for="nom_complet">Nom complet *</label>
-                    <input type="text" name="nom_complet" id="nom_complet" value="{{ old('nom_complet') }}" required placeholder="Entrez votre nom" class="form-control">
+                    <input type="text" name="nom_complet" id="nom_complet" value="{{ old('nom_complet') }}" required placeholder="Entrez votre nom et prenom" class="form-control">
                     @error('nom_complet') <span class="text-danger">{{ $message }}</span> @enderror
                     
 
@@ -61,8 +61,6 @@
 
                         <div class="form-group">
                             <label for="ville">Ville *</label>
-                            
-
                             <select id="ville_select" name="ville">
                                 <option value="">-- Remplissez le Code Postal d'abord --</option>
                             </select>
@@ -72,7 +70,7 @@
                     </div>
 
                     <label for="tel">Téléphone *</label>
-                    <input type="tel" name="tel" id="tel" value="{{ old('tel') }}" required placeholder="Entrez votre numéro de mobile" class="form-control">
+                    <input type="tel" name="tel" id="tel" value="{{ old('tel') }}" required placeholder="+3363434343434" class="form-control">
                     @error('tel') <span class="text-danger">{{ $message }}</span> @enderror
 
                     <button type="button" class="btn-submit btn-next" data-next-step="livraison">SUITE</button>
@@ -116,10 +114,10 @@
 
                     <div id="carteBancaire_saisie">
                         <label for="card_number_saisie">Numéro de carte *</label>
-                        <input type="text" class="form-control" id="card_number_saisie" placeholder="1234 5678 9012 3456"required>
+                        <input type="text" class="form-control" id="card_number_saisie" name="card_number_saisie" placeholder="1234 5678 9012 3456"required>
                                 
                         <label for="card_name_saisie">Nom figurant sur la carte *</label>
-                        <input type="text" class="form-control" id="card_name_saisie" required>
+                        <input type="text" class="form-control" id="card_name_saisie" name="card_name_saisie" required>
                                 
                         <div style="display: flex; gap: 20px;">
                             <div class="form-group" style="flex-grow: 1;">
@@ -128,7 +126,7 @@
                             </div>
                             <div class="form-group" style="flex-grow: 1;">
                                 <label for="expiry_date_saisie">Date d'expiration (MM/AA) *</label>
-                                <input type="text" class="form-control" id="expiry_date_saisie" placeholder="MM/AA" required>
+                                <input type="text" class="form-control" id="expiry_date_saisie" name="expiry_date_saisie" placeholder="MM/AA" required>
                             </div>
                         </div>
                     </div>
@@ -157,7 +155,7 @@
                     <div style="display: flex; gap: 20px;">
                         <button type="button" class="btn-submit btn-prev" data-prev-step="coordonnees" style="background-color: #ccc; color: #333; flex: 1;">PRÉCÉDENT</button>
 
-                        <button type="button" id="finaliser_commande_btn" class="btn-submit" style="flex: 2;">
+                        <button type="submit" id="finaliser_commande_btn" class="btn-submit" style="flex: 2;">
                             FINALISER LA COMMANDE
                             <div class="tooltip-container">
                                 <div class="info-icon">i</div>
@@ -169,7 +167,15 @@
 
                     </div>
                 </div>
-
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </form>
         </div>
         <div class="container commande-form-box">
