@@ -85,7 +85,7 @@ Route::delete('/panier/{compositeId}', [PanierController::class, 'removeItem'])-
 
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
 Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
-Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
+Route::post('/', [Commander::class, 'processPayment'])->name('payer.processPayment');
 
 // --- PAYER ---
 Route::get('/payer', [Payer::class, 'index'])->name('payer.index');
