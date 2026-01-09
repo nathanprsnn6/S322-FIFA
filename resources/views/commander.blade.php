@@ -8,9 +8,10 @@
             <h2 style="text-align: center; color: #034f96;">Commande</h2>
             <hr>
             
-            <form id="commande-form" method="POST" action="{{ route('payer.processPayment', 'payer.store') }}">    
+            <form id="commande-form" method="POST" action="{{ route('payer.processPayment') }}">    
                 @csrf
 
+                {{-- Étape 1 : Coordonnées et Adresse --}}
                 <div id="coordonnees" class="formulaireLivraison active">
                     <h3>1. Informations de Contact et Adresse</h3>
                     
@@ -22,7 +23,6 @@
                     <input type="text" name="nom_complet" id="nom_complet" value="{{ old('nom_complet') }}" required placeholder="Entrez votre nom" class="form-control">
                     @error('nom_complet') <span class="text-danger">{{ $message }}</span> @enderror
                     
-
                     <br>
                     <h4>Adresse de livraison</h4>
 
@@ -49,17 +49,13 @@
                             <input type="text" id="cp" name="cp" maxlength="5" value="{{ old('cp') }}" placeholder="Ex: 75001" required class="form-control">
                         </div>
 
-
                         <div class="form-group">
                             <label for="ville">Ville *</label>
-                            
-
                             <select id="ville_select" name="ville">
                                 <option value="">-- Remplissez le Code Postal d'abord --</option>
                             </select>
                             <input type="hidden" id="ville_real_name" name="ville_in" value="{{ old('ville') }}" class="form-control">
                         </div>
-
                     </div>
 
                     <label for="tel">Téléphone *</label>
@@ -69,6 +65,7 @@
                     <button type="button" class="btn-submit btn-next" data-next-step="livraison">SUITE</button>
                 </div>
 
+                {{-- Étape 2 : Livraison, Paiement et Facturation --}}
                 <div id="livraison" class="formulaireLivraison hidden"> 
                     
                     <h3>2. Options de Livraison</h3>
@@ -99,27 +96,26 @@
                     <h3>3. Paiement</h3>
                     <p style="font-size: 14px; color: #555;">Toutes les transactions sont chiffrées et sécurisées.</p>
 
-                    <div style="display: none;">
-                        <input type="hidden" id="card_number_hidden" name="card_number">
-                        <input type="hidden" id="card_name_hidden" name="card_name">
-                        <input type="hidden" id="expiry_date_hidden" name="expiry_date">
-                    </div>
-
+                    {{-- **Champs de carte bancaire modifiés : les attributs 'name' sont ajoutés directement** --}}
                     <div id="carteBancaire_saisie">
                         <label for="card_number_saisie">Numéro de carte *</label>
-                        <input type="text" class="form-control" id="card_number_saisie" required>
+                        {{-- Ajout de name="card_number" --}}
+                        <input type="text" class="form-control" id="card_number_saisie" name="card_number" required>
                                 
                         <label for="card_name_saisie">Nom figurant sur la carte *</label>
-                        <input type="text" class="form-control" id="card_name_saisie" required>
+                        {{-- Ajout de name="card_name" --}}
+                        <input type="text" class="form-control" id="card_name_saisie" name="card_name" required>
                                 
                         <div style="display: flex; gap: 20px;">
                             <div class="form-group" style="flex-grow: 1;">
                                 <label for="cvv_saisie">CVV *</label>
-                                <input type="text" class="form-control" id="cvv_saisie" required>
+                                {{-- Ajout de name="cvv" (Note : Payer.php ne le traite pas encore, mais c'est cohérent) --}}
+                                <input type="text" class="form-control" id="cvv_saisie" name="cvv" required>
                             </div>
                             <div class="form-group" style="flex-grow: 1;">
                                 <label for="expiry_date_saisie">Date d'expiration (MM/AA) *</label>
-                                <input type="text" class="form-control" id="expiry_date_saisie" placeholder="MM/AA" required>
+                                {{-- Ajout de name="expiry_date" --}}
+                                <input type="text" class="form-control" id="expiry_date_saisie" name="expiry_date" placeholder="MM/AA" required>
                             </div>
                         </div>
                     </div>
@@ -153,6 +149,8 @@
 
             </form>
         </div>
+        
+        {{-- Récapitulatif du Panier --}}
         <div class="container commande-form-box">
             <h2 style="text-align: center; color: #034f96;">Récapitulatif du panier</h2>
             <hr>
@@ -180,7 +178,6 @@
                                     ({{ number_format($contenir->prixLigne, 2, ',', ' ') }} €)
                                 </span>
                             </div>
-
                             <div class="quantity-control" style="display: flex; align-items: center;">
                                 <input type="number" 
                                     class="quantity-input" 
@@ -189,7 +186,6 @@
                                     min="1" 
                                     style="width: 40px; text-align: center; margin: 0 5px;"
                                     readonly>
-                                    
                             </div>
                             
                         </div>
@@ -199,7 +195,6 @@
                     @endforelse
                 </div>
                 <div class="cart-footer">
-
                     <div class="total-row">
                         <span>Total</span>
                         <span>{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
@@ -213,11 +208,14 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Logique pour le bouton "SUITE"
+        
+        const commandeForm = document.getElementById('commande-form');
+        
+        // --- 1. Logique Navigation Étapes (SUITE/PRÉCÉDENT) ---
+        
         const nextButton = document.querySelector('.btn-next');
         if (nextButton) {
             nextButton.addEventListener('click', function (e) {
-                // Empêcher l'envoi du formulaire si des champs requis de la première étape sont vides
                 const coordonneesForm = document.getElementById('coordonnees');
                 const requiredInputs = coordonneesForm.querySelectorAll('[required]');
                 let allValid = true;
@@ -225,14 +223,13 @@
                 requiredInputs.forEach(input => {
                     if (!input.value) {
                         allValid = false;
-                        // Vous pouvez ajouter ici une logique de validation visuelle (par exemple, bordure rouge)
                     }
                 });
 
                 if (allValid) {
-                    const nextStepId = this.getAttribute('data-next-step'); // 'livraison'
-                    const currentStep = this.closest('.formulaireLivraison'); // '#coordonnees'
-                    const nextStep = document.getElementById(nextStepId); // '#livraison'
+                    const nextStepId = this.getAttribute('data-next-step');
+                    const currentStep = this.closest('.formulaireLivraison');
+                    const nextStep = document.getElementById(nextStepId);
 
                     if (currentStep && nextStep) {
                         currentStep.classList.remove('active');
@@ -241,18 +238,17 @@
                         nextStep.classList.add('active');
                     }
                 } else {
-                    alert('Veuillez remplir tous les champs obligatoires.'); // Afficher une alerte ou un message d'erreur
+                    alert('Veuillez remplir tous les champs obligatoires.'); 
                 }
             });
         }
 
-        // Logique pour le bouton "PRÉCÉDENT"
         const prevButton = document.querySelector('.btn-prev');
         if (prevButton) {
             prevButton.addEventListener('click', function () {
-                const prevStepId = this.getAttribute('data-prev-step'); // 'coordonnees'
-                const currentStep = this.closest('.formulaireLivraison'); // '#livraison'
-                const prevStep = document.getElementById(prevStepId); // '#coordonnees'
+                const prevStepId = this.getAttribute('data-prev-step');
+                const currentStep = this.closest('.formulaireLivraison');
+                const prevStep = document.getElementById(prevStepId);
 
                 if (currentStep && prevStep) {
                     currentStep.classList.remove('active');
@@ -262,24 +258,30 @@
                 }
             });
         }
+        
+        // --- 2. Logique Soumission du Formulaire (FINALISER LA COMMANDE) ---
+
         const finaliserBtn = document.getElementById('finaliser_commande_btn');
-        const carteForm = document.getElementById('cartebancaire-form');
-        const commandeForm = document.getElementById('commande-form');
+    const commandeForm = document.getElementById('commande-form'); // Ajout de la déclaration si elle manque
 
-        if (finaliserBtn) {
-            finaliserBtn.addEventListener('click', function (e) {
-                e.preventDefault(); 
-                
-                const cardNumber = document.getElementById('card_number_saisie').value;
-                const cardName = document.getElementById('card_name_saisie').value;
-                const expiryDate = document.getElementById('expiry_date_saisie').value;
-
-                document.getElementById('card_number_hidden').value = cardNumber;
-                document.getElementById('card_name_hidden').value = cardName;
-                document.getElementById('expiry_date_hidden').value = expiryDate;
-
-                commandeForm.submit();
-            });
+    if (finaliserBtn) {
+        finaliserBtn.addEventListener('click', function (e) {
+            e.preventDefault(); 
+            
+            // Récupère les données de la carte saisies pour la validation JS
+            const cardNumberInput = document.getElementById('card_number_saisie');
+            const cardNameInput = document.getElementById('card_name_saisie');
+            const expiryDateInput = document.getElementById('expiry_date_saisie');
+            const cvvInput = document.getElementById('cvv_saisie');
+            
+            // Valide les champs de paiement (ceci est la validation client)
+            if (!cardNumberInput.value || !cardNameInput.value || !expiryDateInput.value || !cvvInput.value) {
+                alert('Veuillez saisir toutes les informations de paiement.');
+                return;
+            }
+            
+            commandeForm.submit();
+        });
         }
     });
 </script>
