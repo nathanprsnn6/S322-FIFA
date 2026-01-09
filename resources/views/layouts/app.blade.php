@@ -18,7 +18,6 @@
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
             <a href="{{ url('publication') }}" class="nav-link">Publication</a>
-            <a href="{{ url('faq') }}" class="nav-link">FAQ</a>
         </div>
 
         <div class="header-right">
@@ -91,7 +90,15 @@
             </div>
 
             <div class="cart-items-container ">
-                <h2>Articles du Panier</h2>
+                <h2 style="display: flex; align-items: center;">
+                    Articles du Panier
+                    <div class="tooltip-container">
+                        <div class="info-icon">i</div>
+                        <div class="tooltip-box">
+                            Vous pouvez modifier la quantité ou supprimer un article.
+                        </div>
+                    </div>
+                </h2>
     
                 <div class="cart-item-list"> 
                     @forelse ($contenirs as $contenir)                        

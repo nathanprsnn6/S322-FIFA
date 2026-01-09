@@ -78,20 +78,15 @@ Route::post('/voter', [VoterController::class, 'store'])->name('voter.store');
 Route::get('/voter/{id}', [VoterDetail::class, 'show'])->name('voter.show');
 Route::get('/verifier-vote/{idtypevote}', [VoterController::class, 'checkVote'])->name('verifier.vote');
 
-// --- PANIER & COMMANDE ---
+// --- PANIER ---
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
 Route::put('/panier/update-quantity/{compositeId}', [PanierController::class, 'updateQuantity'])->name('panier.update_quantity');
 Route::delete('/panier/{compositeId}', [PanierController::class, 'removeItem'])->name('panier.remove_item');
 
-Route::get('/payer', [Payer::class, 'carteBancaire'])->name('payer.carteBancaire');
-Route::post('/', [Payer::class, 'processPayment'])->name('payer.processPayment');
-Route::post('/payer', [Payer::class, 'store'])->name('payer.store');
-
+// --- PAYER & COMMANDE---
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
 
-// --- PAYER ---
-Route::get('/payer', [Payer::class, 'index'])->name('payer.index');
-Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])->name('payer.effectuer');
+Route::post('/payer', [Payer::class, 'processPayment'])->name('payer.processPayment');
 
 // --- PUBLICATIONS ---
 Route::get('/publication', [PublicationController::class, 'index'])->name('publication.index');
