@@ -12,7 +12,6 @@ class Client extends Model
     public $timestamps = false;
     protected $filable = [
         'cpLivraison',
-        'cpLivraison',
         'villeLivraison',
         'telephone',
         'paysLivraison',

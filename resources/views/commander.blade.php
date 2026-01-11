@@ -5,7 +5,16 @@
 <div class="commande-page-container">
     <div class="form-column">
         <div class="container commande-form-box">
-            <h2 style="text-align: center; color: #034f96;">Commande</h2>
+            <h2 style="text-align: center; color: #034f96;">
+                Commande
+                <div class="tooltip-container">
+                    <div class="info-icon">i</div>
+                    <div class="tooltip-box">
+                        Ces donnée serviron à nos partenaire tiers pour livrer vos colis chez vous.
+                    </div>
+                </div>
+            </h2>
+            
             <hr>
             
             <form id="commande-form" method="POST" action="{{ route('payer.processPayment') }}">    
@@ -20,7 +29,7 @@
                     @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                     
                     <label for="nom_complet">Nom complet *</label>
-                    <input type="text" name="nom_complet" id="nom_complet" value="{{ old('nom_complet') }}" required placeholder="Entrez votre nom" class="form-control">
+                    <input type="text" name="nom_complet" id="nom_complet" value="{{ old('nom_complet') }}" required placeholder="Entrez votre nom et prenom" class="form-control">
                     @error('nom_complet') <span class="text-danger">{{ $message }}</span> @enderror
                     
                     <br>
@@ -59,7 +68,7 @@
                     </div>
 
                     <label for="tel">Téléphone *</label>
-                    <input type="tel" name="tel" id="tel" value="{{ old('tel') }}" required placeholder="Entrez votre numéro de mobile" class="form-control">
+                    <input type="tel" name="tel" id="tel" value="{{ old('tel') }}" required placeholder="+3363434343434" class="form-control">
                     @error('tel') <span class="text-danger">{{ $message }}</span> @enderror
 
                     <button type="button" class="btn-submit btn-next" data-next-step="livraison">SUITE</button>
@@ -99,25 +108,27 @@
                     {{-- **Champs de carte bancaire modifiés : les attributs 'name' sont ajoutés directement** --}}
                     <div id="carteBancaire_saisie">
                         <label for="card_number_saisie">Numéro de carte *</label>
-                        {{-- Ajout de name="card_number" --}}
-                        <input type="text" class="form-control" id="card_number_saisie" name="card_number" required>
+                        <input type="text" class="form-control" id="card_number_saisie" name="card_number_saisie" placeholder="1234 5678 9012 3456"required>
                                 
                         <label for="card_name_saisie">Nom figurant sur la carte *</label>
-                        {{-- Ajout de name="card_name" --}}
-                        <input type="text" class="form-control" id="card_name_saisie" name="card_name" required>
+                        <input type="text" class="form-control" id="card_name_saisie" name="card_name_saisie" required>
                                 
-                        <div style="display: flex; gap: 20px;">
-                            <div class="form-group" style="flex-grow: 1;">
+                        <div class="form-group">
+                            <div >
                                 <label for="cvv_saisie">CVV *</label>
-                                {{-- Ajout de name="cvv" (Note : Payer.php ne le traite pas encore, mais c'est cohérent) --}}
-                                <input type="text" class="form-control" id="cvv_saisie" name="cvv" required>
+
+                                <input type="text" class="form-control" id="cvv_saisie" placeholder="175" required>
                             </div>
-                            <div class="form-group" style="flex-grow: 1;">
+                            <div>
                                 <label for="expiry_date_saisie">Date d'expiration (MM/AA) *</label>
-                                {{-- Ajout de name="expiry_date" --}}
-                                <input type="text" class="form-control" id="expiry_date_saisie" name="expiry_date" placeholder="MM/AA" required>
+                                <input type="text" class="form-control" id="expiry_date_saisie" name="expiry_date_saisie" placeholder="MM/AA" required>
                             </div>
                         </div>
+                        <input type="checkbox" name="save_cb" id="save_cb" value="1">
+                        
+                        <label for="save_cb">
+                            Enregistrer les données bancaires pour les futures commandes
+                        </label>                        
                     </div>
 
                     <br>
@@ -143,19 +154,46 @@
                     
                     <div style="display: flex; gap: 20px;">
                         <button type="button" class="btn-submit btn-prev" data-prev-step="coordonnees" style="background-color: #ccc; color: #333; flex: 1;">PRÉCÉDENT</button>
-                        <button type="button" id="finaliser_commande_btn" class="btn-submit" style="flex: 2;">FINALISER LA COMMANDE</button>
+
+                        <button type="submit" id="finaliser_commande_btn" class="btn-submit" style="flex: 2;">
+                            FINALISER LA COMMANDE
+                            <div class="tooltip-container">
+                                <div class="info-icon">i</div>
+                                <div class="tooltip-box">
+                                    Assurez-vous que toutes vos données sont correctes, vous ne pourrez plus accéder à votre panier actuel après avoir cliqué sur ce bouton.
+                                </div>
+                            </div>
+                        </button>
+
                     </div>
                 </div>
-
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </form>
         </div>
         
         {{-- Récapitulatif du Panier --}}
         <div class="container commande-form-box">
-            <h2 style="text-align: center; color: #034f96;">Récapitulatif du panier</h2>
+            <h2 style="text-align: center; color: #034f96;">
+                Récapitulatif du panier
+                <div class="tooltip-container">
+                    <div class="info-icon">i</div>
+                    <div class="tooltip-box">
+                        Assurez-vous que tous vos articles apparaissent dans votre panier ci-dessous.
+                    </div>
+                </div>
+            </h2>
             <hr>
             <div class="cart-items-container ">
                 <h2>Articles du Panier</h2>
+                
 
                 <div class="cart-item-list"> 
                     @forelse ($contenirs as $contenir)                        
@@ -207,10 +245,7 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        
-        const commandeForm = document.getElementById('commande-form');
-        
+    document.addEventListener('DOMContentLoaded', function () {        
         // --- 1. Logique Navigation Étapes (SUITE/PRÉCÉDENT) ---
         
         const nextButton = document.querySelector('.btn-next');
@@ -262,7 +297,7 @@
         // --- 2. Logique Soumission du Formulaire (FINALISER LA COMMANDE) ---
 
         const finaliserBtn = document.getElementById('finaliser_commande_btn');
-    const commandeForm = document.getElementById('commande-form'); // Ajout de la déclaration si elle manque
+        const commandeForm = document.getElementById('commande-form'); 
 
     if (finaliserBtn) {
         finaliserBtn.addEventListener('click', function (e) {

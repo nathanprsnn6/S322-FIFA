@@ -19,32 +19,23 @@ class ProduitDetail extends Controller
     public function show($id)
     {
         $produit = Produit::findOrFail($id);
-
-        // --- LOGIQUE DES PRODUITS RÉCEMMENT CONSULTÉS ---
-        
-        // 1. Récupérer l'historique de la session (ou un tableau vide)
         $recentIds = session()->get('recent_products', []);
 
-        // 2. Ajouter l'ID actuel : on le supprime s'il existe déjà pour le remettre au début
         if (($key = array_search($id, $recentIds)) !== false) {
             unset($recentIds[$key]);
         }
         array_unshift($recentIds, $id);
 
-        // 3. On limite à 5 produits par exemple
         $recentIds = array_slice($recentIds, 0, 5);
 
-        // 4. On sauvegarde dans la session
         session()->put('recent_products', $recentIds);
 
-       // 5. Récupérer les détails des produits consultés (sauf le produit actuel)
 $idsToFetch = array_filter($recentIds, function($val) use ($id) {
     return $val != $id;
 });
 
 $produitsConsultes = collect(); 
 if (!empty($idsToFetch)) {
-    // On récupère les produits sans le ORDER BY RAW
     $results = DB::table('produit')
         ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
         ->join('illustrer', 'produit.idproduit', '=', 'illustrer.idproduit')
@@ -59,14 +50,11 @@ if (!empty($idsToFetch)) {
         ->groupBy('produit.idproduit', 'produit.titreproduit')
         ->get();
 
-    // On trie la collection PHP pour respecter l'ordre des IDs de la session
     $produitsConsultes = $results->sortBy(function ($model) use ($idsToFetch) {
         return array_search($model->idproduit, array_values($idsToFetch));
     });
 }
-        // --- FIN LOGIQUE CONSULTÉS ---
 
-        // Logique pour le produit actuel
         $photo = DB::table('photo')
             ->join('illustrer', 'photo.idphoto', '=', 'illustrer.idphoto')
             ->where('illustrer.idproduit', $id)
@@ -98,7 +86,6 @@ if (!empty($idsToFetch)) {
         $maxQuantity = ($premierIdColoris && $premiereTaille && isset($stock[$premierIdColoris][$premiereTaille])) 
                        ? $stock[$premierIdColoris][$premiereTaille] : 1;
 
-        // Produits similaires
         $produitsSimilaires = DB::table('produit')
             ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
             ->join('illustrer', 'produit.idproduit', '=', 'illustrer.idproduit')
