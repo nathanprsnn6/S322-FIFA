@@ -24,7 +24,7 @@
                     <h3>1. Informations de Contact et Adresse</h3>
                     
                     <label for="email">Courriel *</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" required placeholder="Entrez votre courriel" class="form-control">
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" placeholder="Entrez votre courriel" class="form-control">
                     @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                     
                     <label for="nom_complet">Nom complet *</label>
@@ -82,7 +82,7 @@
                     <div class="delivery-option">
                         <label>
                             <span class="radio-custom"></span>
-                            <input type="radio" name="delivery_method" value="standard" required checked>
+                            <input type="radio" name="delivery_method" value="1" {{ old('delivery_method', '1') == 1 ? 'checked' : '' }} required>
                             <div class="details">
                                 <span>Standard (Jusqu'à 4 jours ouvrables)</span>
                             </div>
@@ -93,7 +93,7 @@
                     <div class="delivery-option">
                         <label>
                             <span class="radio-custom"></span>
-                            <input type="radio" name="delivery_method" value="express" required>
+                            <input type="radio" name="delivery_method" value="2" {{ old('delivery_method') == 2 ? 'checked' : '' }} required>
                             <div class="details">
                                 <span>Express (Jusqu'à 3 jours ouvrables)</span>
                             </div>
@@ -316,5 +316,55 @@
             });
         }
     });
+
+
+    
+    document.addEventListener('DOMContentLoaded', function () {
+        const paysSelect = document.getElementById('pays');
+        const telInput = document.getElementById('tel');
+
+        // Générer l'objet phoneCodes depuis PHP en JSON
+        const phoneCodes = @json($nations->mapWithKeys(function($nation) {
+            return [($nation->idnation ?? $nation->id) => $nation->codetel ?? ''];
+        }));
+
+        function updatePhonePrefix() {
+            const selectedCountry = paysSelect.value;
+            const prefix = phoneCodes[selectedCountry] || '';
+
+            if (!prefix) {
+                return;
+            }
+
+            if (!telInput.value.startsWith(prefix)) {
+                const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
+                telInput.value = prefix + valueSansPrefix;
+            }
+        }
+
+        telInput.addEventListener('input', () => {
+            const selectedCountry = paysSelect.value;
+            const prefix = phoneCodes[selectedCountry] || '';
+
+            if (!prefix) return;
+
+            if (!telInput.value.startsWith(prefix)) {
+                const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
+                telInput.value = prefix + valueSansPrefix;
+            }
+        });
+
+        paysSelect.addEventListener('change', () => {
+            updatePhonePrefix();
+            telInput.focus();
+            setTimeout(() => {
+                telInput.selectionStart = telInput.selectionEnd = telInput.value.length;
+            }, 0);
+        });
+
+        updatePhonePrefix();
+    });
 </script>
 @endsection
+
+

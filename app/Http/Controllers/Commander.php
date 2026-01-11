@@ -17,7 +17,9 @@ class Commander extends Controller{
     public function index()
     {
         $userId = Auth::id();
-        $nations = Nation::orderBy('nomnation', 'asc')->get();
+        $nations = Nation::select('idnation', 'nomnation', 'codetel')
+            ->orderBy('nomnation', 'asc')
+            ->get();
         $commanders = Commande::all();
         $panier = Panier::where('idpersonne', $userId)->first();
         $totalPanier = $panier ? $panier->prixpanier : 0;

@@ -27,13 +27,13 @@ class Payer extends Controller
             'cp' => 'required|string|max:10',
             'pays' => 'required|string|max:30',
             'ville' => 'required|string|max:30',
-            'tel' => 'required|string|max:20',
+            'tel' => 'required|string|min:10|max:20',
 
             'card_number_saisie' => 'required|string|between:13,19', 
             'card_name_saisie' => 'required|string|max:200',
             'expiry_date_saisie' => ['required', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
 
-            'delivery_method' => 'required|in:standard,express',
+            'delivery_method' => 'required|in:1,2',
             'billing_address' => 'required|in:same,different',
         ]);
 
@@ -99,17 +99,30 @@ class Payer extends Controller
                 ->where('idpersonne', $userId)
                 ->value('prixpanier');
 
-            DB::table('transaction')->insert([
+            $panierActif = Panier::where('idpersonne', $userId)->first();
+
+            $idtransaction = DB::table('transaction')->insertGetId([
                 'idcb' => $idcb,
                 'datetransaction' => now(),
                 'montanttransaction' => $prixpanier ?? 0,
+            ],'idtransaction');
+
+            DB::table('commande')->insert([
+                'idpanier' => $panierActif->idpanier,
+                'idtransaction' => $idtransaction,
+                'idpersonne' => $userId,
+                'etatcommande' => 'En cours de livraison',
             ]);
 
-            $panierActif = Panier::where('idpersonne', $userId)->first();
+            DB::table('serviceexpedition')->insert([
+                'idtypelivraison' => $validated['delivery_method'],
+                'libelleserviceexpedition' => $validated['delivery_method'] == 1 ? 'Gestion Fifa Normal' : 'Gestion Fifa Express',
+            ]);
 
-            // Suppression ou archivage du panier après paiement
-            Contenir::where('idpanier', $panierActif->idpanier)->delete();
-            Panier::where('idpanier', $panierActif->idpanier)->delete();
+            
+
+            //Contenir::where('idpanier', $panierActif->idpanier)->delete();
+            //Panier::where('idpanier', $panierActif->idpanier)->delete();
 
             // Si toutes les opérations sont réussies, on valide la transaction
             DB::commit();
@@ -117,7 +130,6 @@ class Payer extends Controller
             Log::info('Paiement réussi pour utilisateur ' . $userId);
             return redirect('/')->with('success', 'Vos informations de paiement et de livraison ont été enregistrées avec succès.');
         } catch (\Exception $e) {
-            // En cas d'erreur, on annule toutes les opérations de la transaction
             DB::rollBack();
             Log::error("Erreur lors du traitement du paiement pour l'utilisateur {$userId}: " . $e->getMessage());
             return back()->withErrors(['error' => 'Une erreur est survenue lors de l\'enregistrement de vos informations. Veuillez réessayer.'])->withInput();
