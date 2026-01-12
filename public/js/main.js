@@ -484,3 +484,183 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+document.addEventListener('DOMContentLoaded', function () {        
+    // --- 1. Logique Navigation Étapes (SUITE/PRÉCÉDENT) ---
+    
+    const nextButton = document.querySelector('.btn-next');
+    if (nextButton) {
+        nextButton.addEventListener('click', function (e) {
+            const coordonneesForm = document.getElementById('coordonnees');
+            const requiredInputs = coordonneesForm.querySelectorAll('[required]');
+            let allValid = true;
+
+            requiredInputs.forEach(input => {
+                if (!input.value) {
+                    allValid = false;
+                }
+            });
+
+            if (allValid) {
+                const nextStepId = this.getAttribute('data-next-step');
+                const currentStep = this.closest('.formulaireLivraison');
+                const nextStep = document.getElementById(nextStepId);
+
+                if (currentStep && nextStep) {
+                    currentStep.classList.remove('active');
+                    currentStep.classList.add('hidden');
+                    nextStep.classList.remove('hidden');
+                    nextStep.classList.add('active');
+                }
+            } else {
+                alert('Veuillez remplir tous les champs obligatoires.'); 
+            }
+        });
+    }
+
+    const prevButton = document.querySelector('.btn-prev');
+    if (prevButton) {
+        prevButton.addEventListener('click', function () {
+            const prevStepId = this.getAttribute('data-prev-step');
+            const currentStep = this.closest('.formulaireLivraison');
+            const prevStep = document.getElementById(prevStepId);
+
+            if (currentStep && prevStep) {
+                currentStep.classList.remove('active');
+                currentStep.classList.add('hidden');
+                prevStep.classList.remove('hidden');
+                prevStep.classList.add('active');
+            }
+        });
+    }
+    
+    // --- 2. Logique Soumission du Formulaire (FINALISER LA COMMANDE) ---
+
+    const finaliserBtn = document.getElementById('finaliser_commande_btn');
+    const commandeForm = document.getElementById('commande-form'); 
+
+    if (finaliserBtn) {
+        finaliserBtn.addEventListener('click', function (e) {
+            e.preventDefault(); 
+            
+            // Récupère les données de la carte saisies pour la validation JS
+            const cardNumberInput = document.getElementById('card_number_saisie');
+            const cardNameInput = document.getElementById('card_name_saisie');
+            const expiryDateInput = document.getElementById('expiry_date_saisie');
+            const cvvInput = document.getElementById('cvv_saisie');
+            
+            // Valide les champs de paiement (ceci est la validation client)
+            if (!cardNumberInput.value || !cardNameInput.value || !expiryDateInput.value || !cvvInput.value) {
+                alert('Veuillez saisir toutes les informations de paiement.');
+                return;
+            }
+            
+            commandeForm.submit();
+        });
+    }
+
+    const paysSelect = document.getElementById('pays');
+    const telInput = document.getElementById('tel');
+
+    const phoneCodes = window.phoneCodes || {};
+
+    function updatePhonePrefix() {
+        const selectedCountry = paysSelect.value;
+        const prefix = phoneCodes[selectedCountry] || '';
+
+        if (!prefix) {
+            return;
+        }
+
+        if (!telInput.value.startsWith(prefix)) {
+            const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
+            telInput.value = prefix + valueSansPrefix;
+        }
+    }
+
+    function formatPhoneNumber(value, prefix) {
+        let cleanValue = value.replace(/[^\d+]/g, '');
+
+        if (cleanValue.startsWith(prefix)) {
+            cleanValue = cleanValue.slice(prefix.length);
+        } else {
+            prefix = '';
+        }
+
+        let formatted = '';
+        if (cleanValue.length > 0) {
+            formatted += cleanValue[0];
+        }
+        if (cleanValue.length > 1) {
+            formatted += ' ' + cleanValue.slice(1, 3);
+        }
+        if (cleanValue.length > 3) {
+            let rest = cleanValue.slice(3);
+            rest = rest.match(/.{1,2}/g).join(' ');
+            formatted += ' ' + rest;
+        }
+
+        return prefix + ' ' + formatted.trim();
+    }
+
+    telInput.addEventListener('input', () => {
+        const selectedCountry = paysSelect.value;
+        const prefix = phoneCodes[selectedCountry] || '';
+
+        if (!prefix) return;
+
+        const formattedValue = formatPhoneNumber(telInput.value, prefix);
+
+        if (telInput.value !== formattedValue) {
+            telInput.value = formattedValue;
+        }
+    });
+
+    paysSelect.addEventListener('change', () => {
+        updatePhonePrefix();
+        telInput.focus();
+        setTimeout(() => {
+            telInput.selectionStart = telInput.selectionEnd = telInput.value.length;
+        }, 0);
+    });
+
+    updatePhonePrefix();
+
+
+    const cardNumberInput = document.getElementById('card_number_saisie');
+    function formatCardNumber(value) {
+        let cleanValue = value.replace(/\D/g, '');
+
+        let formatted = cleanValue.match(/.{1,4}/g);
+        if (formatted) {
+            return formatted.join(' ');
+        } else {
+            return '';
+        }
+    }
+
+    if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', () => {
+            const formattedValue = formatCardNumber(cardNumberInput.value);
+
+            if (cardNumberInput.value !== formattedValue) {
+                cardNumberInput.value = formattedValue;
+            }
+        });
+    }
+
+    const expiryDateInput = document.getElementById('expiry_date_saisie');
+
+    if (expiryDateInput) {
+        expiryDateInput.addEventListener('input', () => {
+            let value = expiryDateInput.value;
+
+            value = value.replace(/\D/g, '');
+
+            if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            }
+
+            expiryDateInput.value = value;
+        });
+    }
+});
