@@ -26,10 +26,15 @@ use App\Http\Controllers\ProduitService;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicationDetail;
 use App\Http\Controllers\Faq;
+use App\Http\Controllers\BotManController; 
+use App\Http\Controllers\GoogleAuthController;
+
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']); 
+ 
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 // --- LISTES & TESTS ---
 Route::get('/personnes', [PersonneTest::class, 'index']);
@@ -123,6 +128,18 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+Route::get('/stress-me', function () {
+    $data = [];
+    for ($i = 0; $i < 1000000; $i++) {
+        $data[] = md5($i); // On fait faire des calculs inutiles au CPU
+    }
+    return "Test fini";
+});
+
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+
+
 //COOKIES
 //Enregistrer les préférences de cookies
 Route::post('/cookie-consent', [CookieController::class, 'store'])
@@ -136,3 +153,6 @@ Route::get('/cookie-policy', function () {
 // formulaire de modification des préférences (non obligatoire).
 Route::get('/cookie-preferences', [CookieController::class, 'edit'])//A FAIRE
     ->name('cookie.preferences.edit');
+
+
+

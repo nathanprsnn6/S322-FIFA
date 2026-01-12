@@ -72,6 +72,7 @@ if (!empty($idsToFetch)) {
         $variantes = DB::table('variante_produit')
             ->join('coloris', 'variante_produit.idcoloris', '=', 'coloris.idcoloris')
             ->where('variante_produit.idproduit', $id)
+            ->where('variante_produit.prixproduit', '>', 0) 
             ->select('coloris.idcoloris', 'coloris.libellecoloris', 'variante_produit.prixproduit')
             ->get();
 
@@ -154,6 +155,7 @@ if (!empty($idsToFetch)) {
             if ($userId) {
                 $panier = DB::table('panier')
                     ->where('idpersonne', $userId)
+                    ->where('panieractif', '=' ,'true')
                     ->where('datecreationpanier', '>=', $limiteDate)
                     ->first();
 
@@ -176,6 +178,7 @@ if (!empty($idsToFetch)) {
 
                 $panier = DB::table('panier')
                     ->where('idpersonne', $guestUserId)
+                    ->where('panieractif', '=' ,'true')
                     ->where('datecreationpanier', '>=', $limiteDate)
                     ->first();
 

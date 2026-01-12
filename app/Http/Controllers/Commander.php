@@ -17,11 +17,17 @@ class Commander extends Controller{
     public function index()
     {
         $userId = Auth::id();
+        $savedCards = [];
+        if ($userId) {
+            $savedCards = CarteBancaire::where('idpersonne', $userId)->get();
+        }
         $nations = Nation::select('idnation', 'nomnation', 'codetel')
             ->orderBy('nomnation', 'asc')
             ->get();
         $commanders = Commande::all();
-        $panier = Panier::where('idpersonne', $userId)->first();
+        $panier = Panier::where('idpersonne', $userId)
+            ->where('panieractif', '=' ,'true')
+            ->first();
         $totalPanier = $panier ? $panier->prixpanier : 0;
 
         $contenirs = Contenir::where('idpanier', $panier->idpanier)
@@ -43,6 +49,7 @@ class Commander extends Controller{
             'contenirs' => $contenirs,
             'prixpanier' => $prixpanier,
             'totalPanier' => $totalPanier,
+            'savedCards'=> $savedCards,
         ]);
     }
 }

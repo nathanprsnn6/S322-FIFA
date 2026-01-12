@@ -31,6 +31,7 @@ class Payer extends Controller
             'card_number_saisie' => 'required|string|between:13,19', 
             'card_name_saisie' => 'required|string|max:200',
             'expiry_date_saisie' => ['required', 'regex:/^(0[1-9]|1[0-2])\/\d{2}$/'],
+            'save_cb' => 'nullable|boolean',
 
             'delivery_method' => 'required|in:1,2',
             'billing_address' => 'required|in:same,different',
@@ -76,7 +77,7 @@ class Payer extends Controller
 
             $existingCarte = CarteBancaire::where('idpersonne', $userId)->first();
 
-            if ($request->has('save_cb')) {
+            if ($request->has('save_cb') && $request->save_cb) {
                 $carteData = [
                     'refcb' => $validated['card_number_saisie'],
                     'dateexpirationcb' => $validated['expiry_date_saisie'],
@@ -136,8 +137,8 @@ class Payer extends Controller
                 'libelleserviceexpedition' => $validated['delivery_method'] == 1 ? 'Gestion Fifa Normal' : 'Gestion Fifa Express',
             ]);
 
-            //Contenir::where('idpanier', $panierActif->idpanier)->delete();
-            //Panier::where('idpanier', $panierActif->idpanier)->delete();
+            Panier::where('idpanier', $panierActif->idpanier)
+                ->update(['panieractif' => false]);
 
             // Si toutes les opérations sont réussies, on valide la transaction
             DB::commit();

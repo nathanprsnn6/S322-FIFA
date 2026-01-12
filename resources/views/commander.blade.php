@@ -102,16 +102,37 @@
                     
                     <br>
                     
-                    <h3>3. Paiement</h3>
-                    <p style="font-size: 14px; color: #555;">Toutes les transactions sont chiffrées et sécurisées.</p>
+                    <h3>3. Paiement</h3><br>
+                    <p style="font-size: 14px; color: #555;">Toutes les transactions sont chiffrées et sécurisées.</p><br>
 
-                    {{-- **Champs de carte bancaire modifiés : les attributs 'name' sont ajoutés directement** --}}
                     <div id="carteBancaire_saisie">
-                        <label for="card_number_saisie">Numéro de carte *</label>
-                        <input type="text" class="form-control" id="card_number_saisie" name="card_number_saisie" placeholder="1234 5678 9012 3456"required>
+                        <div style="position: relative;">
+                            <label for="card_number_saisie">Numéro de carte *</label>
+                            <input type="text" class="form-control @error('card_number_saisie') is-invalid @enderror" id="card_number_saisie" 
+                                name="card_number_saisie" placeholder="1234 5678 9012 3456" autocomplete="off" required>
+                            @error('card_number_saisie')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
+                            <!-- Dropdown cartes sauvegardées -->
+                            <div id="saved-cards-dropdown" style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000;">
+                                <ul id="saved-cards-list" 
+                                    style="display:none; background: white; border: 1px solid #ccc; max-height: 150px; overflow-y: auto; margin: 0; padding: 0; list-style: none;">
+                                    @foreach($savedCards as $card)
+                                        <li class="saved-card-item" 
+                                            data-card-number="{{ $card->refcb }}" 
+                                            data-expiration="{{ $card->dateexpirationcb }}" 
+                                            data-name="{{ $card->nomcb }}" 
+                                            style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;">
+                                            {{ $card->nomcb }} - **** **** **** {{ substr($card->refcb, -4) }} (Exp: {{ $card->dateexpirationcb }})
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                                 
                         <label for="card_name_saisie">Nom figurant sur la carte *</label>
-                        <input type="text" class="form-control" id="card_name_saisie" name="card_name_saisie" required>
+                        <input type="text" class="form-control" id="card_name_saisie" value="{{ old('card_name_saisie') }}" name="card_name_saisie" required>
                                 
                         <div style="display: flex; gap: 20px;">
                             <div class="form-group" style="flex-grow: 1;">
@@ -236,8 +257,12 @@
                 </div>
                 <div class="cart-footer">
                     <div class="total-row">
-                        <span>Total</span>
+                        <span>Total panier</span>
                         <span>{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Total avec prix livraison</span>
+                        <span id="total-price">{{ number_format($totalPanier, 2, ',', ' ') }} €</span>
                     </div>
                 </div>
             </div>
@@ -247,127 +272,65 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {        
-        // --- 1. Logique Navigation Étapes (SUITE/PRÉCÉDENT) ---
-        
-        const nextButton = document.querySelector('.btn-next');
-        if (nextButton) {
-            nextButton.addEventListener('click', function (e) {
-                const coordonneesForm = document.getElementById('coordonnees');
-                const requiredInputs = coordonneesForm.querySelectorAll('[required]');
-                let allValid = true;
+    window.phoneCodes = @json($nations->mapWithKeys(function($nation) {
+        return [($nation->idnation ?? $nation->id) => $nation->codetel ?? ''];
+    }));
 
-                requiredInputs.forEach(input => {
-                    if (!input.value) {
-                        allValid = false;
-                    }
-                });
+    document.addEventListener('DOMContentLoaded', function() {
+        let totalPanier = parseFloat("{{ number_format($totalPanier, 2, '.', '') }}");
 
-                if (allValid) {
-                    const nextStepId = this.getAttribute('data-next-step');
-                    const currentStep = this.closest('.formulaireLivraison');
-                    const nextStep = document.getElementById(nextStepId);
+        const deliveryPrices = {
+            1: 9.00,
+            2: 16.50
+        };
 
-                    if (currentStep && nextStep) {
-                        currentStep.classList.remove('active');
-                        currentStep.classList.add('hidden');
-                        nextStep.classList.remove('hidden');
-                        nextStep.classList.add('active');
-                    }
-                } else {
-                    alert('Veuillez remplir tous les champs obligatoires.'); 
-                }
-            });
+        const totalPriceElement = document.getElementById('total-price');
+
+        function updateTotal() {
+            const selectedDelivery = document.querySelector('input[name="delivery_method"]:checked').value;
+            const totalWithDelivery = totalPanier + deliveryPrices[selectedDelivery];
+            totalPriceElement.textContent = totalWithDelivery.toFixed(2).replace('.', ',') + ' €';
         }
 
-        const prevButton = document.querySelector('.btn-prev');
-        if (prevButton) {
-            prevButton.addEventListener('click', function () {
-                const prevStepId = this.getAttribute('data-prev-step');
-                const currentStep = this.closest('.formulaireLivraison');
-                const prevStep = document.getElementById(prevStepId);
-
-                if (currentStep && prevStep) {
-                    currentStep.classList.remove('active');
-                    currentStep.classList.add('hidden');
-                    prevStep.classList.remove('hidden');
-                    prevStep.classList.add('active');
-                }
-            });
-        }
-        
-        // --- 2. Logique Soumission du Formulaire (FINALISER LA COMMANDE) ---
-
-        const finaliserBtn = document.getElementById('finaliser_commande_btn');
-        const commandeForm = document.getElementById('commande-form'); 
-
-    if (finaliserBtn) {
-        finaliserBtn.addEventListener('click', function (e) {
-            e.preventDefault(); 
-            
-            // Récupère les données de la carte saisies pour la validation JS
-            const cardNumberInput = document.getElementById('card_number_saisie');
-            const cardNameInput = document.getElementById('card_name_saisie');
-            const expiryDateInput = document.getElementById('expiry_date_saisie');
-            const cvvInput = document.getElementById('cvv_saisie');
-            
-            // Valide les champs de paiement (ceci est la validation client)
-            if (!cardNumberInput.value || !cardNameInput.value || !expiryDateInput.value || !cvvInput.value) {
-                alert('Veuillez saisir toutes les informations de paiement.');
-                return;
-            }
-            
-            commandeForm.submit();
+        const deliveryInputs = document.querySelectorAll('input[name="delivery_method"]');
+        deliveryInputs.forEach(input => {
+            input.addEventListener('change', updateTotal);
         });
-        }
-    });
 
+        updateTotal();
 
-    
-    document.addEventListener('DOMContentLoaded', function () {
-        const paysSelect = document.getElementById('pays');
-        const telInput = document.getElementById('tel');
+        const cardInput = document.getElementById('card_number_saisie');
+        const nameInput = document.getElementById('card_name_saisie');
+        const expiryInput = document.getElementById('expiry_date_saisie');
+        const dropdown = document.getElementById('saved-cards-list');
 
-        // Générer l'objet phoneCodes depuis PHP en JSON
-        const phoneCodes = @json($nations->mapWithKeys(function($nation) {
-            return [($nation->idnation ?? $nation->id) => $nation->codetel ?? ''];
-        }));
+        if (!dropdown) return;
 
-        function updatePhonePrefix() {
-            const selectedCountry = paysSelect.value;
-            const prefix = phoneCodes[selectedCountry] || '';
-
-            if (!prefix) {
-                return;
-            }
-
-            if (!telInput.value.startsWith(prefix)) {
-                const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
-                telInput.value = prefix + valueSansPrefix;
-            }
-        }
-
-        telInput.addEventListener('input', () => {
-            const selectedCountry = paysSelect.value;
-            const prefix = phoneCodes[selectedCountry] || '';
-
-            if (!prefix) return;
-
-            if (!telInput.value.startsWith(prefix)) {
-                const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
-                telInput.value = prefix + valueSansPrefix;
+        cardInput.addEventListener('focus', function() {
+            if (dropdown.children.length > 0) {
+                dropdown.style.display = 'block';
             }
         });
 
-        paysSelect.addEventListener('change', () => {
-            updatePhonePrefix();
-            telInput.focus();
+        cardInput.addEventListener('blur', function() {
             setTimeout(() => {
-                telInput.selectionStart = telInput.selectionEnd = telInput.value.length;
-            }, 0);
+                dropdown.style.display = 'none';
+            }, 200);
         });
 
-        updatePhonePrefix();
+        dropdown.querySelectorAll('.saved-card-item').forEach(item => {
+            item.addEventListener('click', function() {
+                cardInput.value = this.dataset.cardNumber;
+                nameInput.value = this.dataset.name;
+                expiryInput.value = this.dataset.expiration;
+                dropdown.style.display = 'none';
+
+                const cvvInput = document.getElementById('cvv_saisie');
+                if (cvvInput) {
+                    cvvInput.value = '';
+                }
+            });
+        });
     });
 
     document.addEventListener('DOMContentLoaded', (event) => {
@@ -412,6 +375,7 @@
     }
 });
 </script>
+
 @endsection
 
 

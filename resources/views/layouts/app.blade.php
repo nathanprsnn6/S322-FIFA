@@ -25,6 +25,7 @@
             <a href="{{ url('produits') }}" class="nav-link">Boutique</a>
             <a href="{{ url('voter') }}" class="nav-link">Voter</a>
             <a href="{{ url('publication') }}" class="nav-link">Publication</a>
+            <a href="{{ url('faq') }}" class="nav-link">FAQ</a>
         </div>
 
         <div class="header-right">
@@ -203,6 +204,18 @@
     </script>
 
     <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
+
+    <script>
+        var botmanWidget = {
+            aboutText: 'Assistant FIFA',
+            introMessage: "Bonjour ! Je peux vous aider avec vos votes, le suivi de commande ou les infos produits.",
+            title: "Support FIFA",
+            mainColor: "#034f96",
+            bubbleBackground: "#034f96", 
+            headerTextColor: "#fff",
+        };
+    </script>
+    <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
     
     @yield('scripts')
 </body>

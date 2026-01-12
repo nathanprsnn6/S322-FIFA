@@ -23,6 +23,7 @@ class User extends Authenticatable
         'prenom',
         'courriel',
         'mdp',
+        'google_id'
     ];
 
     protected $hidden = [
