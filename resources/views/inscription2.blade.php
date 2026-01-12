@@ -10,6 +10,10 @@
         <p class="header-top">
             Vous avez déjà un compte ? <a href="login">&nbsp; Se connecter</a>
         </p>
+        <p class="header-top">
+        Les champs marqués d'un &nbsp;*&nbsp; sont obligatoires<br><br>
+        </p>
+
 
         @if ($errors->any())
             <div style="color: red; background: #ffcccc; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
@@ -28,13 +32,47 @@
             @csrf {{-- Token de sécurité obligatoire --}}
 
             <div class="form-group">
-                <label for="nickname">Surnom *</label>
+            <label for="courriel">
+        Surnom <span class="etoile">*</span>
+        <span class="tooltip-container" 
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              tabindex="0" 
+              aria-label="Plus d'informations sur le courriel">
+            
+            <span class="info-icon" aria-hidden="true">i</span>
+            
+            <span class="tooltip-box" 
+                  id="desc-courriel" 
+                  role="tooltip">
+                  Votre surnom est public. Il doit être unique : s'il est déjà utilisé par un autre membre, il sera refusé lors de la validation.
+            </span>
+        </span>
+    </label>
                 <p class="hint-text">Les autres utilisateurs auront accès à cette information</p>
-                <input type="text" id="nickname" name="nickname" value="{{ old('nickname') }}" required>
+                <input type="text" id="nickname" name="nickname" value="{{ old('nickname') }}" required placeholder="Ex: Coco">
             </div>
 
             <p class="form-group">
-                <label for="favorite">Favori</label>
+            <label for="courriel">
+        Label
+        <span class="tooltip-container" 
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              tabindex="0" 
+              aria-label="Plus d'informations sur le courriel">
+            
+            <span class="info-icon" aria-hidden="true">i</span>
+            
+            <span class="tooltip-box" 
+                  id="desc-courriel" 
+                  role="tooltip">
+                  Sélectionnez votre équipe nationale favorite. Cette information apparaîtra sur votre profil public.
+            </span>
+        </span>
+    </label>
                 <select id="favorite" name="favorite" class="form-control">
                     <option value="">-- Choisir une nation --</option>
                     @foreach($nations as $nation)
