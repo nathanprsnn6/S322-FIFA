@@ -8,7 +8,7 @@ class Panier extends Model
 {
     protected $table = "panier";
     public $timestamps = false;
-    protected $primarykey = "idpanier";
+    protected $primaryKey = "idpanier";
     protected $fillable = [
         'idpanier',
         'idpersonne',        

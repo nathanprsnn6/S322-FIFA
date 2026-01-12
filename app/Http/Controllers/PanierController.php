@@ -14,48 +14,49 @@ class PanierController extends Controller
 {    
     public function getCartItems()
     {
-        $contenirs = Contenir::all();
-        $id = $contenirs->isNotEmpty() ? $contenirs->first()->idproduit : null;
         if (Auth::check()) {
-            
-            $panier = Panier::where('idpersonne', Auth::id())->first();
-            $photo = 
-            DB::table('photo')
-            ->join('illustrer', 'photo.idphoto', '=', 'illustrer.idphoto')
-            ->where('illustrer.idproduit', $id)
-            ->select('photo.destinationphoto')
+            $userId = Auth::id();
+        } else {
+            $userId = session('guest_user_id');
+            if (!$userId) {
+                return ['contenirs' => collect(), 'prixpanier' => 0];
+            }
+        }
+
+        $panier = Panier::where('idpersonne', $userId)
+            ->where('panieractif', '=' ,'true')
             ->first();
 
-            if ($panier) {               
-                $contenirs = Contenir::where('idpanier', $panier->idpanier)
-                                        ->with(['produit.illustrer', 'variante']) 
-                                        ->get();
-                                        
-                $prixpanier = 0; 
+        if (!$panier) {
+            return ['contenirs' => collect(), 'prixpanier' => 0];
+        }
 
-                $contenirs->each(function ($item) use (&$prixpanier) {
-                    
-                    
-                    $prixUnitaire = $item->variante->prixproduit 
-                                    ?? 0;
-                                    
-                    $item->prixLigne = $item->qteproduit * $prixUnitaire;
-                    $prixpanier += $item->prixLigne;
-                });
-                
-                return [
-                    'contenirs' => $contenirs,
-                    'prixpanier' => $prixpanier 
-                ];
-            }
-        }        
+        $contenirs = Contenir::where('idpanier', $panier->idpanier)
+            ->with(['produit.illustrer', 'variante'])
+            ->get();
 
-        return ['contenirs' => collect(), 'prixpanier' => 0];
-        return view('contenir', compact('idproduit', 'idcoloris', 'idtaille', 'ligneproduit','qteproduit', 'photo'));
+        $prixpanier = 0;
+
+        $contenirs->each(function ($item) use (&$prixpanier) {
+            $prixUnitaire = $item->variante->prixproduit ?? 0;
+            $item->prixLigne = $item->qteproduit * $prixUnitaire;
+            $prixpanier += $item->prixLigne;
+        });
+
+        return [
+            'contenirs' => $contenirs,
+            'prixpanier' => $prixpanier,
+        ];
     }    
 
     public function updateQuantity(Request $request, $compositeId) 
     {
+        if (Auth::check()) {
+            $userId = Auth::id();
+        } else {
+            $userId = session('guest_user_id');
+        }
+
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
@@ -70,15 +71,7 @@ class PanierController extends Controller
 
         list($productId, $colorId, $tailleId) = $ids;
         
-        if (!Auth::check()) {
-             return response()->json(['message' => 'Utilisateur non authentifié.'], 401);
-        }
-        
-        $panier = Panier::where('idpersonne', Auth::id())->first(); 
-        
-        if (!$panier) {
-             return response()->json(['message' => 'Panier introuvable pour cet utilisateur.'], 404);
-        }
+        $panier = Panier::where('idpersonne', $userId)->first(); 
         
         $lignePanier = Contenir::where('idpanier', $panier->idpanier)
                                ->where('idproduit', $productId)
@@ -114,7 +107,6 @@ class PanierController extends Controller
         
         return response()->json([
             'success' => true,
-            // Utiliser le nouveau prix de ligne que l'on a calculé
             'new_item_price' => number_format($nouveauPrixLigne, 2, ',', ' '), 
             'new_total_price' => number_format($nouveauTotalPanier, 2, ',', ' ')
         ]);
@@ -122,6 +114,12 @@ class PanierController extends Controller
 
     public function removeItem($compositeId) 
     {
+        if (Auth::check()) {
+            $userId = Auth::id();
+        } else {
+            $userId = session('guest_user_id');
+        }
+
         $ids = explode('-', $compositeId);
         
         if (count($ids) !== 3) {
@@ -130,15 +128,9 @@ class PanierController extends Controller
 
         list($productId, $colorId, $tailleId) = $ids;
         
-        if (!Auth::check()) {
-             return response()->json(['message' => 'Utilisateur non authentifié.'], 401);
-        }
+        $panier = Panier::where('idpersonne', $userId)->first(); 
         
-        $panier = Panier::where('idpersonne', Auth::id())->first(); 
         
-        if (!$panier) {
-             return response()->json(['message' => 'Panier introuvable pour cet utilisateur.'], 404);
-        }
         
         $deletedCount = Contenir::where('idpanier', $panier->idpanier)
                                 ->where('idproduit', $productId)

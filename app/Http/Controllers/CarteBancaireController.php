@@ -11,7 +11,9 @@ class CarteBancaireController extends Controller
 {
     public function index()
     {
+        $carteBancaires = CarteBancaire::all();
         
+        return view('carteBancaire', compact('carteBancaires'));
     }
 
     

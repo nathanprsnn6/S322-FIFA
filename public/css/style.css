@@ -1588,9 +1588,15 @@ input[type="date"], select {
     background-color: #f4f4f4;
 }
 
+.form-column{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
 .commande-form-box {
     background-color: white;
     padding: 30px;
+    margin: 5px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -2525,4 +2531,10 @@ details[open] .faq-answer {
 }
 .etoile{
     color: red;
+    bottom: 140%; /* Petit effet de montée au survol */
+}
+
+.save_cb{
+    margin-left: 5px; 
+    line-height: 1;
 }

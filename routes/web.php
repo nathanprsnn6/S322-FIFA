@@ -26,6 +26,11 @@ use App\Http\Controllers\ProduitService;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicationDetail;
 use App\Http\Controllers\Faq;
+use App\Http\Controllers\BotManController; 
+
+
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']); 
+ 
 
 Route::get('/', function () {
     return view('welcome');
@@ -78,18 +83,15 @@ Route::post('/voter', [VoterController::class, 'store'])->name('voter.store');
 Route::get('/voter/{id}', [VoterDetail::class, 'show'])->name('voter.show');
 Route::get('/verifier-vote/{idtypevote}', [VoterController::class, 'checkVote'])->name('verifier.vote');
 
-// --- PANIER & COMMANDE ---
+// --- PANIER ---
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
 Route::put('/panier/update-quantity/{compositeId}', [PanierController::class, 'updateQuantity'])->name('panier.update_quantity');
 Route::delete('/panier/{compositeId}', [PanierController::class, 'removeItem'])->name('panier.remove_item');
 
+// --- PAYER & COMMANDE---
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
-Route::get('/carteBancaire', [Commander::class, 'carteBancaire'])->name('commander.carteBancaire');
-Route::post('/', [Commander::class, 'processPayment'])->name('commander.processPayment');
 
-// --- PAYER ---
-Route::get('/payer', [Payer::class, 'index'])->name('payer.index');
-Route::post('/payer/effectuer', [Payer::class, 'processPaiement'])->name('payer.effectuer');
+Route::post('/payer', [Payer::class, 'processPayment'])->name('payer.processPayment');
 
 // --- PUBLICATIONS ---
 Route::get('/publication', [PublicationController::class, 'index'])->name('publication.index');
