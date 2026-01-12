@@ -2538,3 +2538,77 @@ details[open] .faq-answer {
     margin-left: 5px; 
     line-height: 1;
 }
+
+/* --- (Gardez le CSS précédent pour :root, .auth-card, header, forms, etc.) --- */
+:root {
+    --fifa-navy: #020c18;
+    --fifa-blue-action: #007bff;
+    --fifa-text: #334155;
+    --fifa-light-gray: #f1f5f9;
+    --border-color: #e2e8f0;
+}
+/* ... autres styles précédents ... */
+
+
+/* NOUVEAU STYLE DU BOUTON GOOGLE */
+.btn-google-integrated {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centre le tout (logo + texte) */
+    width: 100%;
+    padding: 14px; /* Même padding que le bouton principal pour la cohérence */
+    background: var(--fifa-navy);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s, transform 0.1s;
+    box-sizing: border-box;
+    border: 1px solid var(--fifa-navy); /* Bordure pour le netteté */
+}
+
+/* Style du logo SVG à l'intérieur */
+.btn-google-integrated .google-svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 12px; /* Espace entre le logo et le texte */
+    /* Le fond blanc a été retiré ici */
+}
+
+/* Effet au survol */
+.btn-google-integrated:hover {
+    opacity: 0.9; /* Léger éclaircissement */
+}
+
+/* Effet au clic */
+.btn-google-integrated:active {
+    transform: scale(0.99); /* Petit effet de pression */
+}
+/* Séparateur OU */
+.separator {
+    margin: 25px 0;
+    position: relative;
+    text-align: center;
+}
+.separator::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--border-color);
+    z-index: 1;
+}
+.separator span {
+    background: white;
+    padding: 0 15px;
+    position: relative;
+    z-index: 2;
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 700;
+}
