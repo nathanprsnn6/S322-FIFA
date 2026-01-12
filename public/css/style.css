@@ -1942,57 +1942,46 @@ input[type="date"], select {
     gap: 15px;
 }
 
-.fifa-table {
-    margin-bottom: 0;
+/* Force l'alignement horizontal dans la cellule d'action */
+.fifa-table td.text-right {
+    white-space: nowrap; /* Empêche le retour à la ligne forcé */
+    width: 1%; /* Force la colonne à ne prendre que la place nécessaire */
 }
 
-.fifa-table thead th {
-    background-color: #f8f9fa;
-    color: #034f96;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    border-top: none;
-    padding: 15px;
-}
-
-.fifa-table tbody tr {
-    transition: all 0.3s;
-}
-
-.fifa-table tbody tr:hover {
-    background-color: rgba(39, 174, 96, 0.05); /* Léger vert au survol */
+/* Ajustement du formulaire pour que l'input et le bouton fusionnent proprement */
+.fifa-table .input-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .fifa-input-prix {
     border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    padding: 5px 10px;
-    transition: border-color 0.3s;
-    width: 120px;
-}
-
-.fifa-input-prix:focus {
-    border-color: #034f96;
-    outline: none;
+    border-radius: 6px 0 0 6px !important; /* Arrondi seulement à gauche */
+    padding: 8px 12px;
+    width: 100px;
+    height: 38px; /* Hauteur fixe pour correspondre au bouton */
+    margin-right: -2px; /* Fusionne la bordure avec le bouton */
+    z-index: 1;
 }
 
 .fifa-btn-save {
     background-color: #27ae60;
     color: white;
     border: none;
-    padding: 8px 20px;
-    border-radius: 6px;
+    padding: 0 20px;
+    border-radius: 0 6px 6px 0 !important; /* Arrondi seulement à droite */
+    height: 38px;
     font-weight: bold;
     text-transform: uppercase;
     font-size: 0.75rem;
-    transition: transform 0.2s, background 0.3s;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
 }
 
 .fifa-btn-save:hover {
     background-color: #219150;
-    transform: translateY(-2px);
-    color: white;
 }
 
 .alert-fifa {
@@ -2476,32 +2465,31 @@ details[open] .faq-answer {
     margin-left: 5px;
     cursor: help;
     vertical-align: middle;
+    outline: none; /* On gère le focus proprement ci-dessous */
 }
 
-/* Style de l'icône "i" mis à jour */
 .info-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    
-    /* On augmente légèrement le cercle pour accueillir la grosse lettre */
     width: 20px;
     height: 20px;
-    
     background-color: #0056b3;
     color: white;
     border-radius: 50%;
-    
-    /* Police plus grosse et moderne */
     font-size: 15px; 
-    font-weight: 800; /* Très gras pour que ça ressorte bien */
+    font-weight: 800;
     font-family: 'Verdana', 'Arial', sans-serif;
-    
-    /* Petit ajustement visuel pour centrer le 'i' optiquement */
-    padding-bottom: 1px; 
+    padding-bottom: 1px;
+    transition: transform 0.2s ease;
 }
 
-/* Style de la bulle (inchangé) */
+/* Style lors du focus clavier (accessibilité) */
+.tooltip-container:focus .info-icon {
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.4);
+    transform: scale(1.1);
+}
+
 .tooltip-box {
     visibility: hidden;
     width: 240px;
@@ -2518,12 +2506,11 @@ details[open] .faq-answer {
     opacity: 0;
     transition: all 0.3s ease-in-out;
     font-size: 13px;
-    font-weight: normal;
     line-height: 1.5;
     box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+    pointer-events: none; /* Évite de bloquer la souris */
 }
 
-/* Triangle sous la bulle */
 .tooltip-box::after {
     content: "";
     position: absolute;
@@ -2535,10 +2522,15 @@ details[open] .faq-answer {
     border-color: #222 transparent transparent transparent;
 }
 
-/* Affichage au survol */
-.tooltip-container:hover .tooltip-box {
+/* AFFICHAGE : Au survol OU au focus clavier */
+.tooltip-container:hover .tooltip-box,
+.tooltip-container:focus .tooltip-box {
     visibility: visible;
     opacity: 1;
+    bottom: 140%;
+}
+.etoile{
+    color: red;
     bottom: 140%; /* Petit effet de montée au survol */
 }
 

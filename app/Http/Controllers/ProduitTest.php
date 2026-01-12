@@ -29,12 +29,13 @@ class ProduitTest extends Controller
 
         $query = DB::table('produit')
         ->select(
-        'produit.*',
-        DB::raw('MIN(variante_produit.prixproduit) as min_prix'),
-        DB::raw('MAX(variante_produit.prixproduit) as max_prix'),
-        DB::raw('MAX(photo.destinationphoto) as destinationphoto')
+            'produit.*',
+            DB::raw('MIN(variante_produit.prixproduit) as min_prix'),
+            DB::raw('MAX(variante_produit.prixproduit) as max_prix'),
+            DB::raw('MAX(photo.destinationphoto) as destinationphoto')
         )
         ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
+        ->where('variante_produit.prixproduit', '>', 0) 
         ->join('sous_categorie', 'produit.idsouscategorie', '=', 'sous_categorie.idsouscategorie')
         ->join('illustrer', 'produit.idproduit', '=', 'illustrer.idproduit')
         ->join('photo', 'illustrer.idphoto', '=', 'photo.idphoto')
