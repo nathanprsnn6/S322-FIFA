@@ -154,6 +154,7 @@ if (!empty($idsToFetch)) {
             if ($userId) {
                 $panier = DB::table('panier')
                     ->where('idpersonne', $userId)
+                    ->where('panieractif', '=' ,'true')
                     ->where('datecreationpanier', '>=', $limiteDate)
                     ->first();
 
@@ -176,6 +177,7 @@ if (!empty($idsToFetch)) {
 
                 $panier = DB::table('panier')
                     ->where('idpersonne', $guestUserId)
+                    ->where('panieractif', '=' ,'true')
                     ->where('datecreationpanier', '>=', $limiteDate)
                     ->first();
 

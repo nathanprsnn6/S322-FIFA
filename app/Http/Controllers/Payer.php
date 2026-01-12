@@ -136,8 +136,8 @@ class Payer extends Controller
                 'libelleserviceexpedition' => $validated['delivery_method'] == 1 ? 'Gestion Fifa Normal' : 'Gestion Fifa Express',
             ]);
 
-            //Contenir::where('idpanier', $panierActif->idpanier)->delete();
-            //Panier::where('idpanier', $panierActif->idpanier)->delete();
+            Panier::where('idpanier', $panierActif->idpanier)
+                ->update(['panieractif' => false]);
 
             // Si toutes les opérations sont réussies, on valide la transaction
             DB::commit();
