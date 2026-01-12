@@ -26,6 +26,11 @@ use App\Http\Controllers\ProduitService;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicationDetail;
 use App\Http\Controllers\Faq;
+use App\Http\Controllers\BotManController; 
+
+
+Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']); 
+ 
 
 Route::get('/', function () {
     return view('welcome');
