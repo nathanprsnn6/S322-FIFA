@@ -188,6 +188,10 @@
         @yield('content')
     </main>
 
+    <footer>
+        
+    </footer>
+
     <script>
         window.Laravel = {
             csrfToken: '{{ csrf_token() }}',
@@ -212,4 +216,5 @@
     
     @yield('scripts')
 </body>
+
 </html>
