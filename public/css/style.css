@@ -2541,3 +2541,8 @@ details[open] .faq-answer {
     opacity: 1;
     bottom: 140%; /* Petit effet de montée au survol */
 }
+
+.save_cb{
+    margin-left: 5px; 
+    line-height: 1;
+}

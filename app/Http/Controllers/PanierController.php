@@ -23,7 +23,9 @@ class PanierController extends Controller
             }
         }
 
-        $panier = Panier::where('idpersonne', $userId)->first();
+        $panier = Panier::where('idpersonne', $userId)
+            ->where('panieractif', '=' ,'true')
+            ->first();
 
         if (!$panier) {
             return ['contenirs' => collect(), 'prixpanier' => 0];
