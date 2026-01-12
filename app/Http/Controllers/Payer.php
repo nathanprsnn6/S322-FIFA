@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
@@ -77,23 +76,41 @@ class Payer extends Controller
 
             $existingCarte = CarteBancaire::where('idpersonne', $userId)->first();
 
-            if ($existingCarte) {
-                $existingCarte->refcb = $carteData['refcb'];
-                $existingCarte->dateexpirationcb = $carteData['dateexpirationcb'];
-                $existingCarte->nomcb = $carteData['nomcb'];
-                $existingCarte->save();
-
-                $idcb = $existingCarte->idcb;
+            if ($request->has('save_cb')) {
+                $carteData = [
+                    'refcb' => $validated['card_number_saisie'],
+                    'dateexpirationcb' => $validated['expiry_date_saisie'],
+                    'nomcb' => $validated['card_name_saisie'],
+                ];
+    
+                $existingCarte = CarteBancaire::where('idpersonne', $userId)->first();
+    
+                if ($existingCarte) {
+                    $existingCarte->refcb = $carteData['refcb'];
+                    $existingCarte->dateexpirationcb = $carteData['dateexpirationcb'];
+                    $existingCarte->nomcb = $carteData['nomcb'];
+                    $existingCarte->save();
+    
+                    $idcb = $existingCarte->idcb;
+                } else {
+                    $newCarte = new CarteBancaire();
+                    $newCarte->idpersonne = $userId;
+                    $newCarte->refcb = $carteData['refcb'];
+                    $newCarte->dateexpirationcb = $carteData['dateexpirationcb'];
+                    $newCarte->nomcb = $carteData['nomcb'];
+                    $newCarte->save();
+    
+                    $idcb = $newCarte->idcb;
+                }
             } else {
-                $newCarte = new CarteBancaire();
-                $newCarte->idpersonne = $userId;
-                $newCarte->refcb = $carteData['refcb'];
-                $newCarte->dateexpirationcb = $carteData['dateexpirationcb'];
-                $newCarte->nomcb = $carteData['nomcb'];
-                $newCarte->save();
-
-                $idcb = $newCarte->idcb;
-            }
+                    $existingCarte = CarteBancaire::where('idpersonne', $userId)->first();
+                    if($existingCarte) {
+                        $idcb = $existingCarte->idcb;
+                    } else{
+                        $idcb = null;
+                    }                     
+                }
+            
 
             $prixpanier = DB::table('panier')
                 ->where('idpersonne', $userId)
@@ -118,8 +135,6 @@ class Payer extends Controller
                 'idtypelivraison' => $validated['delivery_method'],
                 'libelleserviceexpedition' => $validated['delivery_method'] == 1 ? 'Gestion Fifa Normal' : 'Gestion Fifa Express',
             ]);
-
-            
 
             //Contenir::where('idpanier', $panierActif->idpanier)->delete();
             //Panier::where('idpanier', $panierActif->idpanier)->delete();

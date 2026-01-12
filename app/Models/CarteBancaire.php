@@ -27,7 +27,6 @@ class CarteBancaire extends Model
         }
     }
 
-    // Mutateur : Chiffre avant de sauvegarder $carte->refcb
     public function setRefcbAttribute($value)
     {
         $this->attributes['refcb'] = Crypt::encryptString($value);
