@@ -33,22 +33,22 @@
         @csrf {{-- OBLIGATOIRE pour que Laravel accepte le formulaire --}}
         
         <p class="form-group">
-            <label for="nom">Nom *</label>
+            <label for="nom">Nom <span class="etoile">*</span></label>
             {{-- value="{{ old('nom') }}" permet de garder le texte si erreur --}}
-            <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required>
+            <input type="text" id="nom" name="nom" value="{{ old('nom') }}" required placeholder="Ex: Dupont">
         </p>
         <p class="form-group">
-            <label for="prenom">Prénom *</label>
-            <input type="text" id="prenom" name="prenom" value="{{ old('prenom') }}" required>
-        </p>
-
-        <p class="form-group">
-            <label for="ville">Ville de naissance*</label>
-            <input type="text" id="naiss_ville" name="naiss_ville" value="{{ old('ville') }}" required>
+            <label for="prenom">Prénom <span class="etoile">*</span></label>
+            <input type="text" id="prenom" name="prenom" value="{{ old('prenom') }}" required placeholder="Ex: François">
         </p>
 
         <p class="form-group">
-            <label for="paysnaissance">Pays de naissance *</label>
+            <label for="ville">Ville de naissance <span class="etoile">*</span></label>
+            <input type="text" id="naiss_ville" name="naiss_ville" value="{{ old('ville') }}" required placeholder="Ex: Paris">
+        </p>
+
+        <p class="form-group">
+            <label for="paysnaissance">Pays de naissance <span class="etoile">*</span></label>
             <select id="paysnaissance" name="pays_naissance" class="form-control" required>
                 <option value="">-- Choisir un pays de naissance --</option>
                 @foreach($nations as $nation)
@@ -61,7 +61,15 @@
         </p>
 
         <div class="form-group">
-            <label>Date de naissance *</label>
+        <label>
+        Date de naissance <span class="etoile">*</span>
+        <span class="tooltip-container" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-label="Aide sur la date de naissance">
+            <span class="info-icon" aria-hidden="true">i</span>
+            <span class="tooltip-box" id="desc-naissance" role="tooltip">
+                Vous devez être âgé d'au moins 16 ans pour créer un compte personnel.
+            </span>
+        </span>
+    </label>
             <p class="date-selects">
                 <select id="jour_naissance" name="jour_naissance" required>
                     <option value="" disabled selected>Jour</option>
@@ -73,7 +81,7 @@
                 </select>
 
                 <select id="mois_naissance" name="mois_naissance" required>
-                    <option value="" disabled selected>Mois *</option>
+                    <option value="" disabled selected>Mois</option>
                     @php
                         $mois = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
                                  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
@@ -87,7 +95,7 @@
                 </select>
 
                 <select id="annee_naissance" name="annee_naissance" required>
-                    <option value="" disabled selected>Année *</option>
+                    <option value="" disabled selected>Année</option>
                     @for ($i = date('Y')-3; $i >= 1920; $i--)
                         <option value="{{ $i }}" {{ old('annee_naissance') == $i ? 'selected' : '' }}>{{ $i }}</option>
                     @endfor
@@ -95,29 +103,48 @@
             </p>
         </div>
 
-<div class="form-group">
+        <div class="form-group">
     <label for="courriel">
-        Courriel *
-        <span class="tooltip-container">
-            <span class="info-icon">i</span>
-            <span class="tooltip-box">
+        Courriel <span class="etoile">*</span>
+        <span class="tooltip-container" 
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              tabindex="0" 
+              aria-label="Plus d'informations sur le courriel">
+            
+            <span class="info-icon" aria-hidden="true">i</span>
+            
+            <span class="tooltip-box" 
+                  id="desc-courriel" 
+                  role="tooltip">
                 Le courriel doit respecter le format général. Il vous servira d'identifiant de connexion pour vous connecter à votre compte.
             </span>
         </span>
-        </label>
+    </label>
     <p class="hint-text">Voici votre identifiant FIFA</p>
-    <input type="email" id="courriel" name="courriel" value="{{ old('courriel') }}" required>
+    <input type="email" id="courriel" name="courriel" 
+           aria-describedby="desc-courriel" 
+           value="{{ old('courriel') }}" required placeholder="Ex: dupont.françois@gmail.com">
 </div>
 
 
         <div class="form-group">
-            <label for="cp">Code Postal *</label>
+        <label for="cp">
+        Code Postal <span class="etoile">*</span>
+        <span class="tooltip-container" role="button" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-label="Aide sur le code postal">
+            <span class="info-icon" aria-hidden="true">i</span>
+            <span class="tooltip-box" id="desc-cp" role="tooltip">
+                Saisissez les 5 chiffres de votre code postal pour charger automatiquement la liste des villes.
+            </span>
+        </span>
+    </label>
             <input type="text" id="cp" name="cp" maxlength="5" value="{{ old('cp') }}" placeholder="Ex: 75001" required>
         </div>
 
 
         <div class="form-group">
-            <label for="ville">Ville *</label>
+            <label for="ville">Ville <span class="etoile">*</span></label>
             
 
             <select id="ville_select" name="ville">
@@ -130,7 +157,8 @@
 
 
         <p class="form-group">
-            <label for="paysresidence">Pays de residence *</label>
+        <label for="paysresidence">
+        Pays de résidence <span class="etoile">*</span></label>
             <select id="paysresidence" name="pays_residence" class="form-control" required>
                 <option value="">-- Choisir un pays de residence --</option>
                 @foreach($nations as $nation)
@@ -145,7 +173,7 @@
 
 
         <p class="form-group">
-            <label for="langue">Langue *</label>
+            <label for="langue">Langue <span class="etoile">*</span></label>
             <select id="langue" name="langue" class="form-control" required>
                 <option value="">-- Choisir une langue --</option>
                 @foreach($nations as $nation)

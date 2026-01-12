@@ -125,3 +125,11 @@ Route::middleware(['auth'])->group(function () {
         return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . Artisan::output() . "</pre>";
     });
 });
+
+Route::get('/stress-me', function () {
+    $data = [];
+    for ($i = 0; $i < 1000000; $i++) {
+        $data[] = md5($i); // On fait faire des calculs inutiles au CPU
+    }
+    return "Test fini";
+});
