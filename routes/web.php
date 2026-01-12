@@ -122,3 +122,17 @@ Route::middleware(['auth'])->group(function () {
         return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . Artisan::output() . "</pre>";
     });
 });
+
+//COOKIES
+//Enregistrer les préférences de cookies
+Route::post('/cookie-consent', [CookieController::class, 'store'])
+    ->name('cookie.consent.store');
+
+    //information légale
+Route::get('/cookie-policy', function () {
+    return view('pages.cookie-policy');//A FAIRE
+})->name('cookie.policy');
+
+// formulaire de modification des préférences (non obligatoire).
+Route::get('/cookie-preferences', [CookieController::class, 'edit'])//A FAIRE
+    ->name('cookie.preferences.edit');

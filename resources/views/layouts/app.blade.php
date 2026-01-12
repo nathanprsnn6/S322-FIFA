@@ -8,8 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="shortcut icon" href="{{ asset('img/FIFA.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    @if(request()->attributes->get('cookie_preferences')['analytics'] ?? false)
+        {{-- SEULEMENT si l'utilisateur a accepté --}}
+    @endif
 </head>
 <body>
+    @if (!request()->cookie('user_consent'))
+        {{-- Le composant ou la modale de la bannière de consentement --}}
+        @include('partials.cookie-banner')
+    @endif
 <div id="cart-overlay" class="overlay"></div>
     <header class="fifa-header">
         
