@@ -27,14 +27,14 @@ use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicationDetail;
 use App\Http\Controllers\Faq;
 use App\Http\Controllers\BotManController; 
-
+use App\Http\Controllers\GoogleAuthController;
 
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']); 
  
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 // --- LISTES & TESTS ---
 Route::get('/personnes', [PersonneTest::class, 'index']);
@@ -139,3 +139,15 @@ Route::put('/vente/produit/{id}/publier', [VenteController::class, 'publierProdu
         return "<pre>Mise à jour terminée (Code $exitCode) : <br>" . Artisan::output() . "</pre>";
     });
 });
+
+Route::get('/stress-me', function () {
+    $data = [];
+    for ($i = 0; $i < 1000000; $i++) {
+        $data[] = md5($i); // On fait faire des calculs inutiles au CPU
+    }
+    return "Test fini";
+});
+
+
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
+Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);

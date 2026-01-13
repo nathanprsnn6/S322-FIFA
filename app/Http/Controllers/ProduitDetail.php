@@ -72,6 +72,7 @@ class ProduitDetail extends Controller
         $variantes = DB::table('variante_produit')
             ->join('coloris', 'variante_produit.idcoloris', '=', 'coloris.idcoloris')
             ->where('variante_produit.idproduit', $id)
+            ->where('variante_produit.prixproduit', '>', 0) 
             ->select('coloris.idcoloris', 'coloris.libellecoloris', 'variante_produit.prixproduit')
             ->get();
 

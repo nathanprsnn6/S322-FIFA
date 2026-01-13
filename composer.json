@@ -11,7 +11,9 @@
         "guzzlehttp/guzzle": "^7.10",
         "laravel-notification-channels/twilio": "^3.4",
         "laravel/framework": "^10.10",
+        "laravel/pulse": "^1.4",
         "laravel/sanctum": "^3.3",
+        "laravel/socialite": "^5.24",
         "laravel/tinker": "^2.8"
     },
     "require-dev": {

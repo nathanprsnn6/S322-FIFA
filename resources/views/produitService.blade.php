@@ -24,6 +24,7 @@
                             <tr>
                                 <th>ID Produit</th>
                                 <th>Désignation du Produit</th>
+                                <th>Couleur</th>
                                 <th class="text-right">Action / Prix (€)</th>
                             </tr>
                         </thead>
@@ -32,6 +33,7 @@
                                 <tr>
                                     <td class="align-middle font-weight-bold">#{{ $produit->idproduit }}</td>
                                     <td class="align-middle">{{ $produit->titreproduit }}</td>
+                                    <td class="align-middle">{{ $produit->libellecoloris }}</td>
                                     <td class="text-right">
                                         <form action="{{ route('produits.save_prix') }}" method="POST" class="d-inline-flex">
                                             @csrf

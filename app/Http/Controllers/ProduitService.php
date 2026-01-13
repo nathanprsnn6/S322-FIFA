@@ -13,18 +13,26 @@ class ProduitService extends Controller
      */
     public function produitsSansPrix()
     {
-        // On joint 'produit' et 'variante_produit' via 'idproduit'
         $produits = DB::table('produit')
+            // 1. Jointure vers les variantes
             ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
+            
+            // 2. CORRECTION : On lie 'coloris' directement à 'variante_produit' 
+            // via l'idcoloris qui doit se trouver dans variante_produit
+            ->join('coloris', 'variante_produit.idcoloris', '=', 'coloris.idcoloris')
+            
             ->select(
                 'produit.idproduit', 
-                'produit.titreproduit', // ou 'titreproduit' selon votre base
-                'variante_produit.prixproduit'
+                'produit.titreproduit',
+                'variante_produit.prixproduit',
+                'coloris.libellecoloris'
             )
-            ->whereNull('variante_produit.prixproduit')
-            ->orWhere('variante_produit.prixproduit', '<=', 0)
+            ->where(function($query) {
+                $query->whereNull('variante_produit.prixproduit')
+                      ->orWhere('variante_produit.prixproduit', '<=', 0);
+            })
             ->get();
-
+    
         return view('produitService', compact('produits'));
     }
 

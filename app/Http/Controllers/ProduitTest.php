@@ -38,6 +38,7 @@ class ProduitTest extends Controller
                       LIMIT 1) as destinationphoto')
         )
         ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
+        ->where('variante_produit.prixproduit', '>', 0) 
         ->join('sous_categorie', 'produit.idsouscategorie', '=', 'sous_categorie.idsouscategorie')
         ->where('produit.visible', true)
         ->groupBy('produit.idproduit');

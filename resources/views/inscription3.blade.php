@@ -10,7 +10,9 @@
         <div class="header-top">
             Vous avez déjà un compte ? <a href="login">&nbsp; Se connecter</a>
         </div>
-        
+        <p class="header-top">
+        Les champs marqués d'un &nbsp;*&nbsp; sont obligatoires<br><br>
+    </p>
 
         @if ($errors->any())
             <div style="color: red; background: #ffcccc; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
@@ -30,14 +32,31 @@
                 @csrf {{-- Token de sécurité OBLIGATOIRE --}}
 
                 <div class="form-group">
-                    <label for="mdp">Choisir son mot de passe *</label>
+                <label for="courriel">
+        Mot de passe <span class="etoile">*</span>
+        <span class="tooltip-container" 
+              role="button"
+              aria-haspopup="true"
+              aria-expanded="false"
+              tabindex="0" 
+              aria-label="Plus d'informations sur le courriel">
+            
+            <span class="info-icon" aria-hidden="true">i</span>
+            
+            <span class="tooltip-box" 
+                  id="desc-courriel" 
+                  role="tooltip">
+                  Pour garantir la sécurité de votre compte, votre mot de passe doit contenir au moins 8 caractères. Évitez d'utiliser des informations personnelles évidentes comme votre date de naissance.
+            </span>
+        </span>
+    </label>
                     <p class="hint-text">Le mot de passe doit comprendre au moins 8 caractères.</p>
                     {{-- ATTENTION : name="mdp" pour correspondre au contrôleur ($request->mdp) --}}
                     <input type="password" id="mdp" name="mdp" required>
                 </div>
     
                 <p class="form-group">
-                    <label for="conf_pwd">Confirmer votre mot de passe *</label>
+                    <label for="conf_pwd">Confirmer votre mot de passe <span class="etoile">*</span></label>
                     {{-- name="conf_pwd" pour la règle 'same:mdp' --}}
                     <input type="password" id="conf_pwd" name="conf_pwd" required>
                 </p>
