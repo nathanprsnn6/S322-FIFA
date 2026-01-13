@@ -333,47 +333,6 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', (event) => {
-    // 1. Ciblez l'élément input par son ID ou son nom/type
-    const telInput = document.getElementById('tel');
-
-    // Assurez-vous que l'élément existe avant d'ajouter l'écouteur
-    if (telInput) {
-        telInput.addEventListener('input', function(e) {
-            // Récupère la valeur actuelle et supprime tous les caractères non numériques
-            let value = e.target.value.replace(/\D/g, '');
-            let formattedValue = '';
-
-            // Si la valeur commence par un code international (ex: +33)
-            if (value.startsWith('33')) {
-                // Ajout du préfixe international
-                formattedValue += '+33';
-                // La suite du numéro (on retire les 2 chiffres du 33)
-                value = value.substring(2);
-
-                // Formatage des paires de chiffres restantes (ex: 6 22 88 77 11)
-                for (let i = 0; i < value.length; i += 2) {
-                    if (i > 0) {
-                        formattedValue += ' ';
-                    }
-                    formattedValue += value.substring(i, i + 2);
-                }
-            } else {
-                // Si la valeur NE commence PAS par +33 (format local ou autre)
-                // Appliquer un formatage simple par paires de chiffres
-                for (let i = 0; i < value.length; i += 2) {
-                    if (i > 0) {
-                        formattedValue += ' ';
-                    }
-                    formattedValue += value.substring(i, i + 2);
-                }
-            }
-
-            // Mettez à jour la valeur de l'input avec le formatage
-            e.target.value = formattedValue.trim();
-        });
-    }
-});
 </script>
 
 @endsection

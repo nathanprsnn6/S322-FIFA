@@ -192,6 +192,11 @@
 
             <button type="submit" class="button-primary">ENREGISTRER LES MODIFICATIONS</button>
         </form>
+        <form action="{{ route('user.delete') }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="button-primary btn btn-danger">Supprimer toute mes données</button>
+        </form>
     </section>
     @endsection
 

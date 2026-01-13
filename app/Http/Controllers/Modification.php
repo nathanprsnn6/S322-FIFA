@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Nation;
@@ -91,5 +94,66 @@ class Modification extends Controller
         $user->save();
 
         return back()->with('success', 'Profil mis à jour avec succès !');
+    }
+
+    public function delete()
+    {
+        $user = Auth::user();
+        $personneId = Auth::id();
+
+        
+        if (!$personneId) {
+            Log::error("L'id de la personne est null");
+            return back()->with('error', 'Identifiant utilisateur invalide.');
+        }
+
+        DB::beginTransaction();
+
+        try {
+            $panierIds = DB::table('panier')->where('idpersonne', $personneId)->pluck('idpanier');
+            if ($panierIds->isNotEmpty()) {
+                DB::table('contenir')->whereIn('idpanier', $panierIds)->delete();
+                Log::info("Suppression de " . $panierIds->count() . " entrées dans 'contenir' pour les paniers de l'utilisateur " . $personneId);
+            }
+
+            DB::table('commande')->where('idpersonne', $personneId)->delete();
+            Log::info("Suppression des commandes de l'utilisateur " . $personneId);
+
+            DB::table('panier')->where('idpersonne', $personneId)->delete();
+            Log::info("Suppression des paniers de l'utilisateur " . $personneId);
+
+            DB::table('commande')->where('idpersonne', $personneId)->delete();
+            Log::info("Suppression des commandes de l'utilisateur " . $personneId);
+
+            $carteBancaires = DB::table('cartebancaire')->where('idpersonne', $personneId)->pluck('idcb');
+
+            if ($carteBancaires->isNotEmpty()) {
+                foreach ($carteBancaires as $idcb) {
+                    DB::table('transaction')->where('idcb', $idcb)->delete();
+                    DB::table('cartebancaire')->where('idcb', $idcb)->delete();
+                }
+                Log::info("Suppression des cartes bancaires de l'utilisateur " . $personneId);
+            } else {
+                Log::info("Aucune carte bancaire à supprimer pour l'utilisateur " . $personneId);
+            }
+
+            DB::table('client')->where('idpersonne', $personneId)->delete();
+            Log::info("Suppression du client lié à l'utilisateur " . $personneId);
+
+            $user->delete();
+            Log::info("Suppression de l'utilisateur (personne) " . $personneId);
+
+            DB::commit();
+
+            Auth::logout();
+
+            return redirect('/')->with('status', 'Votre compte et toutes vos données personnelles ont été supprimés avec succès.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error("Erreur lors de la suppression des données de l'utilisateur " . $personneId . ": " . $e->getMessage());
+
+            return back()->with('error', 'Une erreur est survenue lors de la suppression de vos données. Veuillez réessayer ou contacter le support.');
+        }
     }
 }

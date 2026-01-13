@@ -13,10 +13,7 @@
     @endif
 </head>
 <body>
-    @if (!request()->cookie('user_consent'))
-        {{-- Le composant ou la modale de la bannière de consentement --}}
-        @include('partials.cookie-banner')
-    @endif
+    
 <div id="cart-overlay" class="overlay"></div>
     <header class="fifa-header">
         
@@ -195,12 +192,24 @@
         @yield('content')
     </main>
 
-    <footer>
-        
+     <footer class="fifa-footer" role="contentinfo" aria-label="Pied de page">
+        <div class="fifa-footer__inner">
+            <div class="fifa-footer__bar">
+                <ul class="fifa-footer__links" aria-label="Liens légaux">
+                <li><a href="{{ route('politique.confidentialite') }}">Politique de confidentialité</a></li>
+                <li><a href="{{ route('conditions.utilisation') }}">Conditions d'utilisation</a></li>
+                </ul>
+
+                <div class="fifa-footer__copyright">
+                    Copyright © 2026 - <span id="y"></span> FIFA. Tous droits réservés.
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script>
         window.Laravel = {
+            panierActifId: {!! json_encode($panierActif->id ?? null) !!},
             csrfToken: '{{ csrf_token() }}',
             panierUpdateQuantityUrl: '{{ url("panier/update-quantity") }}',
             panierRemoveItemUrl: '{{ url("panier") }}'

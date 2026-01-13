@@ -118,29 +118,29 @@
         </div>
 
         <div class="form-group">
-    <label for="courriel">
-        Courriel <span class="etoile">*</span>
-        <span class="tooltip-container" 
-              role="button"
-              aria-haspopup="true"
-              aria-expanded="false"
-              tabindex="0" 
-              aria-label="Plus d'informations sur le courriel">
-            
-            <span class="info-icon" aria-hidden="true">i</span>
-            
-            <span class="tooltip-box" 
-                  id="desc-courriel" 
-                  role="tooltip">
-                Le courriel doit respecter le format général. Il vous servira d'identifiant de connexion pour vous connecter à votre compte.
-            </span>
-        </span>
-    </label>
-    <p class="hint-text">Voici votre identifiant FIFA</p>
-    <input type="email" id="courriel" name="courriel" 
-           aria-describedby="desc-courriel" 
-           value="{{ session('google_data.courriel') ?? old('courriel') }}" required placeholder="Ex: dupont.françois@gmail.com">
-</div>
+            <label for="courriel">
+                Courriel <span class="etoile">*</span>
+                <span class="tooltip-container" 
+                    role="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    tabindex="0" 
+                    aria-label="Plus d'informations sur le courriel">
+                    
+                    <span class="info-icon" aria-hidden="true">i</span>
+                    
+                    <span class="tooltip-box" 
+                        id="desc-courriel" 
+                        role="tooltip">
+                        Le courriel doit respecter le format général. Il vous servira d'identifiant de connexion pour vous connecter à votre compte.
+                    </span>
+                </span>
+            </label>
+            <p class="hint-text">Voici votre identifiant FIFA</p>
+            <input type="email" id="courriel" name="courriel" 
+                aria-describedby="desc-courriel" 
+                value="{{ session('google_data.courriel') ?? old('courriel') }}" required placeholder="Ex: dupont.françois@gmail.com">
+        </div>
 
 
         <div class="form-group">
