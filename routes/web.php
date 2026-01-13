@@ -117,9 +117,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/sous-categories/{idCategorie}', [VenteController::class, 'getSousCategories']);
     Route::get('/vente/produit/{id}/modifier', [VenteController::class, 'edit'])->name('vente.edit');
     Route::put('/vente/produit/{id}', [VenteController::class, 'update'])->name('vente.update');
+    Route::post('/vente/produit/{id}/image', [App\Http\Controllers\VenteController::class, 'addImage'])->name('vente.image.add');
+    Route::delete('/vente/produit/{id}/image/{idPhoto}', [App\Http\Controllers\VenteController::class, 'deleteImage'])->name('vente.image.delete');
+
+// Gestion des Variantes (Couleurs)
+Route::post('/vente/produit/{id}/variante', [App\Http\Controllers\VenteController::class, 'addVariant'])->name('vente.variant.add');
+Route::delete('/vente/produit/{id}/variante/{idColoris}', [App\Http\Controllers\VenteController::class, 'deleteVariant'])->name('vente.variant.delete');
+Route::get('/vente/demandes', [VenteController::class, 'indexDemandes'])->name('vente.demandes.index');
+Route::get('/vente/demande/{id}/traiter', [VenteController::class, 'createFromDemande'])->name('vente.demandes.create');
+Route::post('/vente/demande/store', [VenteController::class, 'storeFromDemande'])->name('vente.demandes.store');
+Route::get('/vente/en-attente', [VenteController::class, 'indexInvisible'])->name('vente.invisible.index');
+Route::put('/vente/produit/{id}/publier', [VenteController::class, 'publierProduit'])->name('vente.publier');
 
     // SIÈGE
     Route::get('/siege/commandes-express', [SiegeController::class, 'index'])->name('siege.index');
+    Route::post('/siege/commande/{id}/etat', [SiegeController::class, 'changerEtatLivraison'])->name('siege.etat.update');
 
     // STATS
     Route::get('/lancer-maj-stats', function () {

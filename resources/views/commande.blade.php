@@ -3,7 +3,6 @@
 @section('content')
 <div class="container" style="margin-top: 50px; max-width: 1000px;">
     
-    {{-- TITRE --}}
     <div style="margin-bottom: 60px;">
         <h2 style="color: #034f96; font-weight: 800; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 25px;">
             MES COMMANDES EN COURS
@@ -19,7 +18,7 @@
                     <tr style="text-align: left; color: #888; text-transform: uppercase; font-size: 0.85em;">
                         <th style="padding: 10px;">N°</th>
                         <th style="padding: 10px;">Date</th>
-                        <th style="padding: 10px;">Montant</th>
+                        <th style="padding: 10px;">Montant Total</th>
                         <th style="padding: 10px;">Livraison</th>
                         <th style="padding: 10px;">Statut</th>
                         <th style="padding: 10px;">Action</th>
@@ -27,11 +26,10 @@
                 </thead>
                 <tbody>
                     @foreach($commandesEnCours as $commande)
-                        {{-- LIGNE PRINCIPALE --}}
                         <tr class="card-row" style="background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #034f96;">
                             <td style="padding: 20px; font-weight: bold; color: #333;">#{{ $commande->idcommande }}</td>
                             <td style="padding: 20px;">{{ $commande->datetransaction ? \Carbon\Carbon::parse($commande->datetransaction)->format('d/m/Y') : '-' }}</td>
-                            <td style="padding: 20px; font-weight: 800; font-size: 1.1em;">{{ number_format($commande->prixpanier, 2, ',', ' ') }} €</td>
+                            <td style="padding: 20px; font-weight: 800; font-size: 1.1em;">{{ number_format($commande->montant_total, 2, ',', ' ') }} €</td>
                             <td style="padding: 20px;">{{ $commande->libelletypelivraison ?? 'Standard' }}</td>
                             <td style="padding: 20px;">
                                 <span class="badge badge-blue" style="background: #e3f2fd; color: #0d47a1; padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold;">
@@ -46,14 +44,12 @@
                             </td>
                         </tr>
 
-                        {{-- LIGNE DE DÉTAIL (Cachée par défaut) --}}
                         <tr id="details-{{ $commande->idcommande }}" class="detail-row" style="display: none;">
                             <td colspan="6" style="padding: 0;">
                                 <div class="detail-content" style="background-color: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #eee; border-top: none; margin-bottom: 20px;">
                                     
                                     <div style="display: flex; gap: 40px; flex-wrap: wrap;">
                                         
-                                        {{-- Bloc 1 : Liste des produits --}}
                                         <div style="flex: 1; min-width: 300px;">
                                             <h5 style="color: #034f96; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;">
                                                 <i class="fas fa-box-open"></i> CONTENU DU COLIS
@@ -73,7 +69,6 @@
                                             </ul>
                                         </div>
 
-                                        {{-- Bloc 2 : Infos Expédition --}}
                                         <div style="width: 300px; background: white; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; height: fit-content;">
                                             <h5 style="color: #e67e22; border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 15px;">
                                                 <i class="fas fa-truck"></i> SUIVI EXPÉDITION
@@ -120,7 +115,6 @@
         @endif
     </div>
 
-    {{-- HISTORIQUE --}}
     <div>
         <h2 style="color: #444; font-weight: 700; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 25px;">
             Historique des commandes
@@ -136,7 +130,7 @@
                     <tr style="text-align: left; color: #888; text-transform: uppercase; font-size: 0.85em;">
                         <th style="padding: 10px;">N°</th>
                         <th style="padding: 10px;">Date</th>
-                        <th style="padding: 10px;">Montant</th>
+                        <th style="padding: 10px;">Montant Total</th>
                         <th style="padding: 10px;">Statut</th>
                         <th style="padding: 10px;">Action</th>
                     </tr>
@@ -159,7 +153,7 @@
                         <tr class="card-row" style="background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid {{ $borderColor }};">
                             <td style="padding: 20px; font-weight: bold; color: #555;">#{{ $commande->idcommande }}</td>
                             <td style="padding: 20px;">{{ $commande->datetransaction ? \Carbon\Carbon::parse($commande->datetransaction)->format('d/m/Y') : '-' }}</td>
-                            <td style="padding: 20px; font-weight: 800; font-size: 1.1em;">{{ number_format($commande->prixpanier, 2, ',', ' ') }} €</td>
+                            <td style="padding: 20px; font-weight: 800; font-size: 1.1em;">{{ number_format($commande->montant_total, 2, ',', ' ') }} €</td>
                             <td style="padding: 20px;">
                                 <span class="badge" style="{{ $badgeStyle }} padding: 5px 10px; border-radius: 20px; font-size: 0.85em; font-weight: bold;">
                                     {{ $commande->etatcommande }}
@@ -173,7 +167,6 @@
                             </td>
                         </tr>
 
-                        {{-- DÉTAIL HISTORIQUE --}}
                         <tr id="details-{{ $commande->idcommande }}" class="detail-row" style="display: none;">
                             <td colspan="5" style="padding: 0;">
                                 <div class="detail-content" style="background-color: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px; border: 1px solid #eee; border-top: none; margin-bottom: 20px;">

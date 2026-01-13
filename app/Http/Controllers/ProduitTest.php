@@ -26,19 +26,22 @@ class ProduitTest extends Controller
         }
         $availableSubCats = $sousCategoriesQuery->get();
 
-
         $query = DB::table('produit')
         ->select(
-        'produit.*',
-        DB::raw('MIN(variante_produit.prixproduit) as min_prix'),
-        DB::raw('MAX(variante_produit.prixproduit) as max_prix'),
-        DB::raw('MAX(photo.destinationphoto) as destinationphoto')
+            'produit.*',
+            DB::raw('MIN(variante_produit.prixproduit) as min_prix'),
+            DB::raw('MAX(variante_produit.prixproduit) as max_prix'),
+            DB::raw('(SELECT destinationphoto FROM photo 
+                      INNER JOIN illustrer ON photo.idphoto = illustrer.idphoto 
+                      WHERE illustrer.idproduit = produit.idproduit 
+                      ORDER BY photo.idphoto ASC 
+                      LIMIT 1) as destinationphoto')
         )
         ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
         ->join('sous_categorie', 'produit.idsouscategorie', '=', 'sous_categorie.idsouscategorie')
-        ->join('illustrer', 'produit.idproduit', '=', 'illustrer.idproduit')
-        ->join('photo', 'illustrer.idphoto', '=', 'photo.idphoto')
+        ->where('produit.visible', true)
         ->groupBy('produit.idproduit');
+
         if ($request->filled('cat')) {
             $query->where('sous_categorie.idcategorie', $request->cat);
         }
@@ -47,7 +50,6 @@ class ProduitTest extends Controller
         }
 
         if ($request->filled('subcats')) {
-
             $query->whereIn('produit.idsouscategorie', $request->subcats);
         }
 
@@ -66,7 +68,6 @@ class ProduitTest extends Controller
             });
         }
 
-
         if ($request->filled('sort')) {
             $query->orderBy('min_prix', $request->sort);
         }
@@ -81,7 +82,6 @@ class ProduitTest extends Controller
             'allSizes' => $allSizes,
             'availableSubCats' => $availableSubCats, 
             
-
             'currentNation' => $request->nation,
             'currentCat' => $request->cat,
             'selectedColors' => $request->colors ?? [],
