@@ -58,5 +58,8 @@ class User extends Authenticatable
 
     return $this->belongsTo(Personne::class, 'idpersonne', 'idpersonne');
 }
-
+public function getEmailForPasswordReset()
+{
+    return $this->courriel;
+}
 }

@@ -44,6 +44,10 @@
                     @if(Auth::user()->idrole == 5)
                         <a href="{{ route('vente.create') }}" class="btn-auth" style="background-color: #e67e22; color: white; border: none;">
                             <i class="fas fa-tags"></i> Service Vente
+                        <a href="{{ route('typesvote.index') }}" 
+                        class="btn-auth" 
+                        style="background-color: #001d4d; color: white; border: none; border-left: 4px solid #00b2ff; padding: 10px 20px; text-transform: uppercase; font-weight: bold; display: inline-flex; align-items: center; text-decoration: none;">
+                            <i class="fas fa-vote-yea" style="margin-right: 8px; color: #00b2ff;"></i> Gestion des Votes
                         </a>
                     @endif
 
