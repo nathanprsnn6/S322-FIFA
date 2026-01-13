@@ -2867,6 +2867,57 @@ input[type="radio"]:checked + label.size-button {
     font-weight: 700;
 }
 
+/* footer des page */
+footer{
+    background:#004797;
+    color: white;
+}
+
+.fifa-footer__inner{
+    position:relative;
+    margin:10px;
+}
+
+.fifa-footer__copyright{
+    font-size: 13px;
+    margin-right: 80px;
+    color: var(--text-dim);
+    white-space:nowrap;
+}
+
+.fifa-footer__bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 22px;
+    min-height: 74px;
+    padding: 16px 0;
+}
+
+.fifa-footer__links{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap: clamp(14px, 2vw, 28px);
+    margin-left: 60px;
+    padding:0;
+    list-style:none;
+}
+
+.fifa-footer__links a{
+    font-family: "Barlow Condensed", "Inter", sans-serif;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-size: clamp(13px, 1.35vw, 15px);
+    color: var(--text);
+    text-decoration:none;
+    white-space:nowrap;
+    position:relative;
+    opacity:.96;
+}
+
+
 /* Container principal pour centrer la carte */
 .auth-container {
     display: flex;

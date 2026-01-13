@@ -68,7 +68,7 @@
                     </div>
 
                     <label for="tel">Téléphone *</label>
-                    <input type="tel" name="tel" id="tel" value="{{ old('tel') }}" required placeholder="+3363434343434" class="form-control">
+                    <input type="tel" name="tel" id="tel" value="{{ old('tel') }}" required placeholder="+33 6 34 34 34 34" class="form-control">
                     @error('tel') <span class="text-danger">{{ $message }}</span> @enderror
 
                     <button type="button" class="btn-submit btn-next" data-next-step="livraison">SUITE</button>

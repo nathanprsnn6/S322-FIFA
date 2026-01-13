@@ -8,8 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="shortcut icon" href="{{ asset('img/FIFA.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    
 </head>
+
 <body>
+<<<<<<< HEAD
+    
+=======
+
+>>>>>>> 461e00a24b431d2fe26eda81c82c55323d54dc45
 <div id="cart-overlay" class="overlay"></div>
     <header class="fifa-header">
         
@@ -192,8 +199,56 @@
         @yield('content')
     </main>
 
+     <footer class="fifa-footer" role="contentinfo" aria-label="Pied de page">
+        <div class="fifa-footer__inner">
+            <div class="fifa-footer__bar">
+                <ul class="fifa-footer__links" aria-label="Liens légaux">
+                <li><a href="{{ route('politique.confidentialite') }}">Politique de confidentialité</a></li>
+                <li><a href="{{ route('conditions.utilisation') }}">Conditions d'utilisation</a></li>
+                </ul>
+
+                <div class="fifa-footer__copyright">
+                    Copyright © 2026 - <span id="y"></span> FIFA. Tous droits réservés.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ asset('js/tarteaucitron/tarteaucitron.js') }}"></script>
+
+    <script type="text/javascript">
+
+        tarteaucitron.user.facebookpixelId = '123456789';
+        tarteaucitron.user.googleadsId = 'AW-123456789';
+
+        tarteaucitron.init({
+            "privacyUrl": "", /* URL de votre page de politique de confidentialité */
+            "hashtag": "#tarteaucitron", /* Ouvrir le panneau via ce hashtag */
+            "cookieName": "tarteaucitron", /* Nom du cookie déposé */
+            "orientation": "bottom", /* Position de la bannière (top ou bottom) */
+            "groupServices": true, /* Grouper les services par catégorie */
+            "showAlertBanner": true, /* Afficher la petite bannière en bas à droite */
+            "cookieslist": true, /* Afficher la liste des cookies installés */
+            "closePopup": false, /* Fermer la popup après un clic */
+            "showIcon": true, /* Afficher l'icône pour ouvrir le panneau */
+            "iconPosition": "BottomRight", /* Position de l'icône */
+            "adblocker": false, /* Afficher un message si un adblocker est détecté */
+            "DenyAllCta" : true, /* Afficher le bouton "Tout refuser" */
+            "AcceptAllCta" : true, /* Afficher le bouton "Tout accepter" */
+            "highPrivacy": true, /* Désactiver le consentement automatique au scroll */
+            "handleBrowserRequests": true, /* Gérer les requêtes de l'utilisateur via le navigateur */
+        });
+
+       (tarteaucitron.job = tarteaucitron.job || []).push('facebookpixel');
+        (tarteaucitron.job = tarteaucitron.job || []).push('googleads');
+
+        (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
+        
+    </script>
+
     <script>
         window.Laravel = {
+            panierActifId: {!! json_encode($panierActif->id ?? null) !!},
             csrfToken: '{{ csrf_token() }}',
             panierUpdateQuantityUrl: '{{ url("panier/update-quantity") }}',
             panierRemoveItemUrl: '{{ url("panier") }}'
@@ -214,6 +269,27 @@
     </script>
     <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
     
-    @yield('scripts')
+    <script>
+        function changeLanguage(lang) {
+            // 1. On vérifie si l'utilisateur a accepté le service "preferences" dans Tarteaucitron
+            if (tarteaucitron.state.preferences === true) {
+                // 2. On enregistre le cookie pour 1 an
+                document.cookie = "app_locale=" + lang + ";path=/;max-age=" + (365*24*60*60);
+                // 3. On recharge la page pour que le Middleware Laravel lise le cookie
+                window.location.reload();
+            } else {
+                alert("Vous devez accepter les cookies de 'Préférences' pour changer la langue durablement.");
+                tarteaucitron.userInterface.openPanel(); // On ouvre le panneau pour l'aider
+            }
+        }
+
+        //Fusau horaire
+        if (tarteaucitron.state.preferences === true) {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            document.cookie = "app_timezone=" + tz + ";path=/;max-age=31536000";
+        }
+</script>
+    @yield('scripts')    
 </body>
+
 </html>

@@ -71,7 +71,9 @@ class PanierController extends Controller
 
         list($productId, $colorId, $tailleId) = $ids;
         
-        $panier = Panier::where('idpersonne', $userId)->first(); 
+        $panier = Panier::where('idpersonne', $userId)
+            ->where('panieractif', '=', 'true')
+            ->first(); 
         
         $lignePanier = Contenir::where('idpanier', $panier->idpanier)
                                ->where('idproduit', $productId)
@@ -128,8 +130,10 @@ class PanierController extends Controller
 
         list($productId, $colorId, $tailleId) = $ids;
         
-        $panier = Panier::where('idpersonne', $userId)->first(); 
-        
+        $panier = Panier::where('idpersonne', $userId)
+            ->where('panieractif', '=', 'true')
+            ->first(); 
+            
         
         
         $deletedCount = Contenir::where('idpanier', $panier->idpanier)

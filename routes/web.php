@@ -113,6 +113,9 @@ Route::post('/logout', [Connexion::class, 'logout'])->name('logout');
 // --- PROFIL ---
 Route::get('/modifier', [Modification::class, 'edit'])->name('user.edit');
 Route::put('/modifier', [Modification::class, 'update'])->name('user.update');
+Route::delete('/suprimer-donnée', [Modification::class, 'delete'])
+    ->middleware('auth')
+    ->name('user.delete');
 
 // --- VOTE ---
 Route::get('/voter', [VoterController::class, 'index'])->name('voter.index');
@@ -122,8 +125,8 @@ Route::get('/verifier-vote/{idtypevote}', [VoterController::class, 'checkVote'])
 
 // --- PANIER ---
 Route::get('/panier', [PanierController::class, 'getCartItems'])->name('panier.getCartItems');
-Route::put('/panier/update-quantity/{compositeId}', [PanierController::class, 'updateQuantity'])->name('panier.update_quantity');
-Route::delete('/panier/{compositeId}', [PanierController::class, 'removeItem'])->name('panier.remove_item');
+Route::put('/panier/{panier}/update-quantity/{compositeId}', [PanierController::class, 'updateQuantity'])->name('panier.update_quantity');
+Route::delete('/panier/{panier}/item/{compositeId}', [PanierController::class, 'removeItem'])->name('panier.remove_item');
 
 // --- PAYER & COMMANDE---
 Route::get('/commander', [Commander::class, 'index'])->name('commander.index');
@@ -185,9 +188,18 @@ Route::get('/stress-me', function () {
     return "Test fini";
 });
 
-
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+
+//Conditions d'utilisation
+Route::get('/conditions-utilisation', function () {
+    return view('conditionutilisation');
+})->name('conditions.utilisation');
+
+// politique-confidentialite
+Route::get('/politiqueconfidentialite', function () {
+    return view('politiqueconfidentialite');
+})->name('politique.confidentialite');
 
 // Formulaire pour saisir l'e-mail
 // Vérifie que c'est exactement comme ça :

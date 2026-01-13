@@ -13,7 +13,8 @@ class Panier extends Model
         'idpanier',
         'idpersonne',        
         'prixpanier',
-        'datecreationpanier'
+        'datecreationpanier',
+        'panieractif'
     ];
 
     public function commande()
