@@ -2,7 +2,19 @@
 
 @section('content')
 <div class="vente-container">
-    <h1 class="vente-title">Mise en Vente</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 10px;">
+        <h1 class="vente-title" style="margin-bottom: 0;">Mise en Vente</h1>
+        
+        <div style="display: flex; gap: 10px;">
+            <a href="{{ route('vente.invisible.index') }}" style="background-color: #64748b; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <i class="fas fa-eye-slash"></i> Produits en attente
+            </a>
+
+            <a href="{{ route('vente.demandes.index') }}" style="background-color: #d97706; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <i class="fas fa-envelope-open-text"></i> Voir les demandes Pro
+            </a>
+        </div>
+    </div>
     
     @if(session('success'))
         <div style="background-color: #d1fae5; color: #065f46; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
@@ -24,7 +36,7 @@
     <div style="background-color: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
         <b>Erreur :</b> {{ session('error') }}
     </div>
-@endif
+    @endif
 
     <form action="{{ route('vente.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -126,7 +138,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="vente-btn-submit">Mettre en vente</button>
+            <button type="submit" class="vente-btn-submit">Mettre en vente (Invisible)</button>
         </div>
     </form>
 </div>
@@ -134,5 +146,35 @@
 
 @section('scripts')
     <script src="{{ asset('js/main.js') }}"></script>
-@endsection
+    <script>
+        document.getElementById('idcategorie').addEventListener('change', function() {
+            var idCategorie = this.value;
+            var sousCategorieSelect = document.getElementById('idsouscategorie');
+            var sousCatContainer = sousCategorieSelect.parentElement;
 
+            if(idCategorie) {
+                sousCategorieSelect.disabled = false;
+                sousCategorieSelect.innerHTML = '<option value="">Chargement...</option>';
+                
+                fetch('/api/sous-categories/' + idCategorie)
+                    .then(response => response.json())
+                    .then(data => {
+                        sousCategorieSelect.innerHTML = '<option value="">Choisir une sous-catégorie...</option>';
+                        data.forEach(function(sc) {
+                            var option = document.createElement('option');
+                            option.value = sc.idsouscategorie;
+                            option.text = sc.nomsouscategorie;
+                            sousCategorieSelect.add(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                        sousCategorieSelect.innerHTML = '<option value="">Erreur de chargement</option>';
+                    });
+            } else {
+                sousCategorieSelect.disabled = true;
+                sousCategorieSelect.innerHTML = '<option value="">En attente de catégorie...</option>';
+            }
+        });
+    </script>
+@endsection

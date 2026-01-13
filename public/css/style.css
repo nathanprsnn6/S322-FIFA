@@ -2539,6 +2539,260 @@ details[open] .faq-answer {
     line-height: 1;
 }
 
+#double_img {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 30px;
+    align-items: start;
+}
+
+#double_img > div:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 20px;
+}
+
+#img_detail {
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+    max-height: 70vh;
+    object-fit: contain;
+    margin: 0;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.05));
+}
+
+#product-info {
+    margin: 0;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+#product-info h1 {
+    font-size: 2.4em;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 20px;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+}
+
+.text_detail {
+    font-size: 16px;
+    color: #334155;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+#lab_size, #lab_color, #lab_quantity {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #1e293b;
+}
+
+.tooltip-container {
+    margin-left: 8px;
+    position: relative;
+    top: 2px;
+}
+
+.size-buttons-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.size-button {
+    width: 55px;
+    height: 55px;
+    margin: 0;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    border-radius: 8px;
+    font-size: 16px;
+    color: #1e293b;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.size-button:hover {
+    border-color: #034f96;
+    color: #034f96;
+    background-color: #f8fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.size-button.active, 
+input[type="radio"]:checked + label.size-button {
+    background: #034f96;
+    color: white;
+    border-color: #034f96;
+    box-shadow: 0 4px 10px rgba(3, 79, 150, 0.3);
+    transform: translateY(0);
+}
+
+#color {
+    width: 100%;
+    max-width: 350px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    font-size: 15px;
+    color: #1e293b;
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+#quantity {
+    padding: 10px 15px;
+    width: 100px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#price {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 20px 0 10px 0;
+}
+
+#stock {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    padding: 8px 12px;
+    background-color: #f1f5f9;
+    border-radius: 6px;
+    display: inline-block;
+}
+
+.add-cart {
+    width: 100%;
+}
+
+#add-button {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    padding: 18px 30px;
+    background-color: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-right: 0;
+    transition: all 0.2s ease;
+}
+
+#add-button:hover:not(:disabled) {
+    background-color: #034f96;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(3, 79, 150, 0.25);
+}
+
+#add-button:disabled {
+    background-color: #cbd5e1;
+    color: #94a3b8;
+    border: 1px solid #cbd5e1;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 900px) {
+    #double_img {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding: 0 20px;
+        margin-top: 20px;
+    }
+    
+    #img_detail {
+        max-height: 400px;
+    }
+
+    #product-info {
+        padding: 0;
+    }
+    
+    #add-button {
+        max-width: 100%;
+    }
+}
+
+.pd-gallery-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.pd-main-image-container {
+    width: 100%;
+    max-width: 500px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.pd-main-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.pd-thumbnails-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.pd-thumbnail-item {
+    width: 70px;
+    height: 70px;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    object-fit: cover;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.pd-thumbnail-item:hover {
+    opacity: 1;
+    border-color: #ccc;
+}
+
+.pd-thumbnail-active {
+    border-color: #034f96;
+    opacity: 1;
+    transform: scale(1.05);
 /* --- (Gardez le CSS précédent pour :root, .auth-card, header, forms, etc.) --- */
 :root {
     --fifa-navy: #020c18;
