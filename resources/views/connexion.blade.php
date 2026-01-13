@@ -42,6 +42,11 @@
             </svg>
             <span>Continuer avec Google</span>
         </a>
+        <div class="forgot-link-container">
+            <a href="{{ route('password.request') }}" class="link-blue">
+                Mot de passe oublié ?
+            </a>
+        </div>
     </form>
 </section>
 @endsection

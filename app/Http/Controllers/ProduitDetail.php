@@ -30,38 +30,38 @@ class ProduitDetail extends Controller
 
         session()->put('recent_products', $recentIds);
 
-$idsToFetch = array_filter($recentIds, function($val) use ($id) {
-    return $val != $id;
-});
+        $idsToFetch = array_filter($recentIds, function($val) use ($id) {
+            return $val != $id;
+        });
 
-$produitsConsultes = collect(); 
-if (!empty($idsToFetch)) {
-    $results = DB::table('produit')
-        ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
-        ->join('illustrer', 'produit.idproduit', '=', 'illustrer.idproduit')
-        ->join('photo', 'illustrer.idphoto', '=', 'photo.idphoto')
-        ->whereIn('produit.idproduit', $idsToFetch)
-        ->select(
-            'produit.idproduit', 
-            'produit.titreproduit', 
-            DB::raw('MIN(variante_produit.prixproduit) as prix'),
-            DB::raw('MAX(photo.destinationphoto) as destinationphoto')
-        )
-        ->groupBy('produit.idproduit', 'produit.titreproduit')
-        ->get();
+        $produitsConsultes = collect(); 
+        if (!empty($idsToFetch)) {
+            $results = DB::table('produit')
+                ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
+                ->join('illustrer', 'produit.idproduit', '=', 'illustrer.idproduit')
+                ->join('photo', 'illustrer.idphoto', '=', 'photo.idphoto')
+                ->whereIn('produit.idproduit', $idsToFetch)
+                ->select(
+                    'produit.idproduit', 
+                    'produit.titreproduit', 
+                    DB::raw('MIN(variante_produit.prixproduit) as prix'),
+                    DB::raw('MAX(photo.destinationphoto) as destinationphoto')
+                )
+                ->groupBy('produit.idproduit', 'produit.titreproduit')
+                ->get();
 
-    $produitsConsultes = $results->sortBy(function ($model) use ($idsToFetch) {
-        return array_search($model->idproduit, array_values($idsToFetch));
-    });
-}
+            $produitsConsultes = $results->sortBy(function ($model) use ($idsToFetch) {
+                return array_search($model->idproduit, array_values($idsToFetch));
+            });
+        }
 
-        $photo = DB::table('photo')
+        $photos = DB::table('photo')
             ->join('illustrer', 'photo.idphoto', '=', 'illustrer.idphoto')
             ->where('illustrer.idproduit', $id)
             ->select('photo.destinationphoto')
-            ->first();
+            ->orderBy('photo.idphoto', 'asc')
+            ->get();
 
-        
         $tailles = Taille::whereIn('idtaille', function($query) use ($id) {
             $query->select('idtaille')
                   ->from('reference')
@@ -85,7 +85,7 @@ if (!empty($idsToFetch)) {
         $premierIdColoris = $variantes->first()->idcoloris ?? 0;
         $premiereTaille = $tailles->first()->idtaille ?? null;
         $maxQuantity = ($premierIdColoris && $premiereTaille && isset($stock[$premierIdColoris][$premiereTaille])) 
-                       ? $stock[$premierIdColoris][$premiereTaille] : 1;
+                        ? $stock[$premierIdColoris][$premiereTaille] : 1;
 
         $produitsSimilaires = DB::table('produit')
             ->join('variante_produit', 'produit.idproduit', '=', 'variante_produit.idproduit')
@@ -99,7 +99,7 @@ if (!empty($idsToFetch)) {
             ->take(4)
             ->get();
 
-        return view('produitDetails', compact('produit', 'tailles', 'variantes', 'produitsSimilaires', 'produitsConsultes', 'photo', 'stock', 'maxQuantity', 'premierIdColoris'));
+        return view('produitDetails', compact('produit', 'tailles', 'variantes', 'produitsSimilaires', 'produitsConsultes', 'photos', 'stock', 'maxQuantity', 'premierIdColoris'));
     }
 
 
@@ -129,8 +129,6 @@ if (!empty($idsToFetch)) {
 
         return $idPersonne;
     }
-
-
 
     public function store(Request $request)
     {
@@ -253,5 +251,4 @@ if (!empty($idsToFetch)) {
                 ->withInput();
         }
     }
-
 }

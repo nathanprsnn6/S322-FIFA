@@ -11,31 +11,39 @@ use Illuminate\Support\Facades\Log;
 
 class VoterController extends Controller
 {
-    public function index(Request $request)
-    {
-        $userId = Auth::id(); 
-    
-        $typevotes = DB::table('typevote')->select('idtypevote', 'nomtypevote')->get();
-    
-        $selectedType = $request->query('idtypevote', $typevotes->first()->idtypevote ?? 1);
-    
-        $joueurs = Joueur::join('photo', 'joueur.idphotovote', '=', 'photo.idphoto')
-            ->leftJoin('voter', function($join) use ($userId, $selectedType) {
-                $join->on('joueur.idpersonne', '=', 'voter.idpersonne')
-                     ->where('voter.uti_idpersonne', '=', $userId)
-                     ->where('voter.idtypevote', '=', $selectedType);
-            })
-            ->select(
-                'joueur.*', 
-                'photo.destinationphoto', 
-                'voter.position as ma_position'
-            )
-            ->get();
-    
-        $prefill = session('vote_attente', []);
-    
-        return view('voter', compact('joueurs', 'typevotes', 'prefill', 'selectedType'));
-    }
+public function index(Request $request)
+{
+    $userId = Auth::id(); 
+
+    // Récupération de tous les types de votes pour l'affichage des onglets/radios
+    $typevotes = DB::table('typevote')->select('idtypevote', 'nomtypevote')->get();
+
+    // Détermination du type sélectionné (par défaut le premier de la liste)
+    $selectedType = $request->query('idtypevote', $typevotes->first()->idtypevote ?? 1);
+
+    // Requête des joueurs filtrée par éligibilité
+    $joueurs = Joueur::join('photo', 'joueur.idphotovote', '=', 'photo.idphoto')
+        // JOINTURE CRUCIALE : On lie le joueur à sa table d'éligibilité
+        ->join('eligiblevote', 'joueur.idpersonne', '=', 'eligiblevote.idpersonne')
+        // On filtre par le type de vote sélectionné
+        ->where('eligiblevote.idtypevote', '=', $selectedType)
+        // On garde ta logique pour afficher les votes déjà effectués par l'utilisateur
+        ->leftJoin('voter', function($join) use ($userId, $selectedType) {
+            $join->on('joueur.idpersonne', '=', 'voter.idpersonne')
+                 ->where('voter.uti_idpersonne', '=', $userId)
+                 ->where('voter.idtypevote', '=', $selectedType);
+        })
+        ->select(
+            'joueur.*', 
+            'photo.destinationphoto', 
+            'voter.position as ma_position'
+        )
+        ->get();
+
+    $prefill = session('vote_attente', []);
+
+    return view('voter', compact('joueurs', 'typevotes', 'prefill', 'selectedType'));
+}
 
     public function store(Request $request)
     {

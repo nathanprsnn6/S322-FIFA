@@ -2,22 +2,65 @@
 
 @section('content')
 
+<link rel="stylesheet" href="{{ asset('css/product-details-gallery.css') }}">
+
 <script>
     window.stockData = @json($stock);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const mainImage = document.getElementById('pd_main_img_display');
+        const thumbnails = document.querySelectorAll('.pd-thumbnail-item');
+
+        thumbnails.forEach(thumb => {
+            thumb.addEventListener('click', function() {
+                const newSrc = this.getAttribute('data-full-src');
+                
+                mainImage.style.opacity = '0.5';
+                
+                setTimeout(() => {
+                    mainImage.src = newSrc;
+                    mainImage.onload = () => {
+                        mainImage.style.opacity = '1';
+                    };
+                }, 100);
+
+                thumbnails.forEach(t => t.classList.remove('pd-thumbnail-active'));
+                this.classList.add('pd-thumbnail-active');
+            });
+        });
+    });
 </script>
 
 <div id="double_img">
-    <div>
-        <img id="img_detail" src="{{ asset($photo->destinationphoto) }}" alt="{{ $produit->titreproduit }}">
+    <div class="pd-gallery-wrapper">
+        <div class="pd-main-image-container">
+            @if($photos->isNotEmpty())
+                <img id="pd_main_img_display" class="pd-main-image" src="{{ asset($photos->first()->destinationphoto) }}" alt="{{ $produit->titreproduit }}">
+            @else
+                <img id="pd_main_img_display" class="pd-main-image" src="{{ asset('images/default.png') }}" alt="Aucune image">
+            @endif
+        </div>
+
+        @if($photos->count() > 1)
+            <div class="pd-thumbnails-container">
+                @foreach($photos as $index => $photo)
+                    <img 
+                        class="pd-thumbnail-item {{ $loop->first ? 'pd-thumbnail-active' : '' }}" 
+                        src="{{ asset($photo->destinationphoto) }}" 
+                        data-full-src="{{ asset($photo->destinationphoto) }}"
+                        alt="Vue {{ $index + 1 }}"
+                    >
+                @endforeach
+            </div>
+        @endif
     </div>
+
     <form action="{{ route('produits.index') }}" method="POST">
         @csrf
         <input type="hidden" name="produitId" value="{{ $produit->idproduit }}">
         <div id="product-info">
             <h1>{{ $produit->titreproduit }}</h1>
-            <h1>{{ $produit->titreproduit }}</h1>
 
-            {{-- BOUTON MODIFIER (Visible uniquement pour Service Vente) --}}
             @auth
                 @if(Auth::user()->idrole == 5)
                     <div style="margin-bottom: 20px;">
@@ -28,9 +71,6 @@
                     </div>
                 @endif
             @endauth
-
-            <p class="text_detail">
-                <b>Description :</b><br>
 
             <p class="text_detail">
                 <b>Description :</b><br>
@@ -105,7 +145,7 @@
         @endforeach
     </div>
 @endif
-{{-- Section Produits Consultés --}}
+
 @if($produitsConsultes->count() > 0)
     <div class="container" style="max-width: 100%; background: none; box-shadow: none; padding: 0 20px; margin-top: 50px;">
         <h3 class="section-title" style="font-size: 1.5em; border-bottom: 1px solid #034f96; padding-bottom: 15px;">

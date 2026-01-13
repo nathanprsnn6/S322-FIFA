@@ -24,7 +24,7 @@ class Commande extends Controller
                 'panier.prixpanier',
                 'transaction.datetransaction',
                 'typelivraison.libelletypelivraison',
-                // AJOUT : Informations logistiques pour l'User Story
+                'typelivraison.idtypelivraison',
                 'livrer.datelivraison', 
                 'livrer.creneaulivraison'
             )
@@ -51,6 +51,15 @@ class Commande extends Controller
 
         foreach ($toutesLesCommandes as $commande) {
             $commande->produits = $detailsProduits->where('idcommande', $commande->idcommande);
+
+            $fraisLivraison = 0;
+            if ($commande->idtypelivraison == 1) {
+                $fraisLivraison = 16.5;
+            } elseif ($commande->idtypelivraison == 2) {
+                $fraisLivraison = 9;
+            }
+
+            $commande->montant_total = $commande->prixpanier + $fraisLivraison;
         }
 
         $commandesEnCours = $toutesLesCommandes->filter(function ($commande) {
