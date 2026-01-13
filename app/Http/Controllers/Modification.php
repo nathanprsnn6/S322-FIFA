@@ -42,6 +42,7 @@ class Modification extends Controller
             'annee_naissance' => 'required|numeric',
             
             'password' => 'nullable|min:8',
+            'a2f' => 'nullable|boolean',
         ]);
 
         $personne = $user->personne; 
@@ -83,6 +84,7 @@ class Modification extends Controller
 
         $user->naiss_idnation = $request->pays_naissance;
         
+        $user->a2f = $request->has('a2f');
 
 
         if ($request->filled('password')) {

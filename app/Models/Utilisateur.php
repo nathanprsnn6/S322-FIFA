@@ -23,11 +23,20 @@ class Utilisateur extends Model
         'langue_idnation',
         'cp',
         'ville',
-        'mdp'
+        'mdp',
+        'a2f'
     ];
     public function personne()
     {
         // belongsTo(ModeleCible, MaCléEtrangère, CléCible)
         return $this->belongsTo(Personne::class, 'idpersonne', 'idpersonne');
     }
+    public function getEmailForPasswordReset()
+{
+    return $this->courriel;
+}
+public function getAuthPassword()
+{
+    return $this->mdp;
+}
 }
