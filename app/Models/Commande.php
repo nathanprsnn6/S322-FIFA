@@ -17,4 +17,5 @@ class Commande extends Model
         'idpersonne',
         'etatcommande'
     ];
+    
 }

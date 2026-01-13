@@ -142,21 +142,6 @@ Route::get('/stress-me', function () {
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
 
-
-//COOKIES
-//Enregistrer les préférences de cookies
-Route::post('/cookie-consent', [CookieController::class, 'store'])
-    ->name('cookie.consent.store');
-
-    //information légale
-Route::get('/cookie-policy', function () {
-    return view('pages.cookie-policy');//A FAIRE
-})->name('cookie.policy');
-
-// formulaire de modification des préférences (non obligatoire).
-Route::get('/cookie-preferences', [CookieController::class, 'edit'])//A FAIRE
-    ->name('cookie.preferences.edit');
-
 //Conditions d'utilisation
 Route::get('/conditions-utilisation', function () {
     return view('conditionutilisation');
@@ -166,3 +151,4 @@ Route::get('/conditions-utilisation', function () {
 Route::get('/politiqueconfidentialite', function () {
     return view('politiqueconfidentialite');
 })->name('politique.confidentialite');
+
