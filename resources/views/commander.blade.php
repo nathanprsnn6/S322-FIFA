@@ -333,7 +333,7 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', (event) => {
+    /*document.addEventListener('DOMContentLoaded', (event) => {
     // 1. Ciblez l'élément input par son ID ou son nom/type
     const telInput = document.getElementById('tel');
 
@@ -373,7 +373,7 @@
             e.target.value = formattedValue.trim();
         });
     }
-});
+});*/
 </script>
 
 @endsection
