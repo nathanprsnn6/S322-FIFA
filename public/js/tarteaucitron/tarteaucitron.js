@@ -428,7 +428,7 @@ var tarteaucitron = {
                 tarteaucitron.services.gcmads = {
                     "key": "gcmads",
                     "type": "ads",
-                    "name": "Google Ads (personalized ads)",
+                    "name": "Google Ads (personalized ads)",                    
                     "uri": "https://support.google.com/analytics/answer/9976101",
                     "needConsent": true,
                     "cookies": [],

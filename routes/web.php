@@ -138,3 +138,5 @@ Route::get('/stress-me', function () {
 
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+
+// ----- POLITIQUE DE COOKIES

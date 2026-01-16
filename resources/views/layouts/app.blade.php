@@ -1,14 +1,75 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <script src="/tarteaucitron/tarteaucitron.min.js"></script>
+
+    <script type="text/javascript">
+    tarteaucitron.init({
+        "privacyUrl": "", /* Url de la politique de confidentialité */
+        "bodyPosition": "top", /* top place le bandeau de consentement au début du code html, mieux pour l'accessibilité */
+
+        "hashtag": "#tarteaucitron", /* Hashtag qui permet d'ouvrir le panneau de contrôle  */
+        "cookieName": "tarteaucitron", /* Nom du cookie (uniquement lettres et chiffres) */
+
+        "orientation": "middle", /* Position de la bannière (top - bottom - popup - banner) */
+
+        "groupServices": true, /* Grouper les services par catégorie */
+        "showDetailsOnClick": true, /* Cliquer pour ouvrir la description */
+        "serviceDefaultState": "wait", /* Statut par défaut (true - wait - false) */
+                        
+        "showAlertSmall": false, /* Afficher la petite bannière en bas à droite */
+        "cookieslist": false, /* Afficher la liste des cookies via une mini bannière */
+        "cookieslistEmbed": false, /* Afficher la liste des cookies dans le panneau de contrôle */
+                        
+        "closePopup": true, /* Afficher un X pour fermer la bannière */
+
+        "showIcon": true, /* Afficher un cookie pour ouvrir le panneau */
+        //"iconSrc": "", /* Optionnel: URL ou image en base64 */
+        "iconPosition": "BottomRight", /* Position de l'icons: (BottomRight - BottomLeft - TopRight - TopLeft) */
+
+        "adblocker": false, /* Afficher un message si un Adblocker est détecté */
+                        
+        "DenyAllCta" : true, /* Afficher le bouton Tout refuser */
+        "AcceptAllCta" : true, /* Afficher le bouton Tout accepter */
+        "highPrivacy": true, /* Attendre le consentement */
+        "alwaysNeedConsent": false, /* Demander le consentement même pour les services "Privacy by design" */
+                        
+        "handleBrowserDNTRequest": false, /* Refuser tout par défaut si Do Not Track est activé sur le navigateur */
+
+        "removeCredit": false, /* Retirer le lien de crédit vers tarteaucitron.io */
+        "moreInfoLink": true, /* Afficher le lien En savoir plus */
+
+        "useExternalCss": false, /* Mode expert : désactiver le chargement des fichiers .css tarteaucitron */
+        "useExternalJs": false, /* Mode expert : désactiver le chargement des fichiers .js tarteaucitron */
+
+        //"cookieDomain": ".my-multisite-domaine.fr", /* Optionnel: domaine principal pour partager le consentement avec des sous domaines */
+                        
+        "readmoreLink": "", /* Changer le lien En savoir plus par défaut */
+
+        "mandatory": true, /* Afficher un message pour l'utilisation de cookies obligatoires */
+        "mandatoryCta": false, /* Afficher un bouton pour les cookies obligatoires (déconseillé) */
+
+        //"customCloserId": "", /* Optionnel a11y: ID personnalisé pour ouvrir le panel */
+        
+        "googleConsentMode": true, /* Activer le Google Consent Mode v2 pour Google ads & GA4 */
+        "bingConsentMode": true, /* Activer le Bing Consent Mode pour Clarity & Bing Ads */
+        "pianoConsentMode": true, /* Activer le Consent Mode pour Piano Analytics */
+        "pianoConsentModeEssential": false, /* Activer par défaut le mode Essential de Piano */
+        "softConsentMode": false, /* Soft consent mode (le consentement est requis pour charger les tags) */
+
+        "dataLayer": false, /* Envoyer un événement dans dataLayer avec le statut des services */
+        "serverSide": false, /* Server side seulement, les tags ne sont pas chargé côté client */
+        
+        "partnersList": true /* Afficher le détail du nombre de partenaires sur la bandeau */
+    });
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>FIFA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="shortcut icon" href="{{ asset('img/FIFA.png') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">    
 </head>
 
 <body>
@@ -192,78 +253,10 @@
     </main>
 
     <script src="{{ asset('js/tarteaucitron/tarteaucitron.js') }}"></script>
-
-    <script type="text/javascript">
-
-        tarteaucitron.user.facebookpixelId = '123456789';
-        tarteaucitron.user.googleadsId = 'AW-123456789';
-
-        tarteaucitron.init({
-            "privacyUrl": "", /* URL de votre page de politique de confidentialité */
-            "hashtag": "#tarteaucitron", /* Ouvrir le panneau via ce hashtag */
-            "cookieName": "tarteaucitron", /* Nom du cookie déposé */
-            "orientation": "bottom", /* Position de la bannière (top ou bottom) */
-            "groupServices": true, /* Grouper les services par catégorie */
-            "showAlertBanner": true, /* Afficher la petite bannière en bas à droite */
-            "cookieslist": true, /* Afficher la liste des cookies installés */
-            "closePopup": false, /* Fermer la popup après un clic */
-            "showIcon": true, /* Afficher l'icône pour ouvrir le panneau */
-            "iconPosition": "BottomRight", /* Position de l'icône */
-            "adblocker": false, /* Afficher un message si un adblocker est détecté */
-            "DenyAllCta" : true, /* Afficher le bouton "Tout refuser" */
-            "AcceptAllCta" : true, /* Afficher le bouton "Tout accepter" */
-            "highPrivacy": true, /* Désactiver le consentement automatique au scroll */
-            "handleBrowserRequests": true, /* Gérer les requêtes de l'utilisateur via le navigateur */
-        });
-
-       (tarteaucitron.job = tarteaucitron.job || []).push('facebookpixel');
-        (tarteaucitron.job = tarteaucitron.job || []).push('googleads');
-
-        (tarteaucitron.job = tarteaucitron.job || []).push('gtag');
-
-    </script>
-    <script>
-        window.Laravel = {
-            csrfToken: '{{ csrf_token() }}',
-            panierUpdateQuantityUrl: '{{ url("panier/update-quantity") }}',
-            panierRemoveItemUrl: '{{ url("panier") }}'
-        };
-    </script>
-
     <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
-
-    <script>
-        var botmanWidget = {
-            aboutText: 'Assistant FIFA',
-            introMessage: "Bonjour ! Je peux vous aider avec vos votes, le suivi de commande ou les infos produits.",
-            title: "Support FIFA",
-            mainColor: "#034f96",
-            bubbleBackground: "#034f96", 
-            headerTextColor: "#fff",
-        };
-    </script>
     <script src='https://cdn.jsdelivr.net/npm/botman-web-widget@0/build/js/widget.js'></script>
-    
-    <script>
-        function changeLanguage(lang) {
-            // 1. On vérifie si l'utilisateur a accepté le service "preferences" dans Tarteaucitron
-            if (tarteaucitron.state.preferences === true) {
-                // 2. On enregistre le cookie pour 1 an
-                document.cookie = "app_locale=" + lang + ";path=/;max-age=" + (365*24*60*60);
-                // 3. On recharge la page pour que le Middleware Laravel lise le cookie
-                window.location.reload();
-            } else {
-                alert("Vous devez accepter les cookies de 'Préférences' pour changer la langue durablement.");
-                tarteaucitron.userInterface.openPanel(); // On ouvre le panneau pour l'aider
-            }
-        }
 
-        //Fusau horaire
-        if (tarteaucitron.state.preferences === true) {
-            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            document.cookie = "app_timezone=" + tz + ";path=/;max-age=31536000";
-        }
-</script>
+
     @yield('scripts')    
 </body>
 
