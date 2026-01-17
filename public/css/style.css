@@ -2793,6 +2793,7 @@ input[type="radio"]:checked + label.size-button {
     border-color: #034f96;
     opacity: 1;
     transform: scale(1.05);
+}
 /* --- (Gardez le CSS précédent pour :root, .auth-card, header, forms, etc.) --- */
 :root {
     --fifa-navy: #020c18;
@@ -2802,7 +2803,6 @@ input[type="radio"]:checked + label.size-button {
     --border-color: #e2e8f0;
 }
 /* ... autres styles précédents ... */
-
 
 /* NOUVEAU STYLE DU BOUTON GOOGLE */
 .btn-google-integrated {

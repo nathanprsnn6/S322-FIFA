@@ -69,6 +69,12 @@
                         </a>
                     @endif
 
+                    @if(Auth::user()->idrole == 8)
+                        <a href="{{ route('dpd.index') }}" class="btn-auth" style="background-color: #b034cf; color: white; border: none;">
+                            <i class="fas fa-truck"></i> Espace gestion DPD
+                        </a>
+                    @endif
+
                     <div class="user-dropdown">
                         <a href="#" class="btn-auth" style="background-color: white; color: #034f96;">
                             <span class="user-icon" style="border-color: #034f96;"></span> 
