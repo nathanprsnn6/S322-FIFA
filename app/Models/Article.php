@@ -21,5 +21,9 @@ class Article extends Model
         // belongsTo(ModeleCible, MaCléEtrangère, CléCible)
         return $this->belongsTo(Publication::class, 'idpublication', 'idpublication');
     }
+
+    public function blog() {
+        return $this->hasOne(Blog::class, 'idpublication', 'idpublication');
+    }
     
 }

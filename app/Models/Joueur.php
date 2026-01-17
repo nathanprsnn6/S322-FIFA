@@ -28,5 +28,9 @@ class Joueur extends Model
         // belongsTo(ModeleCible, MaCléEtrangère, CléCible)
         return $this->belongsTo(Personne::class, 'idpersonne', 'idpersonne');
     }
+            public function typesVotes()
+{
+    return $this->belongsToMany(TypeVote::class, 'eligiblevote', 'idpersonne', 'idtypevote');
+}
     
 }

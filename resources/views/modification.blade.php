@@ -180,6 +180,17 @@
             <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
 
             <h3 class="section-title">Sécurité</h3>
+
+            <div class="form-group mb-3">
+<div class="form-group mb-3">
+    <label for="a2f" class="d-flex align-items-center cursor-pointer">
+        <span class="me-2">Activer l'A2F</span>
+        <div class="switch">
+            <input type="checkbox" name="a2f" id="a2f" value="1" {{ $user->a2f ? 'checked' : '' }}>
+            <span class="slider round"></span>
+        </div>
+    </label>
+</div>
             
             <div class="form-group">
                 <label for="password">Nouveau mot de passe</label>
@@ -191,6 +202,11 @@
             </div>
 
             <button type="submit" class="button-primary">ENREGISTRER LES MODIFICATIONS</button>
+        </form>
+        <form action="{{ route('user.delete') }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="button-primary btn btn-danger">Supprimer toute mes données</button>
         </form>
     </section>
     @endsection

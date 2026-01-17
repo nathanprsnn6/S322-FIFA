@@ -335,6 +335,7 @@ document.addEventListener('DOMContentLoaded', function() {
 /* ==========================================
    8. gestion du panier
    ========================================== */
+   
 document.addEventListener('DOMContentLoaded', function() {
 
     const cartPopup = document.getElementById('cart-popup');
@@ -370,14 +371,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function updateCartItem(compositeId, newQuantity) {            
+function updateCartItem(compositeId, newQuantity) {
+    const panierId = window.Laravel.panierActifId;
+    console.log(`${window.Laravel.panierUpdateQuantityUrl}/${compositeId}`);
+
     if (newQuantity < 1) {
         newQuantity = 1;
         const input = document.querySelector(`.quantity-input[data-ids="${compositeId}"]`);
         if (input) input.value = 1;
     }
 
-    fetch(`${window.Laravel.panierUpdateQuantityUrl}/${compositeId}`, {
+    fetch(`${window.Laravel.panierUpdateQuantityUrl}/${panierId}/${compositeId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -431,7 +435,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function removeCartItem(compositeId) {
-    const url = `${window.Laravel.panierRemoveItemUrl}/${compositeId}`;
+    const panierId = window.Laravel.panierActifId;
+    const url = `${window.Laravel.panierRemoveItemUrl}/${panierId}/${compositeId}`;
 
     fetch(url, {
         method: 'DELETE',
@@ -484,8 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-document.addEventListener('DOMContentLoaded', function () {        
-    // --- 1. Logique Navigation Étapes (SUITE/PRÉCÉDENT) ---
+document.addEventListener('DOMContentLoaded', function () {
     
     const nextButton = document.querySelector('.btn-next');
     if (nextButton) {
@@ -532,8 +536,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
-    
-    // --- 2. Logique Soumission du Formulaire (FINALISER LA COMMANDE) ---
 
     const finaliserBtn = document.getElementById('finaliser_commande_btn');
     const commandeForm = document.getElementById('commande-form'); 
@@ -542,13 +544,11 @@ document.addEventListener('DOMContentLoaded', function () {
         finaliserBtn.addEventListener('click', function (e) {
             e.preventDefault(); 
             
-            // Récupère les données de la carte saisies pour la validation JS
             const cardNumberInput = document.getElementById('card_number_saisie');
             const cardNameInput = document.getElementById('card_name_saisie');
             const expiryDateInput = document.getElementById('expiry_date_saisie');
             const cvvInput = document.getElementById('cvv_saisie');
             
-            // Valide les champs de paiement (ceci est la validation client)
             if (!cardNumberInput.value || !cardNameInput.value || !expiryDateInput.value || !cvvInput.value) {
                 alert('Veuillez saisir toutes les informations de paiement.');
                 return;
@@ -566,26 +566,28 @@ document.addEventListener('DOMContentLoaded', function () {
     function updatePhonePrefix() {
         const selectedCountry = paysSelect.value;
         const prefix = phoneCodes[selectedCountry] || '';
-
-        if (!prefix) {
-            return;
-        }
-
+    
+        if (!prefix) return;
+    
         if (!telInput.value.startsWith(prefix)) {
+            // Supprime tout ancien préfixe international au début
             const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
             telInput.value = prefix + valueSansPrefix;
         }
     }
-
+    
+    // Formate le numéro après le préfixe
     function formatPhoneNumber(value, prefix) {
+        // Nettoie la valeur en ne gardant que chiffres et +
         let cleanValue = value.replace(/[^\d+]/g, '');
-
+    
+        // Enlève le préfixe s'il est présent pour ne formater que le reste
         if (cleanValue.startsWith(prefix)) {
             cleanValue = cleanValue.slice(prefix.length);
         } else {
             prefix = '';
         }
-
+    
         let formatted = '';
         if (cleanValue.length > 0) {
             formatted += cleanValue[0];
@@ -598,23 +600,71 @@ document.addEventListener('DOMContentLoaded', function () {
             rest = rest.match(/.{1,2}/g).join(' ');
             formatted += ' ' + rest;
         }
-
+    
         return prefix + ' ' + formatted.trim();
     }
-
+    
+    // Empêche la suppression/modification du préfixe
+    telInput.addEventListener('keydown', (e) => {
+        const selectedCountry = paysSelect.value;
+        const prefix = phoneCodes[selectedCountry] || '';
+    
+        if (!prefix) return;
+    
+        const cursorPos = telInput.selectionStart;
+        const prefixLength = prefix.length;
+    
+        // Empêche la suppression du préfixe avec Backspace ou Delete
+        if ((e.key === 'Backspace' && cursorPos <= prefixLength) ||
+            (e.key === 'Delete' && cursorPos < prefixLength)) {
+            e.preventDefault();
+        }
+    
+        // Empêche de placer le curseur dans le préfixe
+        setTimeout(() => {
+            if (telInput.selectionStart < prefixLength) {
+                telInput.selectionStart = telInput.selectionEnd = prefixLength;
+            }
+        }, 0);
+    });
+    
+    // Empêche la sélection partielle du préfixe
+    telInput.addEventListener('select', () => {
+        const selectedCountry = paysSelect.value;
+        const prefix = phoneCodes[selectedCountry] || '';
+    
+        if (!prefix) return;
+    
+        const prefixLength = prefix.length;
+        if (telInput.selectionStart < prefixLength) {
+            telInput.selectionStart = prefixLength;
+        }
+    });
+    
+    // Formate le numéro à chaque saisie, sans toucher au préfixe
     telInput.addEventListener('input', () => {
         const selectedCountry = paysSelect.value;
         const prefix = phoneCodes[selectedCountry] || '';
-
+    
         if (!prefix) return;
-
+    
+        // Si l'utilisateur a supprimé le préfixe (par copier-coller par exemple), on le remet
+        if (!telInput.value.startsWith(prefix)) {
+            const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
+            telInput.value = prefix + valueSansPrefix;
+        }
+    
         const formattedValue = formatPhoneNumber(telInput.value, prefix);
-
+    
         if (telInput.value !== formattedValue) {
             telInput.value = formattedValue;
         }
+    
+        // Place le curseur à la fin du texte
+        telInput.selectionStart = telInput.selectionEnd = telInput.value.length;
     });
-
+    
+    // Mise à jour du préfixe lors du changement de pays
     paysSelect.addEventListener('change', () => {
         updatePhonePrefix();
         telInput.focus();
@@ -622,7 +672,8 @@ document.addEventListener('DOMContentLoaded', function () {
             telInput.selectionStart = telInput.selectionEnd = telInput.value.length;
         }, 0);
     });
-
+    
+    // Initialisation au chargement
     updatePhonePrefix();
 
 

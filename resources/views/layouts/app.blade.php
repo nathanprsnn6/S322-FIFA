@@ -73,7 +73,6 @@
 </head>
 
 <body>
-
 <div id="cart-overlay" class="overlay"></div>
     <header class="fifa-header">
         
@@ -108,6 +107,10 @@
                     @if(Auth::user()->idrole == 5)
                         <a href="{{ route('vente.create') }}" class="btn-auth" style="background-color: #e67e22; color: white; border: none;">
                             <i class="fas fa-tags"></i> Service Vente
+                        <a href="{{ route('typesvote.index') }}" 
+                        class="btn-auth" 
+                        style="background-color: #001d4d; color: white; border: none; border-left: 4px solid #00b2ff; padding: 10px 20px; text-transform: uppercase; font-weight: bold; display: inline-flex; align-items: center; text-decoration: none;">
+                            <i class="fas fa-vote-yea" style="margin-right: 8px; color: #00b2ff;"></i> Gestion des Votes
                         </a>
                     @endif
 
@@ -251,6 +254,22 @@
 
         @yield('content')
     </main>
+
+     <footer class="fifa-footer" role="contentinfo" aria-label="Pied de page">
+        <div class="fifa-footer__inner">
+            <div class="fifa-footer__bar">
+                <ul class="fifa-footer__links" aria-label="Liens légaux">
+                <li><a href="{{ route('politique.confidentialite') }}">Politique de confidentialité</a></li>
+                <li><a href="{{ route('conditions.utilisation') }}">Conditions d'utilisation</a></li>
+                <li><a href="{{ route('politique.cookies') }}">Politique de Cookies</a></li>
+                </ul>
+
+                <div class="fifa-footer__copyright">
+                    Copyright © 2026 - <span id="y"></span> FIFA. Tous droits réservés.
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script src="{{ asset('js/tarteaucitron/tarteaucitron.js') }}"></script>
     <script src="{{ asset('js/main.js') }}?v={{ time() }}"></script>
