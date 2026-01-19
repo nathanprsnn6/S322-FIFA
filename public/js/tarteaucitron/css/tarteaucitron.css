@@ -960,13 +960,14 @@ span#tarteaucitronDisclaimerAlert {
 
 #tarteaucitronIcon {
     background: transparent;
-    position: fixed;
+    position:fixed;
     /*display: none;*/
-    width: auto;
     z-index: 2147483646;
-    left: 20px !important;
     bottom: 20px !important;
     z-index: 9999;
+    width: auto !important; /* Force la largeur à s'adapter au contenu */
+    left: 10px !important;  /* Empêche l'étirement depuis le bord gauche */
+    right: auto !important;
 }
 #tarteaucitronIcon #tarteaucitronManager {
     color: transparent;

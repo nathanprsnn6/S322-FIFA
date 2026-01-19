@@ -2793,7 +2793,6 @@ input[type="radio"]:checked + label.size-button {
     border-color: #034f96;
     opacity: 1;
     transform: scale(1.05);
-}
 /* --- (Gardez le CSS précédent pour :root, .auth-card, header, forms, etc.) --- */
 :root {
     --fifa-navy: #020c18;
@@ -2803,6 +2802,7 @@ input[type="radio"]:checked + label.size-button {
     --border-color: #e2e8f0;
 }
 /* ... autres styles précédents ... */
+}
 
 /* NOUVEAU STYLE DU BOUTON GOOGLE */
 .btn-google-integrated {
@@ -2916,7 +2916,6 @@ footer{
     position:relative;
     opacity:.96;
 }
-
 
 
 /* Container principal pour centrer la carte */
@@ -3292,3 +3291,70 @@ h1 {
 .fifa-checkbox:focus {
     outline: none;
 }
+
+
+/* VIEW cookiesConsent */
+.cookie-policy-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.custom-table th {
+    background-color: #f8f9fa;
+    color: #1a4a72; /* Couleur bleue pro rappelant votre titre */
+    font-weight: bold;
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.custom-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.custom-table tr:hover {
+    background-color: #f1f5f9;
+}
+
+code {
+    background-color: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.btn-manage {
+    background-color: #1a4a72;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-manage:hover {
+    background-color: #133654;
+}
+/* FIN VIEW*/
