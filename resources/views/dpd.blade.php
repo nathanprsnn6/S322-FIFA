@@ -2,18 +2,18 @@
 
 @section('content')
 <div class="container">
-    <h1>Suppression des utilisateurs inactifs (+2 ans)</h1>
+    <h1>Suppression des utilisateurs inactifs (+2 ans)</h1><br>
 
-    <section class="card" aria-label="Liste des utilisateurs à supprimer">
-        <div class="card-head">
+    <section aria-label="Liste des utilisateurs à supprimer">
+        <div class="dpd-head">
             <p class="subtitle">
             Liste des personnes dont la dernière connexion date de plus de 2 ans.
             Cliquez sur “Supprimer” pour retirer l’utilisateur de la base.
             </p>
-            <span class="badge"><span class="dot" aria-hidden="true"></span> Action irréversible</span>
+            <span class="badge"> Action irréversible</span>
         </div>
 
-        <table>
+        <table class ="table-dpd">
             <thead>
                 <tr>
                     <th>Nom / Prénom</th>
@@ -27,7 +27,7 @@
                     <tr>
                         <td>
                             <div class="name">{{ $u->nom }} {{ $u->prenom }}</div>
-                            <div class="muted">ID: {{ $u->idpersonne }}</div>
+                            <div>ID: {{ $u->idpersonne }}</div>
                         </td>
                         <td class="muted">{{ \Carbon\Carbon::parse($u->last_login_date)->format('d/m/Y') }}</td>
                         <td class="actions">
@@ -40,7 +40,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="3" class="empty">Aucun utilisateur inactif depuis plus de 2 ans.</td></tr>
+                    <tr><td colspan="3">Aucun utilisateur inactif depuis plus de 2 ans.</td></tr>
                 @endforelse
             </tbody>
         </table>
