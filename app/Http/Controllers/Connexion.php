@@ -29,7 +29,6 @@ class Connexion extends Controller
     if ($user && Hash::check($request->mdp, $user->mdp)) {
         
         if ($user->a2f) {
-            // RECHERCHE DU TÉLÉPHONE DANS LA TABLE CLIENT
             $telephoneBrut = DB::table('client')
                 ->where('idpersonne', $user->idpersonne)
                 ->value('telephone');
@@ -38,14 +37,12 @@ class Connexion extends Controller
                 return back()->withErrors(['courriel' => "Aucun téléphone trouvé pour l'A2F."]);
             }
 
-            // NETTOYAGE ET FORMATAGE (Ta logique de la méthode expedier)
             $telephoneClean = preg_replace('/[^0-9+]/', '', $telephoneBrut);
             if (str_starts_with($telephoneClean, '0')) {
                 $telephoneClean = '+33' . substr($telephoneClean, 1);
             }
 
             $code = rand(100000, 999999);
-            //dd($code);
 
             session([
                 'a2f_user_id' => $user->idpersonne,
@@ -63,8 +60,11 @@ class Connexion extends Controller
             return redirect()->route('login.a2f.view');
         }
 
-        // Connexion normale...
         Auth::login($user, $request->filled('remember'));
+
+        $user->last_login_date = now()->toDateString();
+        $user->save();
+
         $request->session()->regenerate();
         $this->migrateGuestCartToUser(Auth::id());
         return redirect()->intended('/')->with('success', 'Connexion réussie.');

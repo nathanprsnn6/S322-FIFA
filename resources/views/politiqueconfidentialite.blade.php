@@ -1,4 +1,4 @@
-@extends('layouts.app') {{-- Assurez-vous que 'layouts.app' est le bon nom de votre layout principal --}}
+@extends('layouts.app')
 
 @section('title', 'Politique de Protection des Données Personnelles')
 

@@ -68,7 +68,7 @@ tarteaucitron.lang = {
     },
     "comment": {
         "title": "Commentaires",
-        "details": "Les gestionnaires de commentaires facilitent le dépôt de vos commentaires et luttent contre le spam."
+        "details": "Les gestionnaires de commenta²ires facilitent le dépôt de vos commentaires et luttent contre le spam."
     },
     "support": {
         "title": "Support",
@@ -88,8 +88,13 @@ tarteaucitron.lang = {
         "details": "Google peut utiliser vos données pour la mesure d'audience, la performance publicitaire ou pour vous proposer des annonces personnalisées."
     },
     
+    "gcmads": {
+        "title": "Google Ads (Publicités personnalisées)",
+        "details": "Ce service permet à Google d'afficher des publicités basées sur vos centres d'intérêt et votre historique de navigation."
+    },
+    
     "mandatoryTitle": "Cookies obligatoires",
-    "mandatoryText": "Ce site utilise des cookies nécessaires à son bon fonctionnement. Ils ne peuvent pas être désactivés.",
+    "mandatoryText": "Ce site utilise des cookies nécessaires à son bon fonctionnement. Ils ne peuvent pas être désactivés. ",
 
     "save": "Enregistrer",
     "ourpartners": "Nos partenaires"

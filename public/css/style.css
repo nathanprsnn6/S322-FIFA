@@ -501,7 +501,7 @@ h2 { font-size: 1.2em; color: #555; margin-top: 0; margin-bottom: 25px; font-wei
         gap: 0;
     }
     #produits {
-        grid-template-columns: repeat(2, 1fr); /* 2 colonnes sur mobile */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -1141,7 +1141,7 @@ input[name="rank_3"]:checked + label {
             justify-content: center;
         }
         .font-bebas {
-            font-family: 'Oswald', sans-serif; /* Une google font proche */
+            font-family: 'Oswald', sans-serif;
         }
 
 
@@ -1171,7 +1171,6 @@ input[name="rank_3"]:checked + label {
     outline: none; 
 }
 
-/* Style pour le bouton "SUITE" */
 .btn-submit {
     width: 100%;
     padding: 15px;
@@ -1183,19 +1182,15 @@ input[name="rank_3"]:checked + label {
     margin-top: 30px;
 }
 
-/* Cache les étapes qui ne doivent pas être visibles */
 .formulaireLivraison.hidden {
     display: none;
 }
 
-/* Assure que l'étape active est visible */
 .formulaireLivraison.active {
     display: block;
 }
 
-/* Styles pour les boutons de navigation (SUITE, PRÉCÉDENT) */
 .btn-prev, .btn-submit {
-    /* Utilisez ici les styles de votre bouton "SUITE" */
     padding: 15px;
     background-color: black;
     color: white;
@@ -1651,7 +1646,6 @@ input[type="date"], select {
 
 .delivery-option input[type="radio"] {
     margin-right: 10px;
-    /* Rendre le radio button invisible mais cliquable via l'étiquette */
     position: absolute;
     opacity: 0;
     cursor: pointer;
@@ -1702,7 +1696,7 @@ input[type="date"], select {
     width: 100%;
     margin: 0;
 }
-/* Container principal */
+
 .container-publications {
     max-width: 900px;
     margin: 20px auto;
@@ -1711,7 +1705,6 @@ input[type="date"], select {
     padding: 20px;
 }
 
-/* Carte de publication */
 .pub-card {
     display: flex;
     background: white;
@@ -1727,7 +1720,6 @@ input[type="date"], select {
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Partie Visuelle (Gauche) */
 .pub-visual {
     width: 200px;
     min-width: 200px;
@@ -1754,7 +1746,6 @@ input[type="date"], select {
     border-radius: 6px;
 }
 
-/* Partie Texte (Droite) */
 .pub-content {
     padding: 15px 20px;
     display: flex;
@@ -1791,7 +1782,7 @@ input[type="date"], select {
     line-height: 1.5;
     margin: 0;
 }
-/* Fond bleu marine pour l'entête */
+
 .search-header {
     padding: 15px 0;
     width: 100%;
@@ -1806,7 +1797,6 @@ input[type="date"], select {
     padding: 0 20px;
 }
 
-/* Style du lien Retourner */
 .btn-back {
     color: white;
     text-decoration: none;
@@ -1822,9 +1812,8 @@ input[type="date"], select {
     font-size: 1.2rem;
 }
 
-/* Formulaire et Input */
 .search-form {
-    flex: 1; /* Prend toute la place restante */
+    flex: 1;
 }
 
 .search-wrapper {
@@ -1834,15 +1823,14 @@ input[type="date"], select {
 
 .search-wrapper input {
     width: 100%;
-    padding: 10px 20px 10px 45px; /* Espace pour l'icône à gauche */
-    border-radius: 25px; /* Forme pilule */
+    padding: 10px 20px 10px 45px;
+    border-radius: 25px;
     border: 2px solid #3e5b84;
     background-color: white;
     font-size: 0.95rem;
     outline: none;
 }
 
-/* Icône loupe (nécessite FontAwesome ou un SVG) */
 .search-icon {
     position: absolute;
     left: 15px;
@@ -1860,7 +1848,7 @@ input[type="date"], select {
 
 .btn-more-details {
     display: inline-block;
-    background-color: #0b162a; /* Bleu marine comme ton entête */
+    background-color: #0b162a;
     color: white;
     padding: 15px 30px;
     border-radius: 5px;
@@ -1879,7 +1867,7 @@ input[type="date"], select {
 }
 
 .article-container {
-    max-width: 800px; /* Plus étroit pour faciliter la lecture */
+    max-width: 800px;
     margin: 0 auto;
     padding: 40px 20px;
     font-family: 'Arial', sans-serif;
@@ -1917,8 +1905,6 @@ input[type="date"], select {
     text-align: justify;
 }
 
-/* Palette FIFA : Bleu #034f96 | Vert #27ae60 */
-
 .fifa-container {
     background-color: #f4f7f6;
     padding: 40px 20px;
@@ -1933,7 +1919,7 @@ input[type="date"], select {
 }
 
 .fifa-card-header {
-    background-color: #034f96 !important; /* Bleu FIFA */
+    background-color: #034f96 !important;
     color: white !important;
     padding: 20px;
     border: none;
@@ -1942,13 +1928,12 @@ input[type="date"], select {
     gap: 15px;
 }
 
-/* Force l'alignement horizontal dans la cellule d'action */
 .fifa-table td.text-right {
-    white-space: nowrap; /* Empêche le retour à la ligne forcé */
-    width: 1%; /* Force la colonne à ne prendre que la place nécessaire */
+    white-space: nowrap;
+    width: 1%;
 }
 
-/* Ajustement du formulaire pour que l'input et le bouton fusionnent proprement */
+
 .fifa-table .input-group {
     display: flex;
     align-items: center;
@@ -1957,11 +1942,11 @@ input[type="date"], select {
 
 .fifa-input-prix {
     border: 2px solid #e0e0e0;
-    border-radius: 6px 0 0 6px !important; /* Arrondi seulement à gauche */
+    border-radius: 6px 0 0 6px !important;
     padding: 8px 12px;
     width: 100px;
-    height: 38px; /* Hauteur fixe pour correspondre au bouton */
-    margin-right: -2px; /* Fusionne la bordure avec le bouton */
+    height: 38px;
+    margin-right: -2px;
     z-index: 1;
 }
 
@@ -1970,7 +1955,7 @@ input[type="date"], select {
     color: white;
     border: none;
     padding: 0 20px;
-    border-radius: 0 6px 6px 0 !important; /* Arrondi seulement à droite */
+    border-radius: 0 6px 6px 0 !important;
     height: 38px;
     font-weight: bold;
     text-transform: uppercase;
@@ -1991,7 +1976,7 @@ input[type="date"], select {
     border-radius: 8px;
     margin-bottom: 20px;
 }
-/* Style spécifique pour le bouton Gestion/Prix */
+
 .btn-management {
     background: linear-gradient(135deg, #034f96 0%, #023a6f 100%) !important;
     color: white !important;
@@ -2009,17 +1994,15 @@ input[type="date"], select {
 
 .btn-management i {
     font-size: 16px;
-    color: #ffd700; /* Une touche dorée pour le côté "FIFA Reward/Gold" */
+    color: #ffd700;
 }
 
 .btn-management:hover {
     background: #023a6f !important;
     box-shadow: 0 4px 12px rgba(3, 79, 150, 0.3);
     transform: translateY(-1px);
-    border-color: #ffd700 !important; /* La bordure devient dorée au survol */
+    border-color: #ffd700 !important;
 }
-
-/* --- ESPACE VENTE (Admin) --- */
 
 /* =========================================
    ESPACE VENTE (Admin / Création Produit)
@@ -2028,16 +2011,15 @@ input[type="date"], select {
    .vente-container {
     background-color: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); /* Ombre douce */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
     width: 100%;
     max-width: 900px;
     padding: 40px;
     margin: 50px auto;
-    border-top: 6px solid #034f96; /* Bleu FIFA */
+    border-top: 6px solid #034f96;
     font-family: inherit;
 }
 
-/* --- TYPOGRAPHIE --- */
 .vente-title {
     color: #034f96;
     font-size: 2.2rem;
@@ -2065,24 +2047,22 @@ input[type="date"], select {
     letter-spacing: 0.5px;
 }
 
-/* --- GRILLE DU FORMULAIRE --- */
 .vente-form-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colonnes égales */
-    gap: 30px; /* Espace entre les éléments */
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
 }
 
 .vente-full-width {
-    grid-column: span 2; /* L'élément prend toute la largeur */
+    grid-column: span 2;
 }
 
-/* --- CHAMPS (INPUTS & SELECTS) --- */
 .vente-input, 
 .vente-select, 
 .vente-textarea {
     width: 100%;
-    height: 55px; /* Hauteur fixe pour éviter le texte coupé */
-    padding: 0 20px; /* Espace interne gauche/droite */
+    height: 55px;
+    padding: 0 20px;
     
     font-size: 16px;
     font-family: inherit;
@@ -2092,60 +2072,53 @@ input[type="date"], select {
     border: 2px solid #e2e8f0;
     border-radius: 8px;
     
-    box-sizing: border-box; /* Important pour les dimensions */
+    box-sizing: border-box;
     transition: all 0.3s ease;
     
-    /* Centre le texte verticalement dans l'input */
     display: flex; 
     align-items: center; 
 }
 
-/* Focus : Quand on clique dans le champ */
 .vente-input:focus, 
 .vente-select:focus, 
 .vente-textarea:focus {
     border-color: #034f96;
     background-color: #ffffff;
     outline: none;
-    box-shadow: 0 0 0 4px rgba(3, 79, 150, 0.1); /* Halo bleu */
+    box-shadow: 0 0 0 4px rgba(3, 79, 150, 0.1);
 }
 
-/* --- STYLE SPÉCIFIQUE SELECT (Liste déroulante) --- */
 .vente-select {
     cursor: pointer;
-    appearance: none;        /* Retire le style moche par défaut */
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     
-    /* Flèche personnalisée bleue */
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23034f96' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 20px center;
     background-size: 16px;
     
-    padding-right: 50px; /* Empêche le texte de passer sous la flèche */
+    padding-right: 50px;
 }
 
-/* Groupe Catégorie + Sous-catégorie */
 .vente-select-group {
     display: flex;
     gap: 20px;
     width: 100%;
 }
 .vente-select-group > * {
-    flex: 1; /* Chaque select prend 50% de la place */
+    flex: 1;
 }
 
-/* --- TEXTAREA (Description) --- */
 .vente-textarea {
-    height: auto;     /* Pas de hauteur fixe pour le textarea */
+    height: auto;
     min-height: 150px; 
-    padding: 15px 20px; /* Padding haut/bas différent des inputs */
+    padding: 15px 20px;
     resize: vertical;
     line-height: 1.6;
 }
 
-/* --- UPLOAD FICHIER --- */
 .vente-file-upload {
     height: auto;
     padding: 15px;
@@ -2159,7 +2132,6 @@ input[type="date"], select {
     background-color: #f0f9ff;
 }
 
-/* --- BOUTON VALIDER --- */
 .vente-btn-submit {
     grid-column: span 2;
     margin-top: 20px;
@@ -2188,10 +2160,9 @@ input[type="date"], select {
     background: linear-gradient(135deg, #045cb0 0%, #034f96 100%);
 }
 
-/* --- MOBILE RESPONSIVE --- */
 @media (max-width: 768px) {
     .vente-form-grid {
-        grid-template-columns: 1fr; /* 1 seule colonne */
+        grid-template-columns: 1fr;
         gap: 20px;
     }
     
@@ -2200,7 +2171,7 @@ input[type="date"], select {
     }
     
     .vente-select-group {
-        flex-direction: column; /* Les selects passent l'un sous l'autre */
+        flex-direction: column;
         gap: 15px;
     }
     
@@ -2210,7 +2181,6 @@ input[type="date"], select {
     }
 }
 
-/* Couleurs Officielles FIFA */
 :root {
     --fifa-blue: #004797;
     --fifa-light-blue: #00a3e0;
@@ -2228,7 +2198,6 @@ input[type="date"], select {
     --fifa-text: #333333;
 }
 
-/* Reset et base */
 body, html {
     margin: 0;
     padding: 0;
@@ -2247,10 +2216,9 @@ body, html {
     min-height: 100vh;
 }
 
-/* En-tête sans fond bleu */
 .faq-header {
-    background-color: transparent; /* Retrait du fond bleu */
-    color: var(--fifa-blue); /* Texte en bleu FIFA pour la visibilité */
+    background-color: transparent;
+    color: var(--fifa-blue);
     padding: 60px 20px;
     text-align: center;
 }
@@ -2262,12 +2230,11 @@ body, html {
     font-weight: 800;
 }
 
-/* Conteneur principal plein écran */
 .faq-wrapper {
     width: 100%;
-    max-width: 100%; /* Occupation totale de l'écran */
+    max-width: 100%;
     margin: 0;
-    padding: 40px; /* Marges intérieures pour ne pas coller aux bords physiques */
+    padding: 40px;
 }
 
 .faq-section {
@@ -2285,9 +2252,8 @@ body, html {
     letter-spacing: 1px;
 }
 
-/* Cartes FAQ plein écran */
 .faq-card {
-    width: 100%; /* Largeur totale même fermée */
+    width: 100%;
     background: var(--fifa-white);
     margin-bottom: 15px;
     border-radius: 4px;
@@ -2301,7 +2267,6 @@ body, html {
     transform: translateY(-2px);
 }
 
-/* Détails et Summary */
 details {
     width: 100%;
 }
@@ -2319,12 +2284,10 @@ summary {
     outline: none;
 }
 
-/* Suppression de la flèche par défaut sur certains navigateurs */
 summary::-webkit-details-marker {
     display: none;
 }
 
-/* Icône personnalisée (+/-) */
 summary::after {
     content: '+';
     font-size: 1.8rem;
@@ -2334,11 +2297,10 @@ summary::after {
 }
 
 details[open] summary::after {
-    content: '−'; /* Utilisation d'un vrai signe moins */
+    content: '−';
     transform: rotate(180deg);
 }
 
-/* Zone de réponse */
 .faq-answer {
     padding: 0 25px 25px 25px;
     color: var(--fifa-text);
@@ -2357,7 +2319,6 @@ details[open] summary::after {
     margin-bottom: 10px;
 }
 
-/* Animation */
 details[open] .faq-answer {
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -2367,7 +2328,6 @@ details[open] .faq-answer {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Adaptabilité mobile */
 @media (max-width: 768px) {
     .faq-wrapper {
         padding: 20px 10px;
@@ -2377,7 +2337,7 @@ details[open] .faq-answer {
         font-size: 1.8rem;
     }
 }
-/* Section Contact en bas de page */
+
 .faq-contact-section {
     width: 100%;
     padding: 60px 40px;
@@ -2410,7 +2370,6 @@ details[open] .faq-answer {
     flex-wrap: wrap;
 }
 
-/* Boutons de contact */
 .btn-contact {
     display: inline-block;
     padding: 15px 30px;
@@ -2445,7 +2404,6 @@ details[open] .faq-answer {
     transform: translateY(-3px);
 }
 
-/* Version Mobile */
 @media (max-width: 768px) {
     .faq-contact-section {
         padding: 40px 20px;
@@ -2458,14 +2416,13 @@ details[open] .faq-answer {
     }
 }
 
-/* Conteneur principal (inchangé) */
 .tooltip-container {
     position: relative;
     display: inline-block;
     margin-left: 5px;
     cursor: help;
     vertical-align: middle;
-    outline: none; /* On gère le focus proprement ci-dessous */
+    outline: none;
 }
 
 .info-icon {
@@ -2484,7 +2441,6 @@ details[open] .faq-answer {
     transition: transform 0.2s ease;
 }
 
-/* Style lors du focus clavier (accessibilité) */
 .tooltip-container:focus .info-icon {
     box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.4);
     transform: scale(1.1);
@@ -2508,7 +2464,7 @@ details[open] .faq-answer {
     font-size: 13px;
     line-height: 1.5;
     box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
-    pointer-events: none; /* Évite de bloquer la souris */
+    pointer-events: none;
 }
 
 .tooltip-box::after {
@@ -2522,7 +2478,6 @@ details[open] .faq-answer {
     border-color: #222 transparent transparent transparent;
 }
 
-/* AFFICHAGE : Au survol OU au focus clavier */
 .tooltip-container:hover .tooltip-box,
 .tooltip-container:focus .tooltip-box {
     visibility: visible;
@@ -2531,7 +2486,7 @@ details[open] .faq-answer {
 }
 .etoile{
     color: red;
-    bottom: 140%; /* Petit effet de montée au survol */
+    bottom: 140%;
 }
 
 .save_cb{
@@ -2793,24 +2748,23 @@ input[type="radio"]:checked + label.size-button {
     border-color: #034f96;
     opacity: 1;
     transform: scale(1.05);
-/* --- (Gardez le CSS précédent pour :root, .auth-card, header, forms, etc.) --- */
-:root {
-    --fifa-navy: #020c18;
-    --fifa-blue-action: #007bff;
-    --fifa-text: #334155;
-    --fifa-light-gray: #f1f5f9;
-    --border-color: #e2e8f0;
-}
-/* ... autres styles précédents ... */
 
+    :root {
+        --fifa-navy: #020c18;
+        --fifa-blue-action: #007bff;
+        --fifa-text: #334155;
+        --fifa-light-gray: #f1f5f9;
+        --border-color: #e2e8f0;
+    }
+}
 
 /* NOUVEAU STYLE DU BOUTON GOOGLE */
 .btn-google-integrated {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centre le tout (logo + texte) */
+    justify-content: center;
     width: 100%;
-    padding: 14px; /* Même padding que le bouton principal pour la cohérence */
+    padding: 14px;
     background: var(--fifa-navy);
     color: white;
     text-decoration: none;
@@ -2821,32 +2775,29 @@ input[type="radio"]:checked + label.size-button {
     letter-spacing: 0.5px;
     transition: opacity 0.2s, transform 0.1s;
     box-sizing: border-box;
-    border: 1px solid var(--fifa-navy); /* Bordure pour le netteté */
+    border: 1px solid var(--fifa-navy);
 }
 
-/* Style du logo SVG à l'intérieur */
 .btn-google-integrated .google-svg {
     width: 20px;
     height: 20px;
-    margin-right: 12px; /* Espace entre le logo et le texte */
-    /* Le fond blanc a été retiré ici */
+    margin-right: 12px;
 }
 
-/* Effet au survol */
 .btn-google-integrated:hover {
-    opacity: 0.9; /* Léger éclaircissement */
+    opacity: 0.9;
 }
 
-/* Effet au clic */
 .btn-google-integrated:active {
-    transform: scale(0.99); /* Petit effet de pression */
+    transform: scale(0.99);
 }
-/* Séparateur OU */
+
 .separator {
     margin: 25px 0;
     position: relative;
     text-align: center;
 }
+
 .separator::before {
     content: "";
     position: absolute;
@@ -2857,6 +2808,7 @@ input[type="radio"]:checked + label.size-button {
     background: var(--border-color);
     z-index: 1;
 }
+
 .separator span {
     background: white;
     padding: 0 15px;
@@ -2867,7 +2819,6 @@ input[type="radio"]:checked + label.size-button {
     font-weight: 700;
 }
 
-/* footer des page */
 footer{
     background:#004797;
     color: white;
@@ -2917,8 +2868,6 @@ footer{
     opacity:.96;
 }
 
-
-/* Container principal pour centrer la carte */
 .auth-container {
     display: flex;
     justify-content: center;
@@ -2927,7 +2876,6 @@ footer{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* La carte blanche */
 .auth-card {
     background: white;
     padding: 40px;
@@ -2938,7 +2886,6 @@ footer{
     text-align: center;
 }
 
-/* Titre et header */
 .auth-header h2 {
     margin-top: 20px;
     margin-bottom: 30px;
@@ -2954,7 +2901,6 @@ footer{
     font-size: 14px;
 }
 
-/* Formulaire */
 .form-group {
     text-align: left;
     margin-bottom: 20px;
@@ -2981,7 +2927,6 @@ footer{
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
 }
 
-/* Bouton bleu style FIFA/Google */
 .btn-primary {
     width: 100%;
     background-color: #007bff;
@@ -3000,7 +2945,6 @@ footer{
     background-color: #0056b3;
 }
 
-/* Lien "Mot de passe oublié" */
 .link-blue {
     color: #4a5568;
     text-decoration: underline;
@@ -3012,7 +2956,6 @@ footer{
     color: #007bff;
 }
 
-/* Alertes */
 .alert-success {
     margin-top: 20px;
     padding: 10px;
@@ -3029,7 +2972,6 @@ footer{
     text-align: left;
 }
 
-/* Conteneur principal du switch */
 .switch {
   position: relative;
   display: inline-block;
@@ -3037,14 +2979,12 @@ footer{
   height: 24px;
 }
 
-/* On cache la checkbox par défaut */
 .switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
 
-/* Le rail du bouton */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -3052,11 +2992,10 @@ footer{
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc; /* Gris quand c'est désactivé */
+  background-color: #ccc;
   transition: .4s;
 }
 
-/* Le cercle blanc (curseur) */
 .slider:before {
   position: absolute;
   content: "";
@@ -3069,17 +3008,14 @@ footer{
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Couleur verte quand on coche */
 input:checked + .slider {
-  background-color: #28a745; /* Ton vert ici */
+  background-color: #28a745;
 }
 
-/* Déplacement du cercle quand on coche */
 input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-/* Rendu arrondi (Round) */
 .slider.round {
   border-radius: 34px;
 }
@@ -3088,12 +3024,9 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-/* Petit bonus : pointeur de souris */
 .cursor-pointer {
     cursor: pointer;
 }
-
-/* public/css/fifa-theme.css */
 
 :root {
     --fifa-dark-blue: #001d4d;
@@ -3108,7 +3041,6 @@ body {
     color: var(--fifa-dark-blue);
 }
 
-/* Style de la carte principale */
 .card-fifa {
     border: none;
     border-radius: 0;
@@ -3116,7 +3048,6 @@ body {
     background: var(--fifa-white);
 }
 
-/* Header de la page */
 h1 {
     font-weight: 800;
     text-transform: uppercase;
@@ -3126,7 +3057,6 @@ h1 {
     padding-left: 15px;
 }
 
-/* Bouton Ajouter (Style FIFA) */
 .btn-fifa-primary {
     background-color: var(--fifa-bright-blue);
     color: white;
@@ -3144,7 +3074,6 @@ h1 {
     color: white;
 }
 
-/* Style du tableau */
 .table-fifa thead {
     background-color: var(--fifa-dark-blue);
     color: white;
@@ -3164,14 +3093,13 @@ h1 {
     font-weight: 500;
 }
 
-/* Boutons d'action */
 .btn-action {
     border-radius: 0;
     font-size: 0.8rem;
     font-weight: bold;
     text-transform: uppercase;
 }
-/* Correction de l'alignement du Header */
+
 .border-bottom-fifa {
     border-bottom: 2px solid #eef2f5;
 }
@@ -3184,12 +3112,11 @@ h1 {
     padding-left: 20px;
 }
 
-/* On force le bouton à rester un bloc propre et aligné */
 .btn-fifa-primary {
     background-color: #00b2ff !important;
     color: white !important;
     border: none !important;
-    border-radius: 4px !important; /* Un léger arrondi pour le côté moderne */
+    border-radius: 4px !important;
     padding: 12px 24px !important;
     font-weight: 700;
     text-decoration: none !important;
@@ -3203,7 +3130,6 @@ h1 {
     transform: translateY(-2px);
 }
 
-/* Style pour la colonne Date */
 .badge-date {
     background-color: #f0f4f8;
     color: #001d4d;
@@ -3214,11 +3140,10 @@ h1 {
     display: inline-block;
 }
 
-/* On s'assure que le tableau ne dépasse pas */
 .table-fifa td {
     vertical-align: middle !important;
 }
-/* Conteneur de la liste */
+
 .player-selection-list {
     display: flex;
     flex-direction: column;
@@ -3226,14 +3151,13 @@ h1 {
     margin-top: 20px;
 }
 
-/* Ligne de sélection du joueur */
 .player-selection-row {
     background: #ffffff;
     border: 2px solid #eef2f5;
     padding: 15px 25px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Nom à gauche, Case à droite */
+    justify-content: space-between;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
 }
@@ -3243,13 +3167,11 @@ h1 {
     background-color: #f8fbff;
 }
 
-/* État quand la ligne est sélectionnée */
 .player-selection-row.active {
     border-color: #00b2ff;
     background-color: #f0faff;
 }
 
-/* Style du nom du joueur */
 .player-name-pro {
     font-weight: 800;
     text-transform: uppercase;
@@ -3258,7 +3180,6 @@ h1 {
     letter-spacing: 0.5px;
 }
 
-/* La case à cocher personnalisée (Grosse) */
 .fifa-checkbox {
     width: 35px;
     height: 35px;
@@ -3281,7 +3202,7 @@ h1 {
 }
 
 .fifa-checkbox:checked::after {
-    content: '\f00c'; /* Icône Check FontAwesome */
+    content: '\f00c';
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     color: white;
@@ -3291,3 +3212,151 @@ h1 {
 .fifa-checkbox:focus {
     outline: none;
 }
+
+.cookie-policy-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    font-family: sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.custom-table th {
+    background-color: #f8f9fa;
+    color: #1a4a72;
+    font-weight: bold;
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.custom-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.custom-table tr:hover {
+    background-color: #f1f5f9;
+}
+
+code {
+    background-color: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.btn-manage {
+    background-color: #1a4a72;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s;
+}
+
+.btn-manage:hover {
+    background-color: #133654;
+}
+
+.dpd-head{
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,.10);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    background: rgba(0,0,0,.18);
+}
+
+.subtitle{
+    margin:0;
+    font-size: 13.5px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255);
+    background: rgba(255,255,255,.05);
+    font-size: 12.5px;
+    white-space:nowrap;
+}
+
+.table-dpd{
+    width:100%;
+    border-collapse: collapse;
+}
+
+.table-dpd th, .table-dpd td{
+    padding: 12px 16px;
+    text-align:left;
+}
+
+.table-dpd th{
+    padding-top: 20px;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.72);
+    background: rgba(0,0,0,.18);
+}
+
+.table-dpd td{
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.92);
+}
+
+ .name{
+    font-weight: 700;
+}
+
+.actions{
+    text-align:right;
+    white-space:nowrap;
+}
+
+.btn-danger{
+    border: 1px solid rgba(207, 37, 80, 0.32);
+    background: linear-gradient(135deg, rgba(255,59,107,.16), rgba(255,107,142,.10));
+    border-radius: 14px;
+    padding: 10px 12px;
+    cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    font-weight: 700;
+}
+
+.btn-danger:hover{
+    transform: translateY(-1px);
+    border-color: rgba(255,59,107,.55);
+    box-shadow: 0 16px 44px rgba(255,59,107,.18);
+}
+
+.btn-danger:active{ transform: translateY(0) scale(.99); }
+
+.btn-danger:focus-visible{
+    outline: 3px solid rgba(255,59,107,.25);
+    outline-offset: 3px;
+}
+/* FIN VIEW*/

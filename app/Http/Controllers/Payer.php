@@ -139,8 +139,7 @@ class Payer extends Controller
 
             Panier::where('idpanier', $panierActif->idpanier)
                 ->update(['panieractif' => false]);
-
-            // Si toutes les opérations sont réussies, on valide la transaction
+                
             DB::commit();
             
             Log::info('Paiement réussi pour utilisateur ' . $userId);

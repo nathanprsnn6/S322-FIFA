@@ -31,6 +31,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\TypeVoteController;
 use App\Http\Controllers\CommentaireController;
+use App\Http\Controllers\DpdController;
 
 Route::match(['get', 'post'], '/botman', [BotManController::class, 'handle']); 
  
@@ -145,6 +146,10 @@ Route::middleware(['auth'])->group(function () {
     
     Route::get('/mes-commandes', [Commande::class, 'index'])->name('commandes.index');
 
+    // dpd 
+    Route::get('/dpd', [DpdController::class, 'index'])->name('dpd.index');
+    Route::delete('/dpd/users/{id}', [DpdController::class, 'destroy'])->name('dpd.users.destroy');
+
     // EXPEDITION
     Route::get('/expedition', [ExpeditionController::class, 'index'])->name('expedition.index');
     Route::post('/expedition/expedier/{id}', [ExpeditionController::class, 'expedier'])->name('expedition.expedier');
@@ -160,14 +165,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/vente/produit/{id}/image', [App\Http\Controllers\VenteController::class, 'addImage'])->name('vente.image.add');
     Route::delete('/vente/produit/{id}/image/{idPhoto}', [App\Http\Controllers\VenteController::class, 'deleteImage'])->name('vente.image.delete');
 
-// Gestion des Variantes (Couleurs)
-Route::post('/vente/produit/{id}/variante', [App\Http\Controllers\VenteController::class, 'addVariant'])->name('vente.variant.add');
-Route::delete('/vente/produit/{id}/variante/{idColoris}', [App\Http\Controllers\VenteController::class, 'deleteVariant'])->name('vente.variant.delete');
-Route::get('/vente/demandes', [VenteController::class, 'indexDemandes'])->name('vente.demandes.index');
-Route::get('/vente/demande/{id}/traiter', [VenteController::class, 'createFromDemande'])->name('vente.demandes.create');
-Route::post('/vente/demande/store', [VenteController::class, 'storeFromDemande'])->name('vente.demandes.store');
-Route::get('/vente/en-attente', [VenteController::class, 'indexInvisible'])->name('vente.invisible.index');
-Route::put('/vente/produit/{id}/publier', [VenteController::class, 'publierProduit'])->name('vente.publier');
+    // Gestion des Variantes (Couleurs)
+    Route::post('/vente/produit/{id}/variante', [App\Http\Controllers\VenteController::class, 'addVariant'])->name('vente.variant.add');
+    Route::delete('/vente/produit/{id}/variante/{idColoris}', [App\Http\Controllers\VenteController::class, 'deleteVariant'])->name('vente.variant.delete');
+    Route::get('/vente/demandes', [VenteController::class, 'indexDemandes'])->name('vente.demandes.index');
+    Route::get('/vente/demande/{id}/traiter', [VenteController::class, 'createFromDemande'])->name('vente.demandes.create');
+    Route::post('/vente/demande/store', [VenteController::class, 'storeFromDemande'])->name('vente.demandes.store');
+    Route::get('/vente/en-attente', [VenteController::class, 'indexInvisible'])->name('vente.invisible.index');
+    Route::put('/vente/produit/{id}/publier', [VenteController::class, 'publierProduit'])->name('vente.publier');
 
     // SIÈGE
     Route::get('/siege/commandes-express', [SiegeController::class, 'index'])->name('siege.index');
@@ -190,6 +195,8 @@ Route::get('/stress-me', function () {
 
 Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback']);
+
+// ----- POLITIQUE DE COOKIES
 
 //Conditions d'utilisation
 Route::get('/conditions-utilisation', function () {
@@ -233,3 +240,8 @@ Route::post('/publication/{id}/comment', [App\Http\Controllers\PublicationDetail
 
 
 Route::post('/publication/{id}/comment', [CommentaireController::class, 'store'])->name('commentaires.store');
+
+// ---- POLITIQUE DE COOKIES ----
+Route::get('/cookiesConsent', function () {
+    return view('cookiesConsent');
+})->name('politique.cookies');

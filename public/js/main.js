@@ -488,7 +488,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
+// COMMANDER
 document.addEventListener('DOMContentLoaded', function () {
     
     const nextButton = document.querySelector('.btn-next');
@@ -570,18 +570,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!prefix) return;
     
         if (!telInput.value.startsWith(prefix)) {
-            // Supprime tout ancien préfixe international au début
             const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
             telInput.value = prefix + valueSansPrefix;
         }
     }
     
-    // Formate le numéro après le préfixe
     function formatPhoneNumber(value, prefix) {
-        // Nettoie la valeur en ne gardant que chiffres et +
         let cleanValue = value.replace(/[^\d+]/g, '');
     
-        // Enlève le préfixe s'il est présent pour ne formater que le reste
         if (cleanValue.startsWith(prefix)) {
             cleanValue = cleanValue.slice(prefix.length);
         } else {
@@ -604,7 +600,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return prefix + ' ' + formatted.trim();
     }
     
-    // Empêche la suppression/modification du préfixe
     telInput.addEventListener('keydown', (e) => {
         const selectedCountry = paysSelect.value;
         const prefix = phoneCodes[selectedCountry] || '';
@@ -614,13 +609,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const cursorPos = telInput.selectionStart;
         const prefixLength = prefix.length;
     
-        // Empêche la suppression du préfixe avec Backspace ou Delete
         if ((e.key === 'Backspace' && cursorPos <= prefixLength) ||
             (e.key === 'Delete' && cursorPos < prefixLength)) {
             e.preventDefault();
         }
     
-        // Empêche de placer le curseur dans le préfixe
         setTimeout(() => {
             if (telInput.selectionStart < prefixLength) {
                 telInput.selectionStart = telInput.selectionEnd = prefixLength;
@@ -628,7 +621,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 0);
     });
     
-    // Empêche la sélection partielle du préfixe
     telInput.addEventListener('select', () => {
         const selectedCountry = paysSelect.value;
         const prefix = phoneCodes[selectedCountry] || '';
@@ -641,14 +633,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
-    // Formate le numéro à chaque saisie, sans toucher au préfixe
     telInput.addEventListener('input', () => {
         const selectedCountry = paysSelect.value;
         const prefix = phoneCodes[selectedCountry] || '';
     
         if (!prefix) return;
     
-        // Si l'utilisateur a supprimé le préfixe (par copier-coller par exemple), on le remet
         if (!telInput.value.startsWith(prefix)) {
             const valueSansPrefix = telInput.value.replace(/^\+\d+/, '');
             telInput.value = prefix + valueSansPrefix;
@@ -660,11 +650,9 @@ document.addEventListener('DOMContentLoaded', function () {
             telInput.value = formattedValue;
         }
     
-        // Place le curseur à la fin du texte
         telInput.selectionStart = telInput.selectionEnd = telInput.value.length;
     });
     
-    // Mise à jour du préfixe lors du changement de pays
     paysSelect.addEventListener('change', () => {
         updatePhonePrefix();
         telInput.focus();
@@ -673,7 +661,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 0);
     });
     
-    // Initialisation au chargement
     updatePhonePrefix();
 
 
@@ -715,3 +702,62 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+// ---- PREFERENCES COOKIES ----
+tarteaucitron.user.facebookpixelId = '123456789';
+tarteaucitron.user.googleadsId = 'AW-123456789';
+
+tarteaucitron.init({
+    "privacyUrl": "", /* URL de votre page de politique de confidentialité */
+    "hashtag": "#tarteaucitron", /* Ouvrir le panneau via ce hashtag */
+    "cookieName": "tarteaucitron", /* Nom du cookie déposé */
+    "orientation": "bottom", /* Position de la bannière (top ou bottom) */
+    "groupServices": true, /* Grouper les services par catégorie */
+    "showAlertBanner": true, /* Afficher la petite bannière en bas à droite */
+    "cookieslist": true, /* Afficher la liste des cookies installés */
+    "closePopup": false, /* Fermer la popup après un clic */
+    "showIcon": true, /* Afficher l'icône pour ouvrir le panneau */
+    "iconPosition": "BottomRight", /* Position de l'icône */
+    "adblocker": false, /* Afficher un message si un adblocker est détecté */
+    "DenyAllCta" : true, /* Afficher le bouton "Tout refuser" */
+    "AcceptAllCta" : true, /* Afficher le bouton "Tout accepter" */
+    "highPrivacy": true, /* Désactiver le consentement automatique au scroll */
+    "handleBrowserRequests": true, /* Gérer les requêtes de l'utilisateur via le navigateur */
+});
+
+(tarteaucitron.job = tarteaucitron.job || []).push('facebookpixel');
+(tarteaucitron.job = tarteaucitron.job || []).push('googleads');
+
+(tarteaucitron.job = tarteaucitron.job || []).push('gtag');
+
+window.Laravel = {
+    csrfToken: '{{ csrf_token() }}',
+    panierUpdateQuantityUrl: '{{ url("panier/update-quantity") }}',
+    panierRemoveItemUrl: '{{ url("panier") }}'
+};
+
+
+var botmanWidget = {
+    aboutText: 'Assistant FIFA',
+    introMessage: "Bonjour ! Je peux vous aider avec vos votes, le suivi de commande ou les infos produits.",
+    title: "Support FIFA",
+    mainColor: "#034f96",
+    bubbleBackground: "#034f96", 
+    headerTextColor: "#fff",
+};
+
+function changeLanguage(lang) {
+    if (tarteaucitron.state.preferences === true) {
+        document.cookie = "app_locale=" + lang + ";path=/;max-age=" + (365*24*60*60);
+        window.location.reload();
+    } else {
+        alert("Vous devez accepter les cookies de 'Préférences' pour changer la langue durablement.");
+        tarteaucitron.userInterface.openPanel(); 
+    }
+}
+
+if (tarteaucitron.state.preferences === true) {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.cookie = "app_timezone=" + tz + ";path=/;max-age=31536000";
+}
+//---- FIN COOKIES -----

@@ -41,7 +41,19 @@ class Commander extends Controller{
             $item->prixLigne = $item->qteproduit * $prixUnitaire;
             $prixpanier += $item->prixLigne;
         });
-        
+
+        $user = \DB::table('utilisateur')->where('idpersonne', $userId)->first();
+        $personne = \DB::table('personne')->where('idpersonne', $userId)->first();
+
+        $userNation = Nation::where('idnation', $user->idnation)->first();
+
+        $userData = [
+            'email' => $user->courriel ?? '',
+            'nom_complet' => trim(($personne->nom ?? '') . ' ' . ($personne->prenom ?? '')),
+            'pays' => $userNation ? $userNation->idnation : '',
+            'cp' => $user->cp ?? '',
+        ];
+            
         return view('commander', [
             'commanders' => $commanders,
             'nations' => $nations,
@@ -50,6 +62,7 @@ class Commander extends Controller{
             'prixpanier' => $prixpanier,
             'totalPanier' => $totalPanier,
             'savedCards'=> $savedCards,
+            'userData'=> $userData,
         ]);
     }
 }

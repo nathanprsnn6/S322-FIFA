@@ -25,11 +25,11 @@
                     <h3>1. Informations de Contact et Adresse</h3>
                     
                     <label for="email">Courriel *</label>
-                    <input type="email" name="email" id="email" value="{{ old('email') }}" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" placeholder="Entrez votre courriel" class="form-control">
+                    <input type="email" name="email" id="email" value="{{ old('email', $userData['email'] ?? '') }}" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" placeholder="Entrez votre courriel" class="form-control"> 
                     @error('email') <span class="text-danger">{{ $message }}</span> @enderror
                     
                     <label for="nom_complet">Nom complet *</label>
-                    <input type="text" name="nom_complet" id="nom_complet" value="{{ old('nom_complet') }}" required placeholder="Entrez votre nom et prenom" class="form-control">
+                    <input type="text" name="nom_complet" id="nom_complet" value="{{ old('nom_complet', $userData['nom_complet'] ?? '') }}" required placeholder="Entrez votre nom et prenom" class="form-control">
                     @error('nom_complet') <span class="text-danger">{{ $message }}</span> @enderror
                     
                     <br>
@@ -39,7 +39,8 @@
                     <select id="pays" name="pays" class="form-control" required>
                         <option value="">-- Choisir un pays de residence --</option>
                         @foreach($nations as $nation)
-                            <option value="{{ $nation->idnation ?? $nation->id }}" {{ old('pays') == ($nation->idnation ?? $nation->id) ? 'selected' : '' }}>
+                            <option value="{{ $nation->idnation ?? $nation->id }}" 
+                                {{ old('pays', $userData['pays'] ?? '') == ($nation->idnation ?? $nation->id) ? 'selected' : '' }}>
                                 {{ $nation->nomnation }}
                             </option>
                         @endforeach
@@ -55,7 +56,8 @@
                     <div style="display: flex; gap: 20px;"> 
                         <div class="form-group">
                             <label for="cp">Code Postal *</label>
-                            <input type="text" id="cp" name="cp" maxlength="5" value="{{ old('cp') }}" placeholder="Ex: 75001" required class="form-control">
+                            <input type="text" id="cp" name="cp" maxlength="5" value="{{ old('cp', $userData['cp'] ?? '') }}" placeholder="Ex: 75001" required class="form-control">
+                            @error('cp') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="form-group">
